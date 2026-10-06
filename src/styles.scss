@@ -1,3 +1,17 @@
+/* CSS Reset & Standard-Werte für das JOIN-Projekt */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  scroll-behavior: smooth;
+  height: 100%;
+  font-family: 'Inter', sans-serif;
+  background-color: $join-bg-light;
+  color: $join-dark-blue;
+}
 // JOIN Projekt - Standard Farben
 $join-dark-blue: #2A3647;   // Dunkles Blau (für Header, dunkle Hintergründe, Schriften)
 $join-light-blue: #29ABE2;  // Hellblau / Accent-Farbe (für Buttons, Logos, Highlights)
