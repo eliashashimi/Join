@@ -19,7 +19,7 @@ export interface Contact {
   styleUrls: ['./contact-detail.scss']
 })
 export class ContactDetailComponent {
-  // Testweise mit Dummy-Daten füllen, um das Design im Browser zu sehen:
+  // 1. Normaler Kontakt (Zustand: "Kontakt ausgewählt")
   @Input() contact: Contact | null = {
     firstName: 'Anton',
     lastName: 'Mayer',
@@ -29,11 +29,20 @@ export class ContactDetailComponent {
     initials: 'AM'
   };
 
+  // Hilfs-Variablen zum Testen der States:
+  isLoading: boolean = false;       // Für "Kontakt wird geladen"
+  hasError: boolean = false;        // Für "Kontakt konnte nicht geladen werden"
+  isDeleted: boolean = false;       // Für "Kontakt wurde gelöscht"
+
   onEdit() {
-    console.log('Edit clicked', this.contact);
+    console.log('Edit clicked - nach Edit aktualisieren');
+    if (this.contact) {
+      this.contact.lastName = 'Mayer (Aktualisiert)';
+    }
   }
 
   onDelete() {
-    console.log('Delete clicked', this.contact);
+    console.log('Delete clicked');
+    this.isDeleted = true; // Simuliert "Kontakt wurde gelöscht"
   }
 }
