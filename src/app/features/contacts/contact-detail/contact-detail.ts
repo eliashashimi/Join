@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface Contact {
@@ -18,7 +18,7 @@ export interface Contact {
   templateUrl: './contact-detail.html',
   styleUrls: ['./contact-detail.scss']
 })
-export class ContactDetailComponent {
+export class ContactDetailComponent implements OnInit {
   // 1. Normaler Kontakt (Zustand: "Kontakt ausgewählt")
   @Input() contact: Contact | null = {
     firstName: 'Anton',
@@ -30,9 +30,32 @@ export class ContactDetailComponent {
   };
 
   // Hilfs-Variablen zum Testen der States:
-  isLoading: boolean = false;       // Für "Kontakt wird geladen"
-  hasError: boolean = false;        // Für "Kontakt konnte nicht geladen werden"
-  isDeleted: boolean = false;       // Für "Kontakt wurde gelöscht"
+  isLoading: boolean = false;        // Für "Kontakt wird geladen"
+  hasError: boolean = false;         // Für "Kontakt konnte nicht geladen werden"
+  isDeleted: boolean = false;        // Für "Kontakt wurde gelöscht"
+
+  // Dark-Mode Test-Variable
+  isDarkMode: boolean = false;
+
+  ngOnInit() {
+    // Prüfen, ob beim letzten Mal der Dark Mode aktiv war
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      this.isDarkMode = true;
+      document.body.classList.add('dark-mode');
+    }
+  }
+
+  toggleDarkMode() {
+    this.isDarkMode = !this.isDarkMode;
+    if (this.isDarkMode) {
+      document.body.classList.add('dark-mode');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.body.classList.remove('dark-mode');
+      localStorage.setItem('theme', 'light');
+    }
+  }
 
   onEdit() {
     console.log('Edit clicked - nach Edit aktualisieren');

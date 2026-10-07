@@ -1,3 +1,11 @@
+<div class="theme-toggle-bar">
+  <span>Dark Mode:</span>
+  <label class="theme-switch" for="checkbox">
+    <input type="checkbox" id="checkbox" [checked]="isDarkMode" (change)="toggleDarkMode()" />
+    <div class="slider"></div>
+  </label>
+</div>
+
 <div *ngIf="isLoading" class="state-container">
   <p>Lade Kontaktdaten...</p>
 </div>

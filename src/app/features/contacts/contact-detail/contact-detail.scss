@@ -7,124 +7,196 @@ $join-bg-light: #F6F7F8;
     flex-direction: column;
     gap: 32px;
     padding: 24px 40px;
-    background-color: #ffffff;
+    background-color: var(--card-bg, #ffffff);
+    color: var(--text-color, #2A3647);
     height: 100%;
     box-sizing: border-box;
+    transition: background-color 0.3s ease, color 0.3s ease;
 
     .contact-header {
         display: flex;
         align-items: center;
         gap: 24px;
 
-    .contact-avatar {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #ffffff;
-        font-size: 47px;
-        font-weight: 500;
-        border: 3px solid #ffffff;
-        box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
-        flex-shrink: 0;
-    }
-
-    .contact-header-info {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-
-    .contact-name {
-        font-size: 47px;
-        font-weight: 700;
-        margin: 0;
-        color: $join-dark-blue;
-        line-height: 1.2;
-    }
-
-    .contact-actions {
-        display: flex;
-        gap: 16px;
-        align-items: center;
-        margin-top: 8px;
-
-        .action-btn {
-            background: none;
-            border: none;
+        .contact-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 47px;
+            font-weight: 500;
+            border: 3px solid var(--card-bg, #ffffff);
+            box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .contact-header-info {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+
+            .contact-name {
+                font-size: 47px;
+                font-weight: 700;
+                margin: 0;
+                color: var(--text-color, $join-dark-blue);
+                line-height: 1.2;
+            }
+
+            .contact-actions {
+                display: flex;
+                gap: 16px;
+                align-items: center;
+                margin-top: 8px;
+
+                .action-btn {
+                    background: none;
+                    border: none;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    cursor: pointer;
+                    padding: 6px 12px;
+                    border-radius: 8px;
+                    transition: background-color 0.2s, transform 0.1s;
+
+                    img {
+                        width: 62px;
+                        height: 24px;
+                        transition: filter 0.3s ease;
+                    }
+
+                    &:hover {
+                        background-color: rgba(42, 54, 71, 0.05);
+                    }
+
+                    &.delete-btn:hover {
+                        color: #ff8190;
+                    }
+                }
+            }
+        }
+    }
+
+    .contact-info-section {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+
+        h3 {
+            font-size: 20px;
+            font-weight: 400;
+            margin: 0;
+            color: var(--text-color, $join-dark-blue);
+        }
+
+        .info-group {
+            display: flex;
+            flex-direction: column;
             gap: 8px;
-            cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 4px;
-            transition: background-color 0.2s, transform 0.1s;
 
-        img {
-            width: 62px;
-            height: 24px;
-        }
+            .info-label {
+                font-size: 16px;
+                font-weight: 400;
+                color: var(--text-color, $join-dark-blue);
+            }
 
-        &:hover {
-            background-color: rgba(42, 54, 71, 0.05);
-        }
+            .info-value {
+                font-size: 16px;
+                text-decoration: none;
+                
+                &.email-link {
+                    color: $join-light-blue;
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
 
-        &.delete-btn:hover {
-            color: #ff8190;
-          }
+                &.phone-link {
+                    color: var(--text-color, $join-dark-blue);
+                }
+            }
         }
-      }
     }
-}
-
-.contact-info-section {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-
-    h3 {
-    font-size: 20px;
-    font-weight: 400;
-    margin: 0;
-    color: $join-dark-blue;
-    }
-
-    .info-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-
-    .info-label {
-        font-size: 16px;
-        font-weight: 400;
-        color: $join-dark-blue;
-    }
-
-    .info-value {
-        font-size: 16px;
-        text-decoration: none;
-        
-        &.email-link {
-        color: $join-light-blue;
-        &:hover {
-            text-decoration: underline;
-        }
-        }
-
-        &.phone-link {
-        color: $join-dark-blue;
-        }
-      }
-    }
-  }
 }
 
 .no-contact-selected {
-    Display: flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
     color: #a8a8a8;
     font-size: 18px;
+}
+
+.theme-toggle-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 40px;
+  background-color: var(--card-bg, #ffffff);
+  color: var(--text-color, $join-dark-blue);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  font-weight: 500;
+}
+
+.theme-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+
+    &:checked + .slider {
+      background-color: $join-light-blue;
+
+      &:before {
+        transform: translateX(24px);
+      }
+    }
+  }
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+
+  &:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+  }
+}
+
+
+::ng-deep body.dark-mode {
+  .action-btn {
+    img {
+      filter: invert(100%) brightness(200%);
+    }
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
 }
