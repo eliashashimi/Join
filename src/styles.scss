@@ -1,1 +1,19 @@
-/* You can add global styles to this file, and also import other style files */
+// JOIN Projekt - Standard Farben (MÜSSEN ganz oben stehen!)
+$join-dark-blue: #2A3647;   // Dunkles Blau (für Header, dunkle Hintergründe, Schriften)
+$join-light-blue: #29ABE2;  // Hellblau / Accent-Farbe (für Buttons, Logos, Highlights)
+$join-bg-light: #F6F7F8;    // Sehr helles Grau/Weiß (für den allgemeinen Hintergrund)
+
+/* CSS Reset & Standard-Werte für das JOIN-Projekt */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  scroll-behavior: smooth;
+  height: 100%;
+  font-family: 'Inter', sans-serif;
+  background-color: $join-bg-light;
+  color: $join-dark-blue;
+}
