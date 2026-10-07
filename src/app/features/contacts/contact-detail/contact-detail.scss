@@ -5,28 +5,39 @@ $join-bg-light: #F6F7F8;
 .contact-detail-container {
     display: flex;
     flex-direction: column;
-    gap: 32px;
-    padding: 24px 40px;
+    gap: 2rem;
+    padding: 1.5rem 1.25rem;
     background-color: var(--card-bg, #ffffff);
     color: var(--text-color, #2A3647);
     height: 100%;
     box-sizing: border-box;
     transition: background-color 0.3s ease, color 0.3s ease;
 
+    @media (min-width: 768px) {
+        padding: 1.5rem 2.5rem;
+    }
+
     .contact-header {
         display: flex;
-        align-items: center;
-        gap: 24px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+
+        @media (min-width: 768px) {
+            flex-direction: row;
+            align-items: center;
+            gap: 1.5rem;
+        }
 
         .contact-avatar {
-            width: 120px;
-            height: 120px;
+            width: clamp(5rem, 15vw, 7.5rem);
+            height: clamp(5rem, 15vw, 7.5rem);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #ffffff;
-            font-size: 47px;
+            font-size: clamp(1.75rem, 5vw, 2.9375rem);
             font-weight: 500;
             border: 3px solid var(--card-bg, #ffffff);
             box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
@@ -36,44 +47,72 @@ $join-bg-light: #F6F7F8;
         .contact-header-info {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 0.75rem;
+            width: 100%;
 
             .contact-name {
-                font-size: 47px;
+                font-size: 36px;
                 font-weight: 700;
                 margin: 0;
                 color: var(--text-color, $join-dark-blue);
-                line-height: 1.2;
+                line-height: 120%;
+                word-break: break-word;
+
+                @media (min-width: 768px) {
+                    font-size: clamp(2.25rem, 5vw, 2.9375rem);
+                }
             }
 
             .contact-actions {
                 display: flex;
-                gap: 16px;
+                gap: 1rem;
                 align-items: center;
-                margin-top: 8px;
+                margin-top: 0.5rem;
 
                 .action-btn {
                     background: none;
                     border: none;
                     display: flex;
                     align-items: center;
-                    gap: 8px;
+                    justify-content: center;
                     cursor: pointer;
-                    padding: 6px 12px;
+                    padding: 0;
                     border-radius: 8px;
+                    font-size: 1rem;
+                    font-weight: 400;
+                    color: var(--text-color, $join-dark-blue);
+                    box-sizing: border-box;
                     transition: background-color 0.2s, transform 0.1s;
-
-                    img {
-                        width: 62px;
-                        height: 24px;
-                        transition: filter 0.3s ease;
-                    }
 
                     &:hover {
                         background-color: rgba(42, 54, 71, 0.05);
                     }
+                }
 
-                    &.delete-btn:hover {
+                .edit-btn {
+                    width: 64px;
+                    height: 24px;
+
+                    img {
+                        width: 62px;
+                        height: 24px;
+                        object-fit: contain;
+                        transition: filter 0.3s ease;
+                    }
+                }
+
+                .delete-btn {
+                    width: 81px;
+                    height: 24px;
+
+                    img {
+                        width: 81px;
+                        height: 24px;
+                        object-fit: contain;
+                        transition: filter 0.3s ease;
+                    }
+
+                    &:hover {
                         color: #ff8190;
                     }
                 }
@@ -84,32 +123,37 @@ $join-bg-light: #F6F7F8;
     .contact-info-section {
         display: flex;
         flex-direction: column;
-        gap: 24px;
+        gap: 1.5rem;
 
         h3 {
             font-size: 20px;
             font-weight: 400;
             margin: 0;
             color: var(--text-color, $join-dark-blue);
+            line-height: 120%;
         }
 
         .info-group {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 0.5rem;
 
             .info-label {
                 font-size: 16px;
-                font-weight: 400;
+                font-weight: 700;
                 color: var(--text-color, $join-dark-blue);
+                line-height: 120%;
             }
 
             .info-value {
                 font-size: 16px;
+                font-weight: 400;
+                line-height: 120%;
                 text-decoration: none;
+                word-break: break-all;
                 
                 &.email-link {
-                    color: $join-light-blue;
+                    color: #007CEE;
                     &:hover {
                         text-decoration: underline;
                     }
@@ -128,19 +172,25 @@ $join-bg-light: #F6F7F8;
     align-items: center;
     justify-content: center;
     height: 100%;
+    padding: 1rem;
+    text-align: center;
     color: #a8a8a8;
-    font-size: 18px;
+    font-size: 1.125rem;
 }
 
 .theme-toggle-bar {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 16px 40px;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
   background-color: var(--card-bg, #ffffff);
   color: var(--text-color, $join-dark-blue);
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   font-weight: 500;
+
+  @media (min-width: 768px) {
+    padding: 1rem 2.5rem;
+  }
 }
 
 .theme-switch {
@@ -187,7 +237,6 @@ $join-bg-light: #F6F7F8;
     border-radius: 50%;
   }
 }
-
 
 ::ng-deep body.dark-mode {
   .action-btn {
