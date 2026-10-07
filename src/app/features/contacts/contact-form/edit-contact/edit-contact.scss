@@ -1,4 +1,105 @@
+@use '../../../../../../public/assets/styles';
+
 .contact {
-  &__form {
+  @include styles.flex-center;
+  width: 100%;
+  height: 100%;
+
+  .content-wrapper {
+    @include styles.flex-center;
+    height: 600px;
   }
+  &__form {
+    height: 100%;
+    @include styles.flex-center(column);
+    align-items: flex-start;
+    gap: 16px;
+    background: #2a3647;
+    padding: 0px 46px 60px;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+
+    img {
+      width: 54px;
+      height: 66px;
+      margin-bottom: 16px;
+    }
+    h2 {
+      font-size: 61px;
+      font-weight: bold;
+      color: white;
+    }
+    .logo-underline {
+      height: auto;
+    }
+  }
+  &__right {
+    @include styles.flex-center(column);
+    justify-content: flex-end;
+    height: 100%;
+    padding: 0px 48px 135px 95px;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+    background-color: white;
+    .close-btn {
+      font-size: 18px;
+      width: 100%;
+      text-align: end;
+      border-style: none;
+      background-color: white;
+      margin-bottom: 57px;
+    }
+    &--middle {
+      @include styles.flex-center;
+      gap: 72px;
+      .person-name-img {
+        padding-bottom: 50px;
+      }
+    }
+    &--input {
+      @include styles.flex-center(column);
+      align-items: flex-start;
+      gap: 48px;
+      &--box {
+        @include styles.flex-center(column);
+        align-items: flex-start;
+        gap: 32px;
+      }
+      input {
+        width: 420px;
+        height: 50px;
+        border: 1px solid #124658;
+        border-radius: 10px;
+        padding: 10px;
+        font-size: 20px;
+      }
+    }
+    &--btn {
+      @include styles.flex-center;
+      justify-content: flex-start;
+      gap: 25px;
+      height: 57px;
+      .delete {
+        border: 1px solid #2a3647;
+      }
+      .save {
+        color: white;
+        background-color: #2a3647;
+      }
+      .btn {
+        font-size: 21px;
+        padding: 10px;
+        border-radius: 8px;
+      }
+    }
+  }
+}
+
+.inp-icon {
+  transform: translateX(-40px) translateY(4px);
+}
+
+button:hover,
+input:hover {
+  cursor: pointer;
 }
