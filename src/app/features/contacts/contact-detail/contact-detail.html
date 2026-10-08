@@ -1,0 +1,52 @@
+<div *ngIf="isLoading" class="state-container">
+  <p>Lade Kontaktdaten...</p>
+</div>
+
+<div *ngIf="hasError && !isLoading" class="state-container error-state">
+  <p>Kontakt konnte nicht geladen werden.</p>
+</div>
+
+<div *ngIf="isDeleted" class="state-container">
+  <p>Der Kontakt wurde erfolgreich gelöscht.</p>
+</div>
+
+<ng-container *ngIf="!isLoading && !hasError && !isDeleted">
+  <div class="contact-detail-container" *ngIf="contact; else noContact">
+    <div class="contact-header">
+      <div class="contact-avatar" [style.background-color]="contact.color">
+        {{ contact.initials }}
+      </div>
+      <div class="contact-header-info">
+        <h2 class="contact-name">{{ contact.firstName }} {{ contact.lastName }}</h2>
+        <div class="contact-actions">
+          <button class="action-btn edit-btn" (click)="onEdit()">
+            <img src="assets/contact-details/edit-btn.png" alt="Edit Icon" />
+          </button>
+          <button class="action-btn delete-btn" (click)="onDelete()">
+            <img src="assets/contact-details/delete-btn.png" alt="Delete Icon" />
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-info-section">
+      <h3>Kontaktdaten</h3>
+
+      <div class="info-group">
+        <span class="info-label">E-Mail</span>
+        <a [href]="'mailto:' + contact.email" class="info-value email-link">{{ contact.email }}</a>
+      </div>
+
+      <div class="info-group">
+        <span class="info-label">Telefon</span>
+        <a [href]="'tel:' + contact.phone" class="info-value phone-link">{{ contact.phone }}</a>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noContact>
+    <div class="no-contact-selected">
+      <p>Wähle einen Kontakt aus, um Details anzuzeigen.</p>
+    </div>
+  </ng-template>
+</ng-container>
