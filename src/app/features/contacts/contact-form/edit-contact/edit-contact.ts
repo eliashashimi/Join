@@ -55,13 +55,40 @@ export class EditContact {
     return this.userform.get('phone');
   }
 
+  getInitials() {
+    const nameValue = this.name?.value;
+    if (!nameValue) return '';
+    const parts = nameValue.trim().split(/\s+/);
+    if (parts.length === 1) {
+      return parts[0].substring(0, 2).toUpperCase();
+    }
+    const firstinitial = parts[0].charAt(0);
+    const lastinitial = parts[parts.length - 1].charAt(0);
+    return firstinitial + lastinitial;
+  }
+
+  getBackground() {
+    const nameValue = this.name?.value;
+    if (!nameValue || nameValue.trim().length < 2) {
+      return '#cccccc';
+    }
+    let hash = 0;
+    for (let i = 0; i < nameValue.length; i++) {
+      hash = nameValue.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const color = Math.abs(hash % 360);
+    return `hsl(${color}), 75%, 45%`;
+  }
+
   onSubmit() {
     this.formSubmitted.set(true);
 
     if (this.userform.valid) {
+      const nameText = this.userform.value.name;
       const emailText = this.userform.value.email;
       if (emailText)
         this.userform.patchValue({
+          name: nameText?.trim(),
           email: emailText?.toLowerCase().trim(),
         });
       this.userform.reset();

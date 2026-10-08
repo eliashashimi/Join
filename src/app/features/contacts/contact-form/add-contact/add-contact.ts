@@ -31,7 +31,7 @@ export class AddContact {
   formSubmitted = signal(false);
 
   userform = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(4), forbiddenNameValidator(/ /)]],
+    name: ['', [Validators.required, Validators.minLength(4)]],
     email: [
       '',
       [
@@ -67,13 +67,28 @@ export class AddContact {
     return firstinitial + lastinitial;
   }
 
+  getBackground() {
+    const nameValue = this.name?.value;
+    if (!nameValue || nameValue.trim().length < 2) {
+      return '#cccccc';
+    }
+    let hash = 0;
+    for (let i = 0; i < nameValue.length; i++) {
+      hash = nameValue.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const color = Math.abs(hash % 360);
+    return `hsl(${color}), 75%, 45%`;
+  }
+
   onSubmit() {
     this.formSubmitted.set(true);
 
     if (this.userform.valid) {
+      const nameText = this.userform.value.name;
       const emailText = this.userform.value.email;
       if (emailText)
         this.userform.patchValue({
+          name: nameText?.trim(),
           email: emailText?.toLowerCase().trim(),
         });
       this.userform.reset();

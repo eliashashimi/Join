@@ -10,7 +10,13 @@
       <button class="close-btn">X</button>
       <div class="contact__right--middle">
         <div class="person-name-img">
-          <img src="assets/images/Group 13.png" alt="contact Icon" />
+          @if (getInitials()) {
+            <div class="avatar-circle" [style.background-color]="getBackground()">
+              {{ getInitials() }}
+            </div>
+          } @else {
+            <img src="assets/images/Group 13.png" alt="contact Icon" />
+          }
         </div>
         <form [formGroup]="userform" (ngSubmit)="(onSubmit)">
           <div class="contact__right--input">

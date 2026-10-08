@@ -59,6 +59,18 @@
       .person-name-img {
         padding-bottom: 50px;
       }
+      .avatar-circle {
+        @include styles.flex-center;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 3px solid #ffffff;
+        box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
+        color: white;
+        font-size: 47px;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
     }
     &--input {
       @include styles.flex-center(column);
