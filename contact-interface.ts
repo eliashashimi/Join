@@ -3,8 +3,10 @@
  */
 export interface ContactInterface {
   id: string;
-  firstName: string;
-  lastName: string;
+
+  /** Vor- und Nachname in einem Feld wie im Figma, z. B. 'Anton Mayer'. */
+  name: string;
+
   email: string;
 
   /** Leerer String, wenn keine Telefonnummer hinterlegt ist. */
@@ -13,7 +15,7 @@ export interface ContactInterface {
   /** Avatar-Farbe als Hex-Wert. */
   color: string;
 
-  /** Aus Vor- und Nachname berechnet, z. B. 'AM'. Steht nicht in der Datenbank. */
+  /** Aus dem Namen berechnet, z. B. 'AM'. Steht nicht in der Datenbank. */
   initials: string;
 
   /** Zeitstempel, werden von der Datenbank gesetzt. */
@@ -23,21 +25,20 @@ export interface ContactInterface {
 
 /**
  * Die Felder, die das Formular beim Anlegen oder Bearbeiten liefert.
- * `phone` und `color` sind optional. */
+ * `phone` und `color` sind optional.
+ */
 export interface ContactData {
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
   phone?: string;
   color?: string;
 }
 
 /**
- * Eine Zeile der Tabelle `contacts` in Supabase (Spaltennamen wie in der Datenbank). */
+ * Eine Zeile der Tabelle `contacts` in Supabase (Spaltennamen wie in der Datenbank).*/
 export interface ContactRow {
   id: string;
-  first_name: string;
-  last_name: string;
+  name: string;
   email: string;
   phone: string | null;
   color: string;
