@@ -103,3 +103,18 @@ button:hover,
 input:hover {
   cursor: pointer;
 }
+
+input:invalid {
+  color: red;
+  border: 1px solid red;
+}
+
+.has-error {
+  h5 {
+    color: red;
+  }
+  .inp {
+    color: red;
+    border: 1px solid red;
+  }
+}

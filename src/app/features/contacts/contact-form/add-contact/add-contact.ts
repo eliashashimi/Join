@@ -55,6 +55,18 @@ export class AddContact {
     return this.userform.get('phone');
   }
 
+  getInitials() {
+    const nameValue = this.name?.value;
+    if (!nameValue) return '';
+    const parts = nameValue.trim().split(/\s+/);
+    if (parts.length === 1) {
+      return parts[0].substring(0, 2).toUpperCase();
+    }
+    const firstinitial = parts[0].charAt(0);
+    const lastinitial = parts[parts.length - 1].charAt(0);
+    return firstinitial + lastinitial;
+  }
+
   onSubmit() {
     this.formSubmitted.set(true);
 

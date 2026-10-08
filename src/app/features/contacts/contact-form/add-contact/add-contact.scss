@@ -83,10 +83,10 @@
       justify-content: flex-start;
       gap: 25px;
       height: 57px;
-      .delete {
+      .cancel {
         border: 1px solid #2a3647;
       }
-      .save {
+      .create {
         color: white;
         background-color: #2a3647;
       }
@@ -106,4 +106,19 @@
 button:hover,
 input:hover {
   cursor: pointer;
+}
+
+input:invalid {
+  color: red;
+  border: 1px solid red;
+}
+
+.has-error {
+  h5 {
+    color: red;
+  }
+  .inp {
+    color: red;
+    border: 1px solid red;
+  }
 }
