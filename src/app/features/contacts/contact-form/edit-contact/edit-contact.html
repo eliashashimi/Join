@@ -11,28 +11,98 @@
         <div class="person-name-img">
           <img src="assets/images/Group 13.png" alt="contact Icon" />
         </div>
-        <div class="contact__right--input">
-          <div class="contact__right--input--box">
-            <div class="name-edit inp">
-              <input type="text" placeholder="Name" />
-              <img class="inp-icon" src="assets/icons/person.svg" alt="Name Icon" />
-            </div>
-            <div class="email-edit inp">
-              <input type="text" placeholder="Email" />
-              <img class="inp-icon" src="assets/icons/mail.svg" alt="Email-Icon" />
-            </div>
-            <div class="number-edit inp">
-              <input type="text" placeholder="Phone" />
-              <img class="inp-icon" src="assets/icons/call.svg" alt="Phone Icon" />
+        <form [formGroup]="userform" (ngSubmit)="(onSubmit)">
+          <div class="contact__right--input">
+            <div class="contact__right--input--box">
+              <div
+                [class.has-error]="
+                  (name?.invalid && name?.dirty) || (name?.hasError('required') && formSubmitted())
+                "
+                [class.has-success]="name?.valid && name?.dirty"
+              >
+                <div class="h5-txt">
+                  <h5 label for="name">
+                    @if (
+                      (name?.hasError('minlength') && name?.dirty) ||
+                      (name?.hasError('forbiddenName') && name?.dirty) ||
+                      (name?.hasError('required') && formSubmitted())
+                    ) {
+                      @if (name?.hasError('required') && formSubmitted()) {
+                        {{ 'contact.error.nameRequired' }}
+                      }
+                      @if (name?.hasError('minlength') && name?.dirty) {
+                        {{ 'contact.error.nameMin' }}
+                      }
+                      @if (name?.hasError('forbiddenName') && name?.dirty) {
+                        {{ 'contact.error.nameSpace' }}
+                      }
+                    }
+                  </h5>
+                </div>
+                <input class="name-edit inp" type="text" placeholder="Name" />
+                <img class="inp-icon" src="assets/icons/person.svg" alt="Name Icon" />
+              </div>
+              <div
+                [class.has-error]="
+                  (email?.invalid && email?.dirty) ||
+                  (email?.hasError('required') && formSubmitted())
+                "
+                [class.has-success]="email?.valid && email?.dirty"
+              >
+                <div class="h5-txt">
+                  <h5 label for="email">
+                    @if (
+                      ((email?.hasError('pattern') || email?.hasError('email')) && email?.dirty) ||
+                      (email?.hasError('required') && formSubmitted())
+                    ) {
+                      @if (email?.hasError('required') && formSubmitted()) {
+                        {{ 'contact.error.emailRequired' }}
+                      }
+                      @if (
+                        (email?.hasError('pattern') || email?.hasError('email')) && email?.dirty
+                      ) {
+                        {{ 'contact.error.emailInvalid' }}
+                      }
+                    }
+                  </h5>
+                  <input class="email-edit inp" type="text" placeholder="Email" />
+                  <img class="inp-icon" src="assets/icons/mail.svg" alt="Email-Icon" />
+                </div>
+                <div
+                  [class.has-error]="
+                    (phone?.invalid && phone?.dirty) ||
+                    (phone?.hasError('required') && formSubmitted())
+                  "
+                  [class.has-success]="phone?.valid && phone?.dirty"
+                >
+                  <h5 label for="phone">
+                    @if (
+                      ((phone?.hasError('pattern') || phone?.hasError('phone')) && phone?.dirty) ||
+                      (phone?.hasError('required') && formSubmitted())
+                    ) {
+                      @if (phone?.hasError('required') && formSubmitted()) {
+                        {{ 'contact.error.phoneRequired' }}
+                      }
+                      @if (
+                        (phone?.hasError('pattern') || phone?.hasError('phone')) && phone?.dirty
+                      ) {
+                        {{ 'contact.error.phoneInvalid' }}
+                      }
+                    }
+                  </h5>
+                  <input class="number-edit inp" type="text" placeholder="Phone" />
+                  <img class="inp-icon" src="assets/icons/call.svg" alt="Phone Icon" />
+                </div>
+              </div>
+              <div class="contact__right--btn">
+                <button class="delete btn">Delete</button>
+                <button class="save btn">
+                  Save <img src="assets/icons/check.svg" alt="okay icon" />
+                </button>
+              </div>
             </div>
           </div>
-          <div class="contact__right--btn">
-            <button class="delete btn">Delete</button>
-            <button class="save btn">
-              Save <img src="assets/icons/check.svg" alt="okay icon" />
-            </button>
-          </div>
-        </div>
+        </form>
       </div>
     </div>
   </div>
