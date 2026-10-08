@@ -5,39 +5,27 @@ $join-bg-light: #F6F7F8;
 .contact-detail-container {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-    padding: 1.5rem 1.25rem;
+    gap: 32px;
+    padding: 24px 40px;
     background-color: var(--card-bg, #ffffff);
     color: var(--text-color, #2A3647);
     height: 100%;
     box-sizing: border-box;
-    transition: background-color 0.3s ease, color 0.3s ease;
-
-    @media (min-width: 768px) {
-        padding: 1.5rem 2.5rem;
-    }
 
     .contact-header {
         display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1.5rem;
-
-        @media (min-width: 768px) {
-            flex-direction: row;
-            align-items: center;
-            gap: 1.5rem;
-        }
+        align-items: center;
+        gap: 24px;
 
         .contact-avatar {
-            width: clamp(5rem, 15vw, 7.5rem);
-            height: clamp(5rem, 15vw, 7.5rem);
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #ffffff;
-            font-size: clamp(1.75rem, 5vw, 2.9375rem);
+            font-size: 47px;
             font-weight: 500;
             border: 3px solid var(--card-bg, #ffffff);
             box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
@@ -47,27 +35,21 @@ $join-bg-light: #F6F7F8;
         .contact-header-info {
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
-            width: 100%;
+            gap: 12px;
 
             .contact-name {
-                font-size: 36px;
+                font-size: 47px;
                 font-weight: 700;
                 margin: 0;
                 color: var(--text-color, $join-dark-blue);
-                line-height: 120%;
-                word-break: break-word;
-
-                @media (min-width: 768px) {
-                    font-size: clamp(2.25rem, 5vw, 2.9375rem);
-                }
+                line-height: 1.2;
             }
 
             .contact-actions {
                 display: flex;
-                gap: 1rem;
+                gap: 16px;
                 align-items: center;
-                margin-top: 0.5rem;
+                margin-top: 8px;
 
                 .action-btn {
                     background: none;
@@ -78,9 +60,6 @@ $join-bg-light: #F6F7F8;
                     cursor: pointer;
                     padding: 0;
                     border-radius: 8px;
-                    font-size: 1rem;
-                    font-weight: 400;
-                    color: var(--text-color, $join-dark-blue);
                     box-sizing: border-box;
                     transition: background-color 0.2s, transform 0.1s;
 
@@ -94,10 +73,9 @@ $join-bg-light: #F6F7F8;
                     height: 24px;
 
                     img {
-                        width: 62px;
-                        height: 24px;
+                        width: 20px;
+                        height: 20px;
                         object-fit: contain;
-                        transition: filter 0.3s ease;
                     }
                 }
 
@@ -106,10 +84,9 @@ $join-bg-light: #F6F7F8;
                     height: 24px;
 
                     img {
-                        width: 81px;
-                        height: 24px;
+                        width: 24px;
+                        height: 20px;
                         object-fit: contain;
-                        transition: filter 0.3s ease;
                     }
 
                     &:hover {
@@ -123,37 +100,32 @@ $join-bg-light: #F6F7F8;
     .contact-info-section {
         display: flex;
         flex-direction: column;
-        gap: 1.5rem;
+        gap: 24px;
 
         h3 {
             font-size: 20px;
             font-weight: 400;
             margin: 0;
             color: var(--text-color, $join-dark-blue);
-            line-height: 120%;
         }
 
         .info-group {
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 8px;
 
             .info-label {
                 font-size: 16px;
-                font-weight: 700;
+                font-weight: 400;
                 color: var(--text-color, $join-dark-blue);
-                line-height: 120%;
             }
 
             .info-value {
                 font-size: 16px;
-                font-weight: 400;
-                line-height: 120%;
                 text-decoration: none;
-                word-break: break-all;
                 
                 &.email-link {
-                    color: #007CEE;
+                    color: $join-light-blue;
                     &:hover {
                         text-decoration: underline;
                     }
@@ -172,80 +144,6 @@ $join-bg-light: #F6F7F8;
     align-items: center;
     justify-content: center;
     height: 100%;
-    padding: 1rem;
-    text-align: center;
     color: #a8a8a8;
-    font-size: 1.125rem;
-}
-
-.theme-toggle-bar {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1rem 1.25rem;
-  background-color: var(--card-bg, #ffffff);
-  color: var(--text-color, $join-dark-blue);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  font-weight: 500;
-
-  @media (min-width: 768px) {
-    padding: 1rem 2.5rem;
-  }
-}
-
-.theme-switch {
-  position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 26px;
-
-  input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-
-    &:checked + .slider {
-      background-color: $join-light-blue;
-
-      &:before {
-        transform: translateX(24px);
-      }
-    }
-  }
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: 0.4s;
-  border-radius: 34px;
-
-  &:before {
-    position: absolute;
-    content: "";
-    height: 18px;
-    width: 18px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: 0.4s;
-    border-radius: 50%;
-  }
-}
-
-::ng-deep body.dark-mode {
-  .action-btn {
-    img {
-      filter: invert(100%) brightness(200%);
-    }
-
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-  }
+    font-size: 18px;
 }
