@@ -31,7 +31,10 @@ export class AddContact {
   formSubmitted = signal(false);
 
   userform = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(4)]],
+    name: [
+      '',
+      [Validators.required, Validators.minLength(4), Validators.pattern('^[^\s]+(\s+[^\s]+)*\$')],
+    ],
     email: [
       '',
       [
@@ -55,19 +58,19 @@ export class AddContact {
     return this.userform.get('phone');
   }
 
-  getInitials() {
+  getInitials(): string {
     const nameValue = this.name?.value;
-    if (!nameValue) return '';
+    if (!nameValue || !nameValue?.trim()) return '';
     const parts = nameValue.trim().split(/\s+/);
     if (parts.length === 1) {
       return parts[0].substring(0, 2).toUpperCase();
     }
     const firstinitial = parts[0].charAt(0);
     const lastinitial = parts[parts.length - 1].charAt(0);
-    return firstinitial + lastinitial;
+    return (firstinitial + lastinitial).toUpperCase();
   }
 
-  getBackground() {
+  getBackground(): string {
     const nameValue = this.name?.value;
     if (!nameValue || nameValue.trim().length < 2) {
       return '#cccccc';
@@ -77,21 +80,30 @@ export class AddContact {
       hash = nameValue.charCodeAt(i) + ((hash << 5) - hash);
     }
     const color = Math.abs(hash % 360);
-    return `hsl(${color}), 75%, 45%`;
+    return `hsl(${color}, 70%, 45%)`;
   }
 
   onSubmit() {
     this.formSubmitted.set(true);
 
     if (this.userform.valid) {
-      const nameText = this.userform.value.name;
-      const emailText = this.userform.value.email;
-      if (emailText)
-        this.userform.patchValue({
-          name: nameText?.trim(),
-          email: emailText?.toLowerCase().trim(),
-        });
-      this.userform.reset();
+      const nameText = this.userform.value.name || '';
+      const emailText = this.userform.value.email || '';
+      const phoneText = this.userform.value.phone || '';
+      const generatedColor = this.getBackground();
+
+      const newContact = {
+        name: nameText.trim(),
+        email: emailText.toLowerCase().trim(),
+        phoneText: phoneText.trim(),
+        color: generatedColor
+      };
+        // if (emailText)
+        //   this.userform.patchValue({
+        //     name: nameText?.trim(),
+        //     email: emailText?.toLowerCase().trim(),
+        //   });
+        this.userform.reset();
       this.formSubmitted.set(false);
     }
   }
