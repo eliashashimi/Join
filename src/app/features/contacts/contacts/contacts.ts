@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, signal } from '@angular/core';
 import { Contact as ContactModel, GroupedContacts } from '../../../interfaces/contact';
+import { ContactDetailComponent } from '../contact-detail/contact-detail';
 
 @Component({
-  imports: [CommonModule],
+  imports: [CommonModule,ContactDetailComponent],
   selector: 'app-contacts',
   styleUrl: './contacts.scss',
   templateUrl: './contacts.html',
