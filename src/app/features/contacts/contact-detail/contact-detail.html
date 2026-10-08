@@ -1,11 +1,3 @@
-<div class="theme-toggle-bar">
-  <span>Dark Mode:</span>
-  <label class="theme-switch" for="checkbox">
-    <input type="checkbox" id="checkbox" [checked]="isDarkMode" (change)="toggleDarkMode()" />
-    <div class="slider"></div>
-  </label>
-</div>
-
 <div *ngIf="isLoading" class="state-container">
   <p>Lade Kontaktdaten...</p>
 </div>
@@ -27,7 +19,7 @@
       <div class="contact-header-info">
         <h2 class="contact-name">{{ contact.firstName }} {{ contact.lastName }}</h2>
         <div class="contact-actions">
-          <button class="action-btn" (click)="onEdit()">
+          <button class="action-btn edit-btn" (click)="onEdit()">
             <img src="assets/contact-details/edit-btn.png" alt="Edit Icon" />
           </button>
           <button class="action-btn delete-btn" (click)="onDelete()">

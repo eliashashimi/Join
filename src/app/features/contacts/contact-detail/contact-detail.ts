@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface Contact {
@@ -18,8 +18,7 @@ export interface Contact {
   templateUrl: './contact-detail.html',
   styleUrls: ['./contact-detail.scss']
 })
-export class ContactDetailComponent implements OnInit {
-  // 1. Normaler Kontakt (Zustand: "Kontakt ausgewählt")
+export class ContactDetailComponent {
   @Input() contact: Contact | null = {
     firstName: 'Anton',
     lastName: 'Mayer',
@@ -29,36 +28,12 @@ export class ContactDetailComponent implements OnInit {
     initials: 'AM'
   };
 
-  // Hilfs-Variablen zum Testen der States:
-  isLoading: boolean = false;        // Für "Kontakt wird geladen"
-  hasError: boolean = false;         // Für "Kontakt konnte nicht geladen werden"
-  isDeleted: boolean = false;        // Für "Kontakt wurde gelöscht"
-
-  // Dark-Mode Test-Variable
-  isDarkMode: boolean = false;
-
-  ngOnInit() {
-    // Prüfen, ob beim letzten Mal der Dark Mode aktiv war
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      this.isDarkMode = true;
-      document.body.classList.add('dark-mode');
-    }
-  }
-
-  toggleDarkMode() {
-    this.isDarkMode = !this.isDarkMode;
-    if (this.isDarkMode) {
-      document.body.classList.add('dark-mode');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.body.classList.remove('dark-mode');
-      localStorage.setItem('theme', 'light');
-    }
-  }
+  isLoading: boolean = false;
+  hasError: boolean = false;
+  isDeleted: boolean = false;
 
   onEdit() {
-    console.log('Edit clicked - nach Edit aktualisieren');
+    console.log('Edit clicked');
     if (this.contact) {
       this.contact.lastName = 'Mayer (Aktualisiert)';
     }
@@ -66,6 +41,6 @@ export class ContactDetailComponent implements OnInit {
 
   onDelete() {
     console.log('Delete clicked');
-    this.isDeleted = true; // Simuliert "Kontakt wurde gelöscht"
+    this.isDeleted = true;
   }
 }
