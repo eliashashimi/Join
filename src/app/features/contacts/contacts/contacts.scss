@@ -11,7 +11,7 @@
 /* Sidebar */
 .sidebar {
     width: 232px;
-    background-color: #2a3642;
+    background-color: #2a3647;
     color: #cdcdcd;
     display: flex;
     flex-direction: column;
@@ -62,7 +62,7 @@
 }
 
 .nav-item:hover {
-    background-color: #091931;
+    background-color: rgba(42, 61, 89, 1);
 }
 
 .nav-item.active {
@@ -103,7 +103,7 @@
 }
 
 .top-header {
-    height: 80px;
+    height: 96px;
     background: white;
     display: flex;
     align-items: center;
@@ -119,9 +119,18 @@
     margin-right: auto;
     padding-left: 16px;
 }
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    width: 104px;
+    height: auto;
+    gap: 16px;
+}
+
 .help-icon {
-    width: 32px;
-    height: 32px;
+    width: 20px;
+    height: 20px;
     border: 1px solid #d1d1d1;
     border-radius: 50%;
     display: flex;
@@ -132,8 +141,8 @@
     font-weight: bold;
 }
 .user-avatar-sm {
-    width: 40px;
-    height: 40px;
+    width: 56px;
+    height: 56px;
     border: 2px solid #2a3642;
     border-radius: 50%;
     display: flex;
@@ -142,6 +151,10 @@
     color: #2a3642;
     font-weight: bold;
     font-size: 14px;
+
+    &:hover {
+        background-color: rgba(12, 46, 98, 0.12);
+    }
 }
 
 /* Content Body */
@@ -161,7 +174,7 @@
     padding: 24px 0;
 }
 .add-contact-btn {
-    background-color: #2a3642;
+    background-color: #2a3647;
     color: white;
     border: none;
     border-radius: 10px;
@@ -206,10 +219,10 @@
     transition: background 0.2s;
 }
 .contact-item:hover {
-    background-color: #eeeeee;
+    background: linear-gradient(180deg,rgba(249, 249, 249, 1) 0%, rgba(240, 240, 240, 1) 100%);
 }
 .contact-item.selected {
-    background-color: #2a3642;
+    background-color: #2a3647;
     color: white;
 }
 .contact-item.selected .contact-email {
@@ -251,9 +264,9 @@
 .contacts-detail-container {
     flex: 1;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     flex-direction: column;
-    padding-left: 80px;
+    padding: 120px 160px 0 55px;
     background-color: #f6f7f8;
 }
 .detail-hero {
