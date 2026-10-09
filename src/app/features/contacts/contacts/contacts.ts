@@ -7,7 +7,7 @@ import { EditContact } from '../contact-form/edit-contact/edit-contact';
 import { ContactService } from '../../../service/contact-service';
 
 @Component({
-  imports: [CommonModule, ContactDetailComponent],
+  imports: [CommonModule, ContactDetailComponent, AddContact, EditContact],
   selector: 'app-contacts',
   styleUrl: './contacts.scss',
   templateUrl: './contacts.html',

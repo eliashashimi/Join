@@ -13,6 +13,7 @@ import { ContactService } from '../../../service/contact-service';
 export class ContactDetailComponent {
   @Input() contact: ContactInterface | null = null;
   @Output() contactDeleted = new EventEmitter<void>();
+  @Output() editClicked = new EventEmitter<void>();
 
   private contactService = inject(ContactService);
 
