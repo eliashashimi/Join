@@ -9,11 +9,10 @@ import { ContactService } from '../../../service/contact-service';
 @Component({
   imports: [CommonModule, ContactDetailComponent, AddContact, EditContact],
   selector: 'app-contacts',
+  standalone: true,
   styleUrl: './contacts.scss',
   templateUrl: './contacts.html',
 })
-
-// Automatische Gruppierung nach Anfangsbuchstaben (A, B, D, E, M...)
 export class ContactsComponent implements OnInit {
   showAddContactModal = signal(false);
   showEditContactModal = signal(false);

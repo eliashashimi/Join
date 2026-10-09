@@ -24,11 +24,6 @@ export class ContactDetailComponent {
   showDeleteModal: boolean = false;
 
   onEdit() {
-    // console.log('Edit clicked');
-    // if (this.contact) {
-    //   this.contact.lastName = 'Mayer (Aktualisiert)';
-    // }
-
     this.editClicked.emit();
   }
 
