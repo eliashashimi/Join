@@ -13,6 +13,10 @@ import { ContactService } from '../../../service/contact-service';
 export class ContactDetailComponent {
   @Input() contact: ContactInterface | null = null;
   @Output() contactDeleted = new EventEmitter<void>();
+<<<<<<< HEAD
+=======
+  
+>>>>>>> 8046db9d9bf62f0c4a888c3c9e8794ed3d1d00e0
   @Output() editClicked = new EventEmitter<void>();
 
   private contactService = inject(ContactService);
@@ -24,11 +28,6 @@ export class ContactDetailComponent {
   showDeleteModal: boolean = false;
 
   onEdit() {
-    // console.log('Edit clicked');
-    // if (this.contact) {
-    //   this.contact.lastName = 'Mayer (Aktualisiert)';
-    // }
-
     this.editClicked.emit();
   }
 

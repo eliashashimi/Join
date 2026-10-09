@@ -6,6 +6,10 @@
         <img src="./assets/join-logo-white.png" alt="Join-Logo" />
       </div>
     </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8046db9d9bf62f0c4a888c3c9e8794ed3d1d00e0
     <nav class="nav-menu">
       <a class="nav-item">
         <svg class="nav-icon" viewBox="0 0 24 24">
@@ -49,7 +53,10 @@
 
   <!-- Hauptbereich -->
   <main class="main-content">
+<<<<<<< HEAD
     <!--  Header -->
+=======
+>>>>>>> 8046db9d9bf62f0c4a888c3c9e8794ed3d1d00e0
     <header class="top-header">
       <span class="header-title">Kanban Project Management Tool</span>
       <div class="user-profile">
@@ -61,7 +68,7 @@
     <div class="content-body">
       <!-- Kontaktliste -->
       <div class="contacts-list-container">
-        <button class="add-contact-btn">
+        <button class="add-contact-btn" (click)="showAddContactModal.set(true)">
           Add new contact
           <span class="user-add-icon">👤+</span>
         </button>
@@ -70,6 +77,10 @@
           @for (group of groupedContacts(); track group.letter) {
             <div class="contact-group-header">{{ group.letter }}</div>
             <hr class="group-divider" />
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8046db9d9bf62f0c4a888c3c9e8794ed3d1d00e0
             @for (contact of group.contacts; track contact.id) {
               <div
                 class="contact-item"
@@ -89,18 +100,25 @@
         </div>
       </div>
 
-      <!-- Titelbereich / Detailansicht -->
+      <!-- Detailansicht -->
       <div class="contacts-detail-container">
         <div class="detail-hero">
           <h1 class="hero-title">Contacts</h1>
           <div class="hero-divider"></div>
           <p class="hero-subtitle">Better with a team</p>
         </div>
-        <app-contact-detail></app-contact-detail>
+        <app-contact-detail
+          [contact]="selectedContact()"
+          (contactDeleted)="selectedContact.set(null)"
+          (editClicked)="showEditContactModal.set(true)"
+        >
+        </app-contact-detail>
       </div>
     </div>
   </main>
 </div>
+
+<!-- Modals -->
 @if (showEditContactModal() && selectedContact(); as contact) {
   <div class="modal-overlay" (click)="showEditContactModal.set(false)">
     <div class="modal-content" (click)="$event.stopPropagation()">
@@ -111,6 +129,7 @@
     </div>
   </div>
 }
+
 @if (showAddContactModal()) {
   <div class="modal-overlay" (click)="showAddContactModal.set(false)">
     <div class="modal-content" (click)="$event.stopPropagation()">
