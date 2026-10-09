@@ -1,0 +1,104 @@
+<div class="help-container">
+  <aside class="sidebar">
+    <div class="logo-area">
+      <div class="logo-icon">
+        <img src="./assets/join-logo-white.png" alt="Join-Logo" />
+      </div>
+    </div>
+
+    <nav class="nav-menu">
+      <a routerLink="/summary" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+        </svg>Summary
+      </a>
+      <a routerLink="/add-task" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
+        </svg>Add Task
+      </a>
+      <a routerLink="/board" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+        </svg>Board
+      </a>
+      <a routerLink="/contacts" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+        </svg>Contacts
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a routerLink="/privacy-policy">Privacy Policy</a>
+      <a routerLink="/legal-notice">Legal notice</a>
+    </div>
+  </aside>
+
+  <!-- Hauptbereich -->
+  <main class="main-content">
+    <header class="top-header">
+      <span class="header-title">Kanban Project Management Tool</span>
+      <div class="user-profile">
+        <span class="help-icon active-help">?</span>
+        <div class="user-avatar-sm">SM</div>
+      </div>
+    </header>
+
+    <div class="content-body help-scroll-area">
+      <div class="help-content-wrapper">
+        
+        <div class="help-header-row">
+          <h1>Help</h1>
+          <button class="back-btn" (click)="goBack()">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <path fill="currentColor" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+            </svg>
+          </button>
+        </div>
+
+        <p class="intro-text">
+          Welcome to the help page for <span class="highlight">Join</span>, your guide to using our kanban project management tool. Here, we'll provide an overview of what Join is, how it can benefit you, and how to use it.
+        </p>
+
+        <section class="help-section">
+          <h2>What is Join?</h2>
+          <p>
+            <span class="highlight">Join</span> is a kanban-based project management tool designed and built by a group of dedicated students as part of their web development bootcamp at the Developer Akademie.
+          </p>
+          <p>
+            Kanban, a Japanese term meaning "billboard", is a highly effective method to visualize work, limit work-in-progress, and maximize efficiency (or flow). <span class="highlight">Join</span> leverages the principles of kanban to help users manage their tasks and projects in an intuitive, visual interface.
+          </p>
+          <p>
+            It is important to note that <span class="highlight">Join</span> is designed as an educational exercise and is not intended for extensive business usage. While we strive to ensure the best possible user experience, we cannot guarantee consistent availability, reliability, accuracy, or other aspects of quality regarding <span class="highlight">Join</span>.
+          </p>
+        </section>
+
+        <section class="help-section">
+          <h2>How to use it</h2>
+          <p>Here is a step-by-step guide on how to use <span class="highlight">Join</span>:</p>
+
+          <ol class="help-steps">
+            <li>
+              <strong>Exploring the Board</strong>
+              <p>When you log in to Join, you'll find a default board. This board represents your project and contains four default lists: "To Do", "In Progress", "Await feedback" and "Done".</p>
+            </li>
+            <li>
+              <strong>Creating Contacts</strong>
+              <p>In Join, you can add contacts to collaborate on your projects. Go to the "Contacts" section, click on "New contact", and fill in the required information. Once added, these contacts can be assigned tasks and they can interact with the tasks on the board.</p>
+            </li>
+            <li>
+              <strong>Adding Cards</strong>
+              <p>Now that you've added your contacts, you can start adding cards. Cards represent individual tasks. Click the "+" button under the appropriate list to create a new card. Fill in the task details in the card, like task name, description, due date, assignees, etc.</p>
+            </li>
+            <li>
+              <strong>Moving Cards</strong>
+              <p>As tasks progress, you can move them between lists by dragging and dropping them or by clicking the status arrows on the cards.</p>
+            </li>
+          </ol>
+        </section>
+
+      </div>
+    </div>
+  </main>
+</div>

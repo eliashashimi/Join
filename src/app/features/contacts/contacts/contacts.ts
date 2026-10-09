@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, signal, computed, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { ContactInterface, GroupedContacts } from '../../../interface/contact-interface';
 import { ContactDetailComponent } from '../contact-detail/contact-detail';
 import { AddContact } from '../contact-form/add-contact/add-contact';
@@ -7,7 +8,7 @@ import { EditContact } from '../contact-form/edit-contact/edit-contact';
 import { ContactService } from '../../../service/contact-service';
 
 @Component({
-  imports: [CommonModule, ContactDetailComponent, AddContact, EditContact],
+  imports: [CommonModule,RouterLink, ContactDetailComponent, AddContact, EditContact],
   selector: 'app-contacts',
   standalone: true,
   styleUrl: './contacts.scss',

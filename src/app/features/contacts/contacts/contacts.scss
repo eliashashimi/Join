@@ -133,6 +133,13 @@
       font-weight: bold;
     }
 
+    .help-icon-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    cursor: pointer;
+    }
+
     .user-avatar-sm {
       width: 56px;
       height: 56px;
