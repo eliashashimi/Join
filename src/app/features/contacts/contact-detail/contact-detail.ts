@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface Contact {
@@ -16,16 +16,18 @@ export interface Contact {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './contact-detail.html',
-  styleUrls: ['./contact-detail.scss']
+  styleUrls: ['./contact-detail.scss'],
 })
 export class ContactDetailComponent {
+  editClicked = output<void>();
+
   @Input() contact: Contact | null = {
     firstName: 'Anton',
     lastName: 'Mayer',
     email: 'anton@mayer.de',
     phone: '+49 1111 222233',
     color: '#FF7A00',
-    initials: 'AM'
+    initials: 'AM',
   };
 
   isLoading: boolean = false;
@@ -33,10 +35,11 @@ export class ContactDetailComponent {
   isDeleted: boolean = false;
 
   onEdit() {
-    console.log('Edit clicked');
-    if (this.contact) {
-      this.contact.lastName = 'Mayer (Aktualisiert)';
-    }
+    // console.log('Edit clicked');
+    // if (this.contact) {
+    //   this.contact.lastName = 'Mayer (Aktualisiert)';
+    // }
+    this.editClicked.emit();
   }
 
   onDelete() {

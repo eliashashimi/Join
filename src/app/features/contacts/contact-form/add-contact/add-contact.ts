@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, output } from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -11,6 +11,7 @@ import {
   FormGroup,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Supabase } from '../../../../service/supabase';
 
 export function forbiddenNameValidator(nameRe: RegExp): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -28,7 +29,13 @@ export function forbiddenNameValidator(nameRe: RegExp): ValidatorFn {
 export class AddContact {
   fb = inject(FormBuilder);
   router = inject(Router);
+  supabase = inject(Supabase);
   formSubmitted = signal(false);
+  closeModal = output<void>();
+
+  close() {
+    this.closeModal.emit();
+  }
 
   userform = this.fb.group({
     name: [
@@ -83,28 +90,26 @@ export class AddContact {
     return `hsl(${color}, 70%, 45%)`;
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.formSubmitted.set(true);
 
     if (this.userform.valid) {
-      const nameText = this.userform.value.name || '';
-      const emailText = this.userform.value.email || '';
-      const phoneText = this.userform.value.phone || '';
+      const nameText = this.userform.value.name;
+      const emailText = this.userform.value.email;
       const generatedColor = this.getBackground();
-
-      const newContact = {
-        name: nameText.trim(),
-        email: emailText.toLowerCase().trim(),
-        phoneText: phoneText.trim(),
-        color: generatedColor
-      };
-        // if (emailText)
-        //   this.userform.patchValue({
-        //     name: nameText?.trim(),
-        //     email: emailText?.toLowerCase().trim(),
-        //   });
-        this.userform.reset();
+      const { error } = await this.supabase.client.from('contacts').insert({
+        name: nameText?.trim(),
+        email: emailText?.toLowerCase().trim(),
+        phone: this.userform.value.phone?.trim(),
+        color: generatedColor, // <-- Die berechnete Farbe mitsenden
+      });
+      if (error) {
+        console.error('Konnte Kontakt nicht erstellen:', error.message);
+        return;
+      }
+      this.userform.reset();
       this.formSubmitted.set(false);
+      this.close();
     }
   }
 }
