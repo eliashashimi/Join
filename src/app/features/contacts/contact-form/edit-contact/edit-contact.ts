@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, input, output } from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -35,6 +35,9 @@ export class EditContact implements OnInit {
   formSubmitted = signal(false);
   contactColor: string = '#cccccc';
   existingContactId!: string;
+
+  contactId = input.required<string>();
+  closeModal = output<void>();
 
   userform = this.fb.group({
     name: [
@@ -82,6 +85,8 @@ export class EditContact implements OnInit {
       .select('*')
       .eq('id', id)
       .single();
+    console.log(data);
+
     if (error) {
       console.error('no contact loaded: ', error.message);
       return;
