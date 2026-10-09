@@ -7,13 +7,17 @@ import { EditContact } from '../contact-form/edit-contact/edit-contact';
 import { ContactService } from '../../../service/contact-service';
 
 @Component({
-  imports: [CommonModule, ContactDetailComponent],
   selector: 'app-contacts',
+  standalone: true,
+  imports: [
+    CommonModule, 
+    ContactDetailComponent, 
+    AddContact, 
+    EditContact
+  ],
   styleUrl: './contacts.scss',
   templateUrl: './contacts.html',
 })
-
-// Automatische Gruppierung nach Anfangsbuchstaben (A, B, D, E, M...)
 export class ContactsComponent implements OnInit {
   showAddContactModal = signal(false);
   showEditContactModal = signal(false);
