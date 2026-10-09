@@ -1,1 +1,109 @@
 <p>privacy-policy works!</p>
+<div class="privacy-container">
+  <aside class="sidebar">
+    <div class="logo-area">
+      <div class="logo-icon">
+        <img src="./assets/join-logo-white.png" alt="Join-Logo" />
+      </div>
+    </div>
+
+    <nav class="nav-menu">
+      <a routerLink="/summary" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+          <path
+            fill="currentColor"
+            d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"
+          /></svg
+        >Summary
+      </a>
+      <a routerLink="/add-task" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+          <path
+            fill="currentColor"
+            d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"
+          /></svg
+        >Add Task
+      </a>
+      <a routerLink="/board" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+          <path
+            fill="currentColor"
+            d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"
+          /></svg
+        >Board
+      </a>
+      <a routerLink="/contacts" class="nav-item">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+          <path
+            fill="currentColor"
+            d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"
+          /></svg
+        >Contacts
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a routerLink="/privacy-policy" class="footer-link" [class.active]="true">Privacy Policy</a>
+      <a routerLink="/legal-notice" class="footer-link">Legal notice</a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="top-header">
+      <span class="header-title">Kanban Project Management Tool</span>
+      <div class="user-profile">
+        <a routerLink="/help" class="help-icon-link" style="text-decoration: none">
+          <span class="help-icon">?</span>
+        </a>
+        <div class="user-avatar-sm">SM</div>
+      </div>
+    </header>
+
+    <div class="content-body privacy-scroll-area">
+      <div class="privacy-content-wrapper">
+        <div class="privacy-header-row">
+          <h1>Privacy Policy</h1>
+        </div>
+
+        <section class="privacy-section">
+          <h2>Introduction</h2>
+          <p>
+            Welcome to <span class="highlight">Join</span>. We take the protection of your personal
+            data very seriously. This privacy policy informs you about how we handle personal data
+            when you use our kanban project management tool developed as part of a student bootcamp
+            project at the Developer Akademie.
+          </p>
+        </section>
+
+        <section class="privacy-section">
+          <h2>Data Collection and Usage</h2>
+          <p>
+            As an educational project, we limit data collection to the absolute minimum required to
+            provide core functionality (such as managing tasks, creating contacts, and organizing
+            boards). The data you enter (e.g., task descriptions, contact names, and email
+            addresses) is stored locally or within our shared test database exclusively for the
+            purpose of demonstrating and testing the application.
+          </p>
+        </section>
+
+        <section class="privacy-section">
+          <h2>Cookies and Local Storage</h2>
+          <p>
+            Our application may use local storage mechanisms (such as browser local storage or
+            session tokens) to maintain your login session and preferences. This data remains on
+            your device and is not shared with third-party tracking services.
+          </p>
+        </section>
+
+        <section class="privacy-section">
+          <h2>Your Rights</h2>
+          <p>
+            Since <span class="highlight">Join</span> is an educational student project, you have
+            the right to request information about any test data stored by you, or to ask for its
+            deletion at any time by contacting the development team members.
+          </p>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
