@@ -27,7 +27,6 @@ export class ContactDetailComponent {
     // if (this.contact) {
     //   this.contact.lastName = 'Mayer (Aktualisiert)';
     // }
-    console.log(this.editClicked);
 
     this.editClicked.emit();
   }
