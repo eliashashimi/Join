@@ -8,7 +8,7 @@ import { EditContact } from '../contact-form/edit-contact/edit-contact';
 import { ContactService } from '../../../service/contact-service';
 
 @Component({
-  imports: [CommonModule,RouterLink, ContactDetailComponent, AddContact, EditContact],
+  imports: [CommonModule, RouterLink, ContactDetailComponent, AddContact, EditContact],
   selector: 'app-contacts',
   standalone: true,
   styleUrl: './contacts.scss',
@@ -21,7 +21,13 @@ export class ContactsComponent implements OnInit {
 
   contacts = this.contactService.contacts;
 
-  selectedContact = signal<ContactInterface | null>(null);
+  selectedContactId = signal<string | null>(null);
+
+  selectedContact = computed(() => {
+    const id = this.selectedContactId();
+    if (!id) return null;
+    return this.contacts().find((c) => c.id === id) || null;
+  });
 
   async ngOnInit() {
     await this.contactService.getContacts();

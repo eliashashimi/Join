@@ -43,8 +43,7 @@ export class AddContact {
       [
         Validators.required,
         Validators.minLength(4),
-        Validators.pattern('^[^\s]+(\s+[^\s]+)*\$'),
-        Validators.pattern('^[a-zA-Z]{2, }'),
+        Validators.pattern('^[a-zA-ZäöüÄÖÜß]{2,}(?:[- ][a-zA-ZäöüÄÖÜß]{2,})*$'),
       ],
     ],
     email: [
@@ -52,10 +51,13 @@ export class AddContact {
       [
         Validators.required,
         Validators.email,
-        Validators.pattern('^[a-zA-Z0-9._+-]+@[a-zA-Z0-9,-]+\\.[a-z]{2,4}$'),
+        Validators.pattern('^[a-zA-Z0-9._+-]+@[a-zA-Z0-9-]+\\.[a-z]{2,4}$'),
       ],
     ],
-    phone: ['', [Validators.required, Validators.pattern('^[+0-9]+[0-9]')]],
+    phone: [
+      '',
+      [Validators.required, Validators.pattern('^(?!^(\\d)\\1+$)(?!^\\s+$)[+0-9\\s/-]{3,20}$')],
+    ],
   });
 
   get name() {
@@ -106,7 +108,7 @@ export class AddContact {
         name: nameText?.trim(),
         email: emailText?.toLowerCase().trim(),
         phone: this.userform.value.phone?.trim(),
-        color: generatedColor, // <-- Die berechnete Farbe mitsenden
+        color: generatedColor,
       });
       if (error) {
         console.error('Konnte Kontakt nicht erstellen:', error.message);

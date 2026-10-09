@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, input, output } from '@angular/core';
+import { Component, inject, signal, input, output, effect } from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -11,8 +11,13 @@ import {
   FormGroup,
 } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ContactInterface } from '../../../../interface/contact-interface';
+import { ContactData, ContactInterface } from '../../../../interface/contact-interface';
 import { Supabase } from '../../../../service/supabase';
+import { ContactService } from '../../../../service/contact-service';
+
+const Name_Regex = '^[a-zA-ZäöüÄÖÜß]{2,}(?:[- ][a-zA-ZäöüÄÖÜß]{2,})*$';
+const Email_Regex = '^[a-zA-Z0-9._+-]+@[a-zA-Z0-9-]+\\.[a-z]{2,4}$';
+const Phone_Regex = '^(?!^(\\d)\\1+$)(?!^\\s+$)[+0-9\\s/-]{3,20}$';
 
 export function forbiddenNameValidator(nameRe: RegExp): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -27,36 +32,36 @@ export function forbiddenNameValidator(nameRe: RegExp): ValidatorFn {
   styleUrl: './edit-contact.scss',
   templateUrl: './edit-contact.html',
 })
-export class EditContact implements OnInit {
+export class EditContact {
   fb = inject(FormBuilder);
   router = inject(Router);
   route = inject(ActivatedRoute);
   supabase = inject(Supabase);
+  contactService = inject(ContactService);
   formSubmitted = signal(false);
   contactColor: string = '#cccccc';
   existingContactId!: string;
-
   contactId = input.required<string>();
   closeModal = output<void>();
 
+  constructor() {
+    effect(() => {
+      const id = this.contactId();
+      if (id) {
+        this.existingContactId = id;
+        this.loadContactData(id);
+      }
+    });
+  }
+
+  close() {
+    this.closeModal.emit();
+  }
+
   userform = this.fb.group({
-    name: [
-      '',
-      [
-        Validators.required,
-        Validators.minLength(4),
-        Validators.pattern('^[^\\s]+(\\s+[^\\s]+)*\$'),
-      ],
-    ],
-    email: [
-      '',
-      [
-        Validators.required,
-        Validators.email,
-        Validators.pattern('^[a-zA-Z0-9._+-]+@[a-zA-Z0-9,-]+\\.[a-z]{2,4}$'),
-      ],
-    ],
-    phone: ['', [Validators.required, Validators.pattern('^[+0-9]+[0-9]')]],
+    name: ['', [Validators.required, Validators.minLength(4), Validators.pattern(Name_Regex)]],
+    email: ['', [Validators.required, Validators.email, Validators.pattern(Email_Regex)]],
+    phone: ['', [Validators.required, Validators.pattern(Phone_Regex)]],
   });
 
   get name() {
@@ -71,15 +76,8 @@ export class EditContact implements OnInit {
     return this.userform.get('phone');
   }
 
-  ngOnInit() {
-    const contactId = this.route.snapshot.paramMap.get('id');
-    if (contactId) {
-      this.existingContactId = contactId;
-      this.loadContactData(contactId);
-    }
-  }
-
   async loadContactData(id: string) {
+    // const data = await this.contactService.getContactById(id);
     const { data, error } = await this.supabase.client
       .from('contacts')
       .select('*')
@@ -126,28 +124,31 @@ export class EditContact implements OnInit {
     return `hsl(${color}, 70%, 45%)`;
   }
 
+  private getFormData(): ContactData {
+    return {
+      name: this.userform.value.name?.trim() || '',
+      email: this.userform.value.email?.toLowerCase().trim() || '',
+      phone: this.userform.value.phone?.trim() || '',
+    };
+  }
+
+  private resetAndCloseForm(): void {
+    this.userform.reset();
+    this.formSubmitted.set(false);
+    this.close();
+  }
+
   async onSubmit() {
     this.formSubmitted.set(true);
-    if (this.userform.valid) {
-      const nameText = this.userform.value.name;
-      const emailText = this.userform.value.email;
-      const color = this.getBackground();
-      const { error } = await this.supabase.client
-        .from('contacts')
-        .update({
-          name: nameText?.trim(),
-          email: emailText?.toLowerCase().trim(),
-          phone: this.userform.value.phone?.trim(),
-          color: this.contactColor,
-        })
-        .eq('id', this.existingContactId);
-      if (error) {
-        console.error('no contact loaded:', error.message);
-        return;
-      }
-      this.userform.reset();
-      this.formSubmitted.set(false);
-      this.router.navigate(['/contacts']);
+    if (!this.userform.valid) {
+      return;
+    }
+    try {
+      const updateData = this.getFormData();
+      await this.contactService.updateContact(this.existingContactId, updateData);
+      this.resetAndCloseForm();
+    } catch (error: any) {
+      console.error('no contact loaded:', error.message);
     }
   }
 }

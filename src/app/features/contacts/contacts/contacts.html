@@ -77,7 +77,7 @@
               <div
                 class="contact-item"
                 [class.selected]="selectedContact()?.id === contact.id"
-                (click)="selectedContact.set(contact)"
+                (click)="selectedContactId.set(contact.id)"
               >
                 <div class="contact-avatar" [style.background-color]="contact.color">
                   {{ contact.initials }}
@@ -101,7 +101,7 @@
         </div>
         <app-contact-detail
           [contact]="selectedContact()"
-          (contactDeleted)="selectedContact.set(null)"
+          (contactDeleted)="selectedContactId.set(null)"
           (editClicked)="showEditContactModal.set(true)"
         >
         </app-contact-detail>

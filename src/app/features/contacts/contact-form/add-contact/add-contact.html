@@ -7,7 +7,7 @@
       <img class="logo-underline" src="assets/icons/Vector 5.svg" alt="" />
     </div>
     <div class="contact__right">
-      <button class="close-btn">X</button>
+      <button class="close-btn" (click)="close()">X</button>
       <div class="contact__right--middle">
         <div class="person-name-img">
           @if (getInitials()) {
@@ -18,7 +18,7 @@
             <img src="assets/images/Group 13.png" alt="contact Icon" />
           }
         </div>
-        <form [formGroup]="userform" (ngSubmit)="(onSubmit)">
+        <form [formGroup]="userform" (ngSubmit)="onSubmit()">
           <div class="contact__right--input">
             <div class="contact__right--input--box">
               <div
@@ -27,7 +27,7 @@
                 "
                 [class.has-success]="name?.valid && name?.dirty"
               >
-                <h5 label for="name">
+                <h5>
                   @if (
                     (name?.hasError('minlength') && name?.dirty) ||
                     (name?.hasError('forbiddenName') && name?.dirty) ||
@@ -60,7 +60,7 @@
                 "
                 [class.has-success]="email?.valid && email?.dirty"
               >
-                <h5 label for="email">
+                <h5>
                   @if (
                     ((email?.hasError('pattern') || email?.hasError('email')) && email?.dirty) ||
                     (email?.hasError('required') && formSubmitted())
@@ -89,7 +89,7 @@
                 "
                 [class.has-success]="phone?.valid && phone?.dirty"
               >
-                <h5 label for="phone">
+                <h5>
                   @if (
                     ((phone?.hasError('pattern') || phone?.hasError('phone')) && phone?.dirty) ||
                     (phone?.hasError('required') && formSubmitted())
@@ -113,10 +113,10 @@
               </div>
             </div>
             <div class="contact__right--btn">
-              <button class="cancel btn">
+              <button class="cancel btn" (click)="close()">
                 Cancel <img src="assets/icons/cancel-icon.svg" alt="" />
               </button>
-              <button class="create btn">
+              <button class="create btn" (click)="onSubmit()">
                 Create contact <img src="assets/icons/check.svg" alt="okay icon" />
               </button>
             </div>
