@@ -40,7 +40,12 @@ export class AddContact {
   userform = this.fb.group({
     name: [
       '',
-      [Validators.required, Validators.minLength(4), Validators.pattern('^[^\s]+(\s+[^\s]+)*\$')],
+      [
+        Validators.required,
+        Validators.minLength(4),
+        Validators.pattern('^[^\s]+(\s+[^\s]+)*\$'),
+        Validators.pattern('^[a-zA-Z]{2, }'),
+      ],
     ],
     email: [
       '',

@@ -1,9 +1,10 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ContactsComponent } from './features/contacts/contacts/contacts';
+import { AddContact } from './features/contacts/contact-form/add-contact/add-contact';
 
 @Component({
-  imports: [RouterOutlet, ContactsComponent],
+  imports: [RouterOutlet, ContactsComponent, AddContact],
   selector: 'app-root',
   styleUrl: './app.scss',
   templateUrl: './app.html',
