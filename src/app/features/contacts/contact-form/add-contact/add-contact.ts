@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, output } from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -11,6 +11,7 @@ import {
   FormGroup,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Supabase } from '../../../../service/supabase';
 
 export function forbiddenNameValidator(nameRe: RegExp): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -28,10 +29,24 @@ export function forbiddenNameValidator(nameRe: RegExp): ValidatorFn {
 export class AddContact {
   fb = inject(FormBuilder);
   router = inject(Router);
+  supabase = inject(Supabase);
   formSubmitted = signal(false);
+  closeModal = output<void>();
+
+  close() {
+    this.closeModal.emit();
+  }
 
   userform = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(4)]],
+    name: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(4),
+        Validators.pattern('^[^\s]+(\s+[^\s]+)*\$'),
+        Validators.pattern('^[a-zA-Z]{2, }'),
+      ],
+    ],
     email: [
       '',
       [
@@ -55,19 +70,19 @@ export class AddContact {
     return this.userform.get('phone');
   }
 
-  getInitials() {
+  getInitials(): string {
     const nameValue = this.name?.value;
-    if (!nameValue) return '';
+    if (!nameValue || !nameValue?.trim()) return '';
     const parts = nameValue.trim().split(/\s+/);
     if (parts.length === 1) {
       return parts[0].substring(0, 2).toUpperCase();
     }
     const firstinitial = parts[0].charAt(0);
     const lastinitial = parts[parts.length - 1].charAt(0);
-    return firstinitial + lastinitial;
+    return (firstinitial + lastinitial).toUpperCase();
   }
 
-  getBackground() {
+  getBackground(): string {
     const nameValue = this.name?.value;
     if (!nameValue || nameValue.trim().length < 2) {
       return '#cccccc';
@@ -77,22 +92,29 @@ export class AddContact {
       hash = nameValue.charCodeAt(i) + ((hash << 5) - hash);
     }
     const color = Math.abs(hash % 360);
-    return `hsl(${color}), 75%, 45%`;
+    return `hsl(${color}, 70%, 45%)`;
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.formSubmitted.set(true);
 
     if (this.userform.valid) {
       const nameText = this.userform.value.name;
       const emailText = this.userform.value.email;
-      if (emailText)
-        this.userform.patchValue({
-          name: nameText?.trim(),
-          email: emailText?.toLowerCase().trim(),
-        });
+      const generatedColor = this.getBackground();
+      const { error } = await this.supabase.client.from('contacts').insert({
+        name: nameText?.trim(),
+        email: emailText?.toLowerCase().trim(),
+        phone: this.userform.value.phone?.trim(),
+        color: generatedColor, // <-- Die berechnete Farbe mitsenden
+      });
+      if (error) {
+        console.error('Konnte Kontakt nicht erstellen:', error.message);
+        return;
+      }
       this.userform.reset();
       this.formSubmitted.set(false);
+      this.close();
     }
   }
 }

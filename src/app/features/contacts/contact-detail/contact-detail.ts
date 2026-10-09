@@ -8,23 +8,23 @@ import { ContactService } from '../../../service/contact-service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './contact-detail.html',
-  styleUrls: ['./contact-detail.scss']
+  styleUrls: ['./contact-detail.scss'],
 })
-
 export class ContactDetailComponent {
   @Input() contact: ContactInterface | null = null;
   @Output() contactDeleted = new EventEmitter<void>();
+  @Output() editClicked = new EventEmitter<void>();
 
   private contactService = inject(ContactService);
 
   isLoading: boolean = false;
   hasError: boolean = false;
   isDeleted: boolean = false;
-  
+
   showDeleteModal: boolean = false;
 
   onEdit() {
-    console.log('Edit clicked for:', this.contact?.name);
+    this.editClicked.emit();
   }
 
   onDelete() {
@@ -46,11 +46,10 @@ export class ContactDetailComponent {
     try {
       await this.contactService.deleteContact(this.contact.id);
       this.isDeleted = true;
-      
+
       setTimeout(() => {
         this.contactDeleted.emit();
       }, 1500);
-
     } catch (err) {
       console.error('Fehler beim Löschen des Kontakts:', err);
       this.hasError = true;

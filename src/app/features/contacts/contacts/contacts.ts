@@ -1,16 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, signal, computed, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { ContactInterface, GroupedContacts } from '../../../interface/contact-interface';
 import { ContactDetailComponent } from '../contact-detail/contact-detail';
+import { AddContact } from '../contact-form/add-contact/add-contact';
+import { EditContact } from '../contact-form/edit-contact/edit-contact';
 import { ContactService } from '../../../service/contact-service';
 
 @Component({
-  imports: [CommonModule, ContactDetailComponent],
+  imports: [CommonModule,RouterLink, ContactDetailComponent, AddContact, EditContact],
   selector: 'app-contacts',
+  standalone: true,
   styleUrl: './contacts.scss',
   templateUrl: './contacts.html',
 })
 export class ContactsComponent implements OnInit {
+  showAddContactModal = signal(false);
+  showEditContactModal = signal(false);
   private contactService = inject(ContactService);
 
   contacts = this.contactService.contacts;
@@ -23,7 +29,7 @@ export class ContactsComponent implements OnInit {
 
   groupedContacts = computed<GroupedContacts[]>(() => {
     const map = new Map<string, ContactInterface[]>();
-    
+
     for (const c of this.contacts()) {
       const letter = c.name.charAt(0).toUpperCase();
       if (!map.has(letter)) {
