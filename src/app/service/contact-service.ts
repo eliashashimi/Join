@@ -48,6 +48,22 @@ export class ContactService {
       .throwOnError();
     return data ? toContact(data) : null;
   }
+
+  /**
+   * DELETE: Löscht einen Kontakt anhand seiner ID aus Supabase.
+   * Aktualisiert gleichzeitig das lokale Signal.
+   * @param id ID des Kontakts
+   */
+  async deleteContact(id: string): Promise<void> {
+    await this.db
+      .from(TABLE)
+      .delete()
+      .eq('id', id)
+      .throwOnError();
+
+    // Entfernt den gelöschten Kontakt sofort aus dem lokalen Signal
+    this.contactList.set(this.contactList().filter(c => c.id !== id));
+  }
 }
 
 /** Übersetzt eine Datenbank-Zeile in einen Kontakt für die App. */
