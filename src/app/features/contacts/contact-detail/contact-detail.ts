@@ -1,15 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-export interface Contact {
-  id?: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  color: string;
-  initials: string;
-}
+import { ContactInterface } from '../../../interface/contact-interface';
+import { ContactService } from '../../../service/contact-service';
 
 @Component({
   selector: 'app-contact-detail',
@@ -18,29 +10,52 @@ export interface Contact {
   templateUrl: './contact-detail.html',
   styleUrls: ['./contact-detail.scss']
 })
+
 export class ContactDetailComponent {
-  @Input() contact: Contact | null = {
-    firstName: 'Anton',
-    lastName: 'Mayer',
-    email: 'anton@mayer.de',
-    phone: '+49 1111 222233',
-    color: '#FF7A00',
-    initials: 'AM'
-  };
+  @Input() contact: ContactInterface | null = null;
+  @Output() contactDeleted = new EventEmitter<void>();
+
+  private contactService = inject(ContactService);
 
   isLoading: boolean = false;
   hasError: boolean = false;
   isDeleted: boolean = false;
+  
+  showDeleteModal: boolean = false;
 
   onEdit() {
-    console.log('Edit clicked');
-    if (this.contact) {
-      this.contact.lastName = 'Mayer (Aktualisiert)';
-    }
+    console.log('Edit clicked for:', this.contact?.name);
   }
 
   onDelete() {
-    console.log('Delete clicked');
-    this.isDeleted = true;
+    if (!this.contact || !this.contact.id) return;
+    this.showDeleteModal = true;
+  }
+
+  cancelDelete() {
+    this.showDeleteModal = false;
+  }
+
+  async confirmDelete() {
+    if (!this.contact || !this.contact.id) return;
+
+    this.showDeleteModal = false;
+    this.isLoading = true;
+    this.hasError = false;
+
+    try {
+      await this.contactService.deleteContact(this.contact.id);
+      this.isDeleted = true;
+      
+      setTimeout(() => {
+        this.contactDeleted.emit();
+      }, 1500);
+
+    } catch (err) {
+      console.error('Fehler beim Löschen des Kontakts:', err);
+      this.hasError = true;
+    } finally {
+      this.isLoading = false;
+    }
   }
 }
