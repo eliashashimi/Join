@@ -17,7 +17,7 @@
         {{ contact.initials }}
       </div>
       <div class="contact-header-info">
-        <h2 class="contact-name">{{ contact.firstName }} {{ contact.lastName }}</h2>
+        <h2 class="contact-name">{{ contact.name }}</h2>
         <div class="contact-actions">
           <button class="action-btn edit-btn" (click)="onEdit()">
             <img src="assets/contact-details/edit-btn.png" alt="Edit Icon" />
@@ -39,7 +39,9 @@
 
       <div class="info-group">
         <span class="info-label">Telefon</span>
-        <a [href]="'tel:' + contact.phone" class="info-value phone-link">{{ contact.phone }}</a>
+        <a [href]="'tel:' + contact.phone" class="info-value phone-link">{{
+          contact.phone || 'Keine Nummer'
+        }}</a>
       </div>
     </div>
   </div>
