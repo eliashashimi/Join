@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  imports: [],
   selector: 'app-legal-notice',
-  styleUrl: './legal-notice.scss',
+  standalone: true,
+  imports: [CommonModule, RouterLink],
   templateUrl: './legal-notice.html',
+  styleUrl: './legal-notice.scss'
 })
 export class LegalNotice {}
