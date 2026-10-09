@@ -50,7 +50,7 @@
 
   <!-- Hauptbereich -->
   <main class="main-content">
-    <!--  Header -->
+    <!-- Header -->
     <header class="top-header">
       <span class="header-title">Kanban Project Management Tool</span>
       <div class="user-profile">
@@ -98,7 +98,10 @@
           <div class="hero-divider"></div>
           <p class="hero-subtitle">Better with a team</p>
         </div>
-        <app-contact-detail [contact]="selectedContact()"></app-contact-detail>
+        <app-contact-detail 
+          [contact]="selectedContact()" 
+          (contactDeleted)="selectedContact.set(null)">
+        </app-contact-detail>
       </div>
     </div>
   </main>
