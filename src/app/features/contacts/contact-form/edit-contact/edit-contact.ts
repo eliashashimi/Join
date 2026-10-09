@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -10,7 +10,9 @@ import {
   ReactiveFormsModule,
   FormGroup,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { ContactInterface } from '../../../../interface/contact-interface';
+import { Supabase } from '../../../../service/supabase';
 
 export function forbiddenNameValidator(nameRe: RegExp): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -25,13 +27,24 @@ export function forbiddenNameValidator(nameRe: RegExp): ValidatorFn {
   styleUrl: './edit-contact.scss',
   templateUrl: './edit-contact.html',
 })
-export class EditContact {
+export class EditContact implements OnInit {
   fb = inject(FormBuilder);
   router = inject(Router);
+  route = inject(ActivatedRoute);
+  supabase = inject(Supabase);
   formSubmitted = signal(false);
+  contactColor: string = '#cccccc';
+  existingContactId!: string;
 
   userform = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(4), forbiddenNameValidator(/ /)]],
+    name: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(4),
+        Validators.pattern('^[^\\s]+(\\s+[^\\s]+)*\$'),
+      ],
+    ],
     email: [
       '',
       [
@@ -55,6 +68,34 @@ export class EditContact {
     return this.userform.get('phone');
   }
 
+  ngOnInit() {
+    const contactId = this.route.snapshot.paramMap.get('id');
+    if (contactId) {
+      this.existingContactId = contactId;
+      this.loadContactData(contactId);
+    }
+  }
+
+  async loadContactData(id: string) {
+    const { data, error } = await this.supabase.client
+      .from('contacts')
+      .select('*')
+      .eq('id', id)
+      .single();
+    if (error) {
+      console.error('no contact loaded: ', error.message);
+      return;
+    }
+    if (data) {
+      this.contactColor = data.color || '#cccccc';
+      this.userform.patchValue({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+      });
+    }
+  }
+
   getInitials() {
     const nameValue = this.name?.value;
     if (!nameValue) return '';
@@ -64,10 +105,10 @@ export class EditContact {
     }
     const firstinitial = parts[0].charAt(0);
     const lastinitial = parts[parts.length - 1].charAt(0);
-    return firstinitial + lastinitial;
+    return (firstinitial + lastinitial).toUpperCase();
   }
 
-  getBackground() {
+  getBackground(): string {
     const nameValue = this.name?.value;
     if (!nameValue || nameValue.trim().length < 2) {
       return '#cccccc';
@@ -77,22 +118,31 @@ export class EditContact {
       hash = nameValue.charCodeAt(i) + ((hash << 5) - hash);
     }
     const color = Math.abs(hash % 360);
-    return `hsl(${color}), 75%, 45%`;
+    return `hsl(${color}, 70%, 45%)`;
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.formSubmitted.set(true);
-
     if (this.userform.valid) {
       const nameText = this.userform.value.name;
       const emailText = this.userform.value.email;
-      if (emailText)
-        this.userform.patchValue({
+      const color = this.getBackground();
+      const { error } = await this.supabase.client
+        .from('contacts')
+        .update({
           name: nameText?.trim(),
           email: emailText?.toLowerCase().trim(),
-        });
+          phone: this.userform.value.phone?.trim(),
+          color: this.contactColor,
+        })
+        .eq('id', this.existingContactId);
+      if (error) {
+        console.error('no contact loaded:', error.message);
+        return;
+      }
       this.userform.reset();
       this.formSubmitted.set(false);
+      this.router.navigate(['/contacts']);
     }
   }
 }

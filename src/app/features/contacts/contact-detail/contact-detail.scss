@@ -1,235 +1,237 @@
-$join-dark-blue: #2A3647;   
-$join-light-blue: #29ABE2;  
-$join-bg-light: #F6F7F8;
+$join-dark-blue: #2a3647;
+$join-light-blue: #29abe2;
+$join-bg-light: #f6f7f8;
 
 .contact-detail-container {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 4vw, 32px);
+  padding: clamp(16px, 3vw, 24px) clamp(16px, 5vw, 40px);
+  color: var(--text-color, #2a3647);
+  height: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+
+  .contact-header {
     display: flex;
-    flex-direction: column;
-    gap: clamp(16px, 4vw, 32px);
-    padding: clamp(16px, 3vw, 24px) clamp(16px, 5vw, 40px);
-    color: var(--text-color, #2A3647);
-    height: 100%;
-    box-sizing: border-box;
-    overflow-y: auto;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: clamp(16px, 3vw, 24px);
 
-    .contact-header {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap; 
-        gap: clamp(16px, 3vw, 24px);
-
-        .contact-avatar {
-            width: clamp(80px, 15vw, 120px);
-            height: clamp(80px, 15vw, 120px);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ffffff;
-            font-size: clamp(1.75rem, 4vw, 2.9375rem);
-            font-weight: 500;
-            border: 3px solid var(--card-bg, #ffffff);
-            box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
-            flex-shrink: 0;
-        }
-
-        .contact-header-info {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-
-            .contact-name {
-                font-size: clamp(1.5rem, 5vw, 2.9375rem);
-                font-weight: 700;
-                margin: 0;
-                color: var(--text-color, $join-dark-blue);
-                line-height: 1.2;
-                word-break: break-word;
-            }
-
-            .contact-actions {
-                display: flex;
-                gap: 16px;
-                align-items: center;
-                margin-top: 4px;
-
-                .action-btn {
-                    background: none;
-                    border: none;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    cursor: pointer;
-                    padding: 0;
-                    border-radius: 8px;
-                    box-sizing: border-box;
-                    transition: background-color 0.2s, transform 0.1s;
-
-                    &:hover {
-                        background-color: rgba(42, 54, 71, 0.05);
-                    }
-                }
-
-                .edit-btn {
-                    width: 64px;
-                    height: 24px;
-
-                    img {
-                        width: 64px;
-                        height: 20px;
-                        object-fit: contain;
-                    }
-                }
-
-                .delete-btn {
-                    width: 81px;
-                    height: 24px;
-
-                    img {
-                        width: 81px;
-                        height: 20px;
-                        object-fit: contain;
-                    }
-
-                    &:hover {
-                        color: #ff8190;
-                    }
-                }
-            }
-        }
+    .contact-avatar {
+      width: clamp(80px, 15vw, 120px);
+      height: clamp(80px, 15vw, 120px);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: clamp(1.75rem, 4vw, 2.9375rem);
+      font-weight: 500;
+      border: 3px solid var(--card-bg, #ffffff);
+      box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+      flex-shrink: 0;
     }
 
-    .contact-info-section {
+    .contact-header-info {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      .contact-name {
+        font-size: clamp(1.5rem, 5vw, 2.9375rem);
+        font-weight: 700;
+        margin: 0;
+        color: var(--text-color, $join-dark-blue);
+        line-height: 1.2;
+        word-break: break-word;
+      }
+
+      .contact-actions {
         display: flex;
-        flex-direction: column;
         gap: 16px;
+        align-items: center;
+        margin-top: 4px;
 
-        h3 {
-            font-size: 1.25rem;
-            font-weight: 400;
-            margin: 0;
-            color: var(--text-color, $join-dark-blue);
+        .action-btn {
+          background: none;
+          border: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          padding: 0;
+          border-radius: 8px;
+          box-sizing: border-box;
+          transition:
+            background-color 0.2s,
+            transform 0.1s;
+
+          &:hover {
+            background-color: rgba(42, 54, 71, 0.05);
+          }
         }
 
-        .info-group {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
+        .edit-btn {
+          width: 64px;
+          height: 24px;
 
-            .info-label {
-                font-size: 1rem;
-                font-weight: 400;
-                color: var(--text-color, $join-dark-blue);
-            }
-
-            .info-value {
-                font-size: 1rem; 
-                text-decoration: none;
-                word-break: break-all; 
-                
-                &.email-link {
-                    color: $join-light-blue;
-                    &:hover {
-                        text-decoration: underline;
-                    }
-                }
-
-                &.phone-link {
-                    color: var(--text-color, $join-dark-blue);
-                }
-            }
+          img {
+            width: 64px;
+            height: 20px;
+            object-fit: contain;
+          }
         }
+
+        .delete-btn {
+          width: 81px;
+          height: 24px;
+
+          img {
+            width: 81px;
+            height: 20px;
+            object-fit: contain;
+          }
+
+          &:hover {
+            color: #ff8190;
+          }
+        }
+      }
     }
-}
+  }
 
-.no-contact-selected {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    color: #a8a8a8;
-    font-size: 1.125rem;
-    text-align: center;
-    padding: 16px;
-}
-
-.modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    padding: 16px;
-    box-sizing: border-box;
-}
-
-.delete-confirm-modal {
-    background-color: #ffffff;
-    padding: clamp(20px, 5vw, 32px);
-    border-radius: 20px;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
-    width: 100%;
-    max-width: 400px;
+  .contact-info-section {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    text-align: center;
-    box-sizing: border-box;
 
     h3 {
-        margin: 0;
-        font-size: clamp(1.25rem, 4vw, 1.5rem);
-        color: $join-dark-blue;
-        font-weight: 700;
+      font-size: 1.25rem;
+      font-weight: 400;
+      margin: 0;
+      color: var(--text-color, $join-dark-blue);
     }
 
-    p {
-        margin: 0;
+    .info-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+
+      .info-label {
         font-size: 1rem;
-        color: #707070;
+        font-weight: 400;
+        color: var(--text-color, $join-dark-blue);
+      }
+
+      .info-value {
+        font-size: 1rem;
+        text-decoration: none;
+        word-break: break-all;
+
+        &.email-link {
+          color: $join-light-blue;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+
+        &.phone-link {
+          color: var(--text-color, $join-dark-blue);
+        }
+      }
+    }
+  }
+}
+
+.no-contact-selected {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #a8a8a8;
+  font-size: 1.125rem;
+  text-align: center;
+  padding: 16px;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.delete-confirm-modal {
+  background-color: #ffffff;
+  padding: clamp(20px, 5vw, 32px);
+  border-radius: 20px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+  box-sizing: border-box;
+
+  h3 {
+    margin: 0;
+    font-size: clamp(1.25rem, 4vw, 1.5rem);
+    color: $join-dark-blue;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+    color: #707070;
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+
+    button {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      flex: 1;
+      min-width: 100px;
     }
 
-    .modal-actions {
-        display: flex;
-        justify-content: center;
-        gap: 12px;
-        margin-top: 8px;
-        flex-wrap: wrap;
+    .btn-cancel {
+      background-color: #ffffff;
+      color: $join-dark-blue;
+      border: 1px solid $join-dark-blue;
 
-        button {
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            flex: 1;
-            min-width: 100px;
-        }
-
-        .btn-cancel {
-            background-color: #ffffff;
-            color: $join-dark-blue;
-            border: 1px solid $join-dark-blue;
-
-            &:hover {
-                background-color: $join-bg-light;
-            }
-        }
-
-        .btn-confirm {
-            background-color: $join-dark-blue;
-            color: #ffffff;
-            border: none;
-
-            &:hover {
-                background-color: $join-light-blue;
-            }
-        }
+      &:hover {
+        background-color: $join-bg-light;
+      }
     }
+
+    .btn-confirm {
+      background-color: $join-dark-blue;
+      color: #ffffff;
+      border: none;
+
+      &:hover {
+        background-color: $join-light-blue;
+      }
+    }
+  }
 }
