@@ -34,14 +34,14 @@
 
       <div class="info-group">
         <span class="info-label">E-Mail</span>
-        <a [href]="'mailto:' + contact.email" class="info-value email-link">{{ contact.email }}</a>
+        <a href="mailto:{{ contact.email }}" class="info-value email-link">{{ contact.email }}</a>
       </div>
 
       <div class="info-group">
         <span class="info-label">Telefon</span>
-        <a [href]="'tel:' + contact.phone" class="info-value phone-link">{{
-          contact.phone || 'Keine Nummer'
-        }}</a>
+        <a href="tel:{{ contact.phone }}" class="info-value phone-link">
+          {{ contact.phone || 'Keine Nummer' }}
+        </a>
       </div>
     </div>
   </div>
@@ -52,3 +52,14 @@
     </div>
   </ng-template>
 </ng-container>
+
+<div class="modal-backdrop" *ngIf="showDeleteModal">
+  <div class="delete-confirm-modal">
+    <h3>Kontakt löschen</h3>
+    <p>Möchtest du diesen Kontakt wirklich unwiderruflich löschen?</p>
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="cancelDelete()">Abbrechen</button>
+      <button class="btn-confirm" (click)="confirmDelete()">Löschen</button>
+    </div>
+  </div>
+</div>
