@@ -45,11 +45,16 @@ export class ContactDetailComponent {
 
     try {
       await this.contactService.deleteContact(this.contact.id);
-      this.isDeleted = true;
-
+      // this.isDeleted = true;
+      // setTimeout(() => {
+      //   this.contactDeleted.emit();
+      //   this.isDeleted = false;
+      // }, 1500);
+      this.contactService.showDeletedMessage.set(true);
       setTimeout(() => {
         this.contactDeleted.emit();
-      }, 1500);
+        this.contactService.showDeletedMessage.set(false);
+      }, 3000);
     } catch (err) {
       console.error('Fehler beim Löschen des Kontakts:', err);
       this.hasError = true;

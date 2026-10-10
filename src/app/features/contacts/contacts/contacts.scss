@@ -134,10 +134,10 @@
     }
 
     .help-icon-link {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    cursor: pointer;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      cursor: pointer;
     }
 
     .user-avatar-sm {
@@ -329,4 +329,17 @@
   background: transparent;
   border-radius: 30px;
   box-shadow: 0px 0px 16px 4px rgba(0, 0, 0, 0.1);
+
+  animation: slideInFromRight 0.5s ease-out forwards;
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100dvw);
+    opacitiy: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }

@@ -6,9 +6,9 @@
   <p>Kontakt konnte nicht geladen werden.</p>
 </div>
 
-<div *ngIf="isDeleted" class="state-container">
+<!-- <div *ngIf="isDeleted" class="state-container">
   <p>Der Kontakt wurde erfolgreich gelöscht.</p>
-</div>
+</div> -->
 
 <ng-container *ngIf="!isLoading && !hasError && !isDeleted">
   <div class="contact-detail-container" *ngIf="contact; else noContact">
@@ -31,7 +31,6 @@
 
     <div class="contact-info-section">
       <h3>Kontaktdaten</h3>
-
       <div class="info-group">
         <span class="info-label">E-Mail</span>
         <a href="mailto:{{ contact.email }}" class="info-value email-link">{{ contact.email }}</a>
@@ -48,7 +47,13 @@
 
   <ng-template #noContact>
     <div class="no-contact-selected">
-      <p>Wähle einen Kontakt aus, um Details anzuzeigen.</p>
+      @if (contactService.showSuccessMessage()) {
+        <p>Der Kontakt wurde erfolgreich hinzugefügt!</p>
+      } @else if (contactService.showDeletedMessage()) {
+        <p>Der Kontakt wurde erfolgreich gelöscht.</p>
+      } @else {
+        <p>Wähle einen Kontakt aus, um Details anzuzeigen.</p>
+      }
     </div>
   </ng-template>
 </ng-container>

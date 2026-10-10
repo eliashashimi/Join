@@ -18,7 +18,7 @@
             <img src="assets/images/Group 13.png" alt="contact Icon" />
           }
         </div>
-        <form [formGroup]="userform" (ngSubmit)="onSubmit()">
+        <form [formGroup]="userform">
           <div class="contact__right--input">
             <div class="contact__right--input--box">
               <div
@@ -34,13 +34,13 @@
                     (name?.hasError('required') && formSubmitted())
                   ) {
                     @if (name?.hasError('required') && formSubmitted()) {
-                      {{ 'contact.error.nameRequired' }}
+                      {{ 'Your name is required' }}
                     }
                     @if (name?.hasError('minlength') && name?.dirty) {
-                      {{ 'contact.error.nameMin' }}
+                      {{ 'Your full name is required' }}
                     }
                     @if (name?.hasError('forbiddenName') && name?.dirty) {
-                      {{ 'contact.error.nameSpace' }}
+                      {{ 'remove the spaces' }}
                     }
                   }
                 </h5>
