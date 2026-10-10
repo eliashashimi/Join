@@ -342,3 +342,158 @@
   border-radius: 30px;
   box-shadow: 0px 0px 16px 4px rgba(0, 0, 0, 0.1);
 }
+
+/* ==========================================
+    RESPONSIVE DESIGN (Mobile & Tablet)
+   ========================================== */
+
+/* Ab Tablet / kleineren Bildschirmen (z.B. < 1024px) */
+@media(max-width: 1024px) {
+  /* Sidebar schmaler machen oder komplett als Hamburger-Lösung (hier: kompakter) */
+  .sidebar {
+    width: 80px;
+    padding: 20px 0;
+
+    .logo-area {
+      width: 80px;
+      .logo-icon { width: 50px; }
+    }
+
+    .nav-menu {
+      margin-top: 60px;
+      
+      .nav-item {
+        padding: 12px;
+        justify-content: center;
+        font-size: 0; // Text ausblenden, nur Icons zeigen
+        gap: 0;
+        
+        .nav-icon {
+          width: 26px;
+          height: 26px;
+        }
+      }
+    }
+
+    .sidebar-footer {
+      display: none; // Footer-Links auf kleineren Screens einsparen
+    }
+  }
+
+  .top-header {
+    padding: 0 20px;
+    height: 70px;
+    
+    .header-title {
+      font-size: 16px;
+      padding-left: 0;
+    }
+  }
+}
+
+/* Für Smartphones (max. 768px) */
+@media(max-width: 768px) {
+  .contacts-container {
+    position: relative;
+    flex-direction: column;
+  }
+
+  /* Sidebar nach unten als Bottom-Navigation oder komplett verstecken */
+  .sidebar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 60px;
+    flex-direction: row;
+    padding: 0;
+    z-index: 1000;
+    justify-content: space-around;
+    align-items: center;
+
+    .logo-area {
+      display: none; // Logo auf Handys unten ausblenden
+    }
+
+    .nav-menu {
+      flex-direction: row;
+      margin-top: 0;
+      width: 100%;
+      justify-content: space-around;
+      height: 100%;
+      align-items: center;
+
+      .nav-item {
+        padding: 0;
+        height: 100%;
+        flex: 1;
+        justify-content: center;
+        
+        &.active {
+          background-color: rgba(0,0,0,0.2);
+        }
+      }
+    }
+  }
+
+  /* Hauptbereich anpassen wegen der fixierten Bottom-Navigation */
+  .main-content {
+    height: calc(100vh - 60px);
+  }
+
+  .content-body {
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Kontaktliste nimmt auf Mobile die volle Breite ein */
+  .contacts-list-container {
+    width: 100vw;
+    border-right: none;
+    padding: 16px 0;
+  }
+
+  .add-contact-btn {
+    font-size: 18px;
+    padding: 12px;
+    margin: 0 16px 16px 16px;
+  }
+
+  .detail-hero {
+    padding: 16px 20px 0 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    .hero-title {
+      font-size: 36px;
+    }
+
+    .hero-divider {
+      display: none; // Trennlinie auf Handy sparen
+    }
+
+    .hero-subtitle {
+      font-size: 18px;
+      width: 100%;
+    }
+  }
+
+  /* Detailansicht standardmäßig als Overlay / Fullscreen auf dem Handy, 
+     wenn ein Kontakt ausgewählt ist */
+  .contacts-detail-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100%;
+    background-color: #f6f7f8;
+    z-index: 50;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+
+    /* Wenn aktiv (kann per CSS-Klasse gesteuert werden, sobald ein Kontakt da ist) */
+    &.mobile-active {
+      transform: translateX(0);
+    }
+  }
+}
