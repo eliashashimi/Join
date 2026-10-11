@@ -15,13 +15,12 @@ import { ContactService } from '../../../service/contact-service';
   templateUrl: './contacts.html',
 })
 export class ContactsComponent implements OnInit {
-  showAddContactModal = signal(false);
-  showEditContactModal = signal(false);
+  selectedContactId = signal<string | null>(null);
+  showAddContactModal = signal<boolean>(false);
+  showEditContactModal = signal<boolean>(false);
   private contactService = inject(ContactService);
 
   contacts = this.contactService.contacts;
-
-  selectedContactId = signal<string | null>(null);
 
   selectedContact = computed(() => {
     const id = this.selectedContactId();
@@ -48,4 +47,10 @@ export class ContactsComponent implements OnInit {
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([letter, contacts]) => ({ letter, contacts }));
   });
+
+  isMobileDetailOpen = computed(() => this.selectedContactId() !== null);
+
+  goBackToList(): void {
+    this.selectedContactId.set(null);
+  }
 }
