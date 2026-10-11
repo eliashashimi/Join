@@ -15,6 +15,10 @@ import { Supabase } from '../../../../service/supabase';
 import { ContactData } from '../../../../interface/contact-interface';
 import { ContactService } from '../../../../service/contact-service';
 
+const Name_Regex = '^[a-zA-ZäöüÄÖÜß]{2,}(?:[- ][a-zA-ZäöüÄÖÜß]{2,})*$';
+const Email_Regex = '^[a-zA-Z0-9._+-]+@[a-zA-Z0-9-]+\\.[a-z]{2,4}$';
+const Phone_Regex = '^(?!^(\\d)\\1+$)(?!^\\s+$)[+0-9\\s/-]{3,20}$';
+
 export function forbiddenNameValidator(nameRe: RegExp): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const forbidden = nameRe.test(control.value);
@@ -41,26 +45,9 @@ export class AddContact {
   }
 
   userform = this.fb.group({
-    name: [
-      '',
-      [
-        Validators.required,
-        Validators.minLength(4),
-        Validators.pattern('^[a-zA-ZäöüÄÖÜß]{2,}(?:[- ][a-zA-ZäöüÄÖÜß]{2,})*$'),
-      ],
-    ],
-    email: [
-      '',
-      [
-        Validators.required,
-        Validators.email,
-        Validators.pattern('^[a-zA-Z0-9._+-]+@[a-zA-Z0-9-]+\\.[a-z]{2,4}$'),
-      ],
-    ],
-    phone: [
-      '',
-      [Validators.required, Validators.pattern('^(?!^(\\d)\\1+$)(?!^\\s+$)[+0-9\\s/-]{3,20}$')],
-    ],
+    name: ['', [Validators.required, Validators.minLength(4), Validators.pattern(Name_Regex)]],
+    email: ['', [Validators.required, Validators.email, Validators.pattern(Email_Regex)]],
+    phone: ['', [Validators.required, Validators.pattern(Phone_Regex)]],
   });
 
   get name() {

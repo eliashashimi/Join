@@ -30,7 +30,7 @@
                 <h5>
                   @if (
                     (name?.hasError('minlength') && name?.dirty) ||
-                    (name?.hasError('forbiddenName') && name?.dirty) ||
+                    (name?.hasError('pattern') && name?.dirty) ||
                     (name?.hasError('required') && formSubmitted())
                   ) {
                     @if (name?.hasError('required') && formSubmitted()) {
@@ -39,7 +39,7 @@
                     @if (name?.hasError('minlength') && name?.dirty) {
                       {{ 'Your full name is required' }}
                     }
-                    @if (name?.hasError('forbiddenName') && name?.dirty) {
+                    @if (name?.hasError('pattern') && name?.dirty) {
                       {{ 'remove the spaces' }}
                     }
                   }

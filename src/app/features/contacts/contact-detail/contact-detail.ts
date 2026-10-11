@@ -45,11 +45,6 @@ export class ContactDetailComponent {
 
     try {
       await this.contactService.deleteContact(this.contact.id);
-      // this.isDeleted = true;
-      // setTimeout(() => {
-      //   this.contactDeleted.emit();
-      //   this.isDeleted = false;
-      // }, 1500);
       this.contactService.showDeletedMessage.set(true);
       setTimeout(() => {
         this.contactDeleted.emit();

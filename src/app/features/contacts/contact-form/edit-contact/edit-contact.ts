@@ -1,4 +1,14 @@
-import { Component, inject, signal, input, output, effect } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  input,
+  output,
+  effect,
+  Output,
+  EventEmitter,
+  Input,
+} from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -43,6 +53,15 @@ export class EditContact {
   existingContactId!: string;
   contactId = input.required<string>();
   closeModal = output<void>();
+  @Input() contact: ContactInterface | null = null;
+  @Output() contactDeleted = new EventEmitter<void>();
+
+  showDeleteModal: boolean = false;
+
+  onDelete() {
+    if (!this.contact || !this.contact.id) return;
+    this.showDeleteModal = true;
+  }
 
   constructor() {
     effect(() => {
