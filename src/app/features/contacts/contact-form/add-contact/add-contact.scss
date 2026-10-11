@@ -80,6 +80,20 @@
         @include styles.flex-center(column);
         align-items: flex-start;
         gap: 32px;
+        div {
+          position: relative;
+          width: 100%;
+        }
+
+        h5 {
+          position: absolute;
+          bottom: -22px;
+          left: 0;
+          margin: 0;
+          font-size: 13px;
+          font-weight: 400;
+          white-space: nowrap;
+        }
       }
       input {
         width: 420px;

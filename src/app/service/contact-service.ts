@@ -53,6 +53,8 @@ export class ContactService {
 
   /** Alle geladenen Kontakte, alphabetisch nach Namen sortiert. */
   readonly contacts = this.contactList.asReadonly();
+  showSuccessMessage = signal<boolean>(false);
+  showDeletedMessage = signal<boolean>(false);
 
   /**
    * READ: Lädt alle Kontakte und legt sie im Signal `contacts` ab.
