@@ -26,7 +26,8 @@ import { Supabase } from '../../../../service/supabase';
 import { ContactService } from '../../../../service/contact-service';
 import { CommonModule } from '@angular/common';
 
-const Name_Regex = '^[a-zA-ZäöüÄÖÜß]{2,}(?:[- ][a-zA-ZäöüÄÖÜß]{2,})*$';
+const Name_Regex =
+  /^(?!\s)(?!.*([a-zA-ZäöüÄÖÜß])\1\1)(?!.*[- ]{2,})[a-zA-ZäöüÄÖÜß]{2,}(?:[- ][a-zA-ZäöüÄÖÜß]{2,})*$/;
 const Email_Regex = '^[a-zA-Z0-9._+-]+@[a-zA-Z0-9-]+\\.[a-z]{2,4}$';
 const Phone_Regex = '^(?!^(\\d)\\1+$)(?!^\\s+$)[+0-9\\s/-]{3,20}$';
 
