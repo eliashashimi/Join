@@ -1,14 +1,4 @@
-import {
-  Component,
-  inject,
-  signal,
-  input,
-  output,
-  effect,
-  Output,
-  EventEmitter,
-  Input,
-} from '@angular/core';
+import { Component, inject, signal, input, output, effect } from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -55,6 +45,7 @@ export class EditContact {
   existingContactId!: string;
   contactId = input.required<string>();
   closeModal = output<void>();
+  contactDeleted = output<void>();
   showDeleteModal: boolean = false;
 
   constructor() {
@@ -162,6 +153,21 @@ export class EditContact {
       this.resetAndCloseForm();
     } catch (error: any) {
       console.error('no contact loaded:', error.message);
+    }
+  }
+
+  async onDelete() {
+    if (!this.existingContactId) return;
+    try {
+      await this.contactService.deleteContact(this.existingContactId);
+      this.contactService.showDeletedMessage.set(true);
+      this.resetAndCloseForm();
+      this.contactDeleted.emit();
+      setTimeout(() => {
+        this.contactService.showDeletedMessage.set(false);
+      }, 3000);
+    } catch (error: any) {
+      console.error('Kontakt konnte nicht gelöscht werden: ', error.message);
     }
   }
 }

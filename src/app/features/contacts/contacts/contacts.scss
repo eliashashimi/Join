@@ -338,15 +338,13 @@
 
 /* Modals */
 .modal-overlay {
+  @include styles.flex-center;
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   z-index: 1000;
 }
 
@@ -361,7 +359,7 @@
 @keyframes slideInFromRight {
   from {
     transform: translateX(100dvw);
-    opacitiy: 0;
+    opacity: 0;
   }
   to {
     transform: translateX(0);

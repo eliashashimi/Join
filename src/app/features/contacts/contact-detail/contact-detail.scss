@@ -1,3 +1,5 @@
+@use '../../../../../public/assets/styles';
+
 $join-dark-blue: #2a3647;
 $join-light-blue: #29abe2;
 $join-bg-light: #f6f7f8;
@@ -144,15 +146,33 @@ $join-bg-light: #f6f7f8;
   }
 }
 
-.no-contact-selected {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  color: #a8a8a8;
+.successfully-added-deleted {
+  @include styles.flex-center;
+  position: fixed;
+  bottom: 200px;
+  right: 450px;
+  z-index: 10;
+
+  width: auto;
+  min-width: 280px;
+  padding: 16px 24px;
+  color: #ffffff;
+  background-color: #2a3647;
   font-size: 1.125rem;
-  text-align: center;
-  padding: 16px;
+  border-radius: 20px;
+
+  animation: slideInFromRight 0.4s ease-out forwards;
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 .modal-backdrop {
