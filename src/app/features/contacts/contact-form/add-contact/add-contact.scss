@@ -58,6 +58,10 @@
       gap: 72px;
       .person-name-img {
         padding-bottom: 50px;
+        img {
+          width: 120px;
+          height: 120px;
+        }
       }
       .avatar-circle {
         @include styles.flex-center;

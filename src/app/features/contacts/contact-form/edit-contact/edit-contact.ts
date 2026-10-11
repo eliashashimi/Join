@@ -24,6 +24,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ContactData, ContactInterface } from '../../../../interface/contact-interface';
 import { Supabase } from '../../../../service/supabase';
 import { ContactService } from '../../../../service/contact-service';
+import { CommonModule } from '@angular/common';
 
 const Name_Regex = '^[a-zA-ZäöüÄÖÜß]{2,}(?:[- ][a-zA-ZäöüÄÖÜß]{2,})*$';
 const Email_Regex = '^[a-zA-Z0-9._+-]+@[a-zA-Z0-9-]+\\.[a-z]{2,4}$';
@@ -37,7 +38,7 @@ export function forbiddenNameValidator(nameRe: RegExp): ValidatorFn {
 }
 
 @Component({
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   selector: 'app-edit-contact',
   styleUrl: './edit-contact.scss',
   templateUrl: './edit-contact.html',
@@ -53,15 +54,7 @@ export class EditContact {
   existingContactId!: string;
   contactId = input.required<string>();
   closeModal = output<void>();
-  @Input() contact: ContactInterface | null = null;
-  @Output() contactDeleted = new EventEmitter<void>();
-
   showDeleteModal: boolean = false;
-
-  onDelete() {
-    if (!this.contact || !this.contact.id) return;
-    this.showDeleteModal = true;
-  }
 
   constructor() {
     effect(() => {
