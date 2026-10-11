@@ -8,20 +8,25 @@ import { EditContact } from '../contact-form/edit-contact/edit-contact';
 import { ContactService } from '../../../service/contact-service';
 
 @Component({
-  imports: [CommonModule,RouterLink, ContactDetailComponent, AddContact, EditContact],
+  imports: [CommonModule, RouterLink, ContactDetailComponent, AddContact, EditContact],
   selector: 'app-contacts',
   standalone: true,
   styleUrl: './contacts.scss',
   templateUrl: './contacts.html',
 })
 export class ContactsComponent implements OnInit {
-  showAddContactModal = signal(false);
-  showEditContactModal = signal(false);
+  selectedContactId = signal<string | null>(null);
+  showAddContactModal = signal<boolean>(false);
+  showEditContactModal = signal<boolean>(false);
   private contactService = inject(ContactService);
 
   contacts = this.contactService.contacts;
 
-  selectedContact = signal<ContactInterface | null>(null);
+  selectedContact = computed(() => {
+    const id = this.selectedContactId();
+    if (!id) return null;
+    return this.contacts().find((c) => c.id === id) || null;
+  });
 
   async ngOnInit() {
     await this.contactService.getContacts();
@@ -42,4 +47,10 @@ export class ContactsComponent implements OnInit {
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([letter, contacts]) => ({ letter, contacts }));
   });
+
+  isMobileDetailOpen = computed(() => this.selectedContactId() !== null);
+
+  goBackToList(): void {
+    this.selectedContactId.set(null);
+  }
 }

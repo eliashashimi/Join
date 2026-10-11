@@ -12,6 +12,12 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Supabase } from '../../../../service/supabase';
+import { ContactData } from '../../../../interface/contact-interface';
+import { ContactService } from '../../../../service/contact-service';
+
+const Name_Regex = '^[a-zA-ZäöüÄÖÜß]{2,}(?:[- ][a-zA-ZäöüÄÖÜß]{2,})*$';
+const Email_Regex = '^[a-zA-Z0-9._+-]+@[a-zA-Z0-9-]+\\.[a-z]{2,4}$';
+const Phone_Regex = '^(?!^(\\d)\\1+$)(?!^\\s+$)[+0-9\\s/-]{3,20}$';
 
 export function forbiddenNameValidator(nameRe: RegExp): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -32,30 +38,16 @@ export class AddContact {
   supabase = inject(Supabase);
   formSubmitted = signal(false);
   closeModal = output<void>();
+  contactService = inject(ContactService);
 
   close() {
     this.closeModal.emit();
   }
 
   userform = this.fb.group({
-    name: [
-      '',
-      [
-        Validators.required,
-        Validators.minLength(4),
-        Validators.pattern('^[^\s]+(\s+[^\s]+)*\$'),
-        Validators.pattern('^[a-zA-Z]{2, }'),
-      ],
-    ],
-    email: [
-      '',
-      [
-        Validators.required,
-        Validators.email,
-        Validators.pattern('^[a-zA-Z0-9._+-]+@[a-zA-Z0-9,-]+\\.[a-z]{2,4}$'),
-      ],
-    ],
-    phone: ['', [Validators.required, Validators.pattern('^[+0-9]+[0-9]')]],
+    name: ['', [Validators.required, Validators.minLength(4), Validators.pattern(Name_Regex)]],
+    email: ['', [Validators.required, Validators.email, Validators.pattern(Email_Regex)]],
+    phone: ['', [Validators.required, Validators.pattern(Phone_Regex)]],
   });
 
   get name() {
@@ -95,26 +87,37 @@ export class AddContact {
     return `hsl(${color}, 70%, 45%)`;
   }
 
+  private getFormData(): ContactData {
+    return {
+      name: this.userform.value.name?.trim() || '',
+      email: this.userform.value.email?.toLowerCase().trim() || '',
+      phone: this.userform.value.phone?.trim() || '',
+    };
+  }
+
+  private resetAndCloseForm(): void {
+    this.userform.reset();
+    this.formSubmitted.set(false);
+    this.close();
+  }
+
   async onSubmit() {
+    console.log('onSubmit wurde ausgelöst');
     this.formSubmitted.set(true);
 
-    if (this.userform.valid) {
-      const nameText = this.userform.value.name;
-      const emailText = this.userform.value.email;
-      const generatedColor = this.getBackground();
-      const { error } = await this.supabase.client.from('contacts').insert({
-        name: nameText?.trim(),
-        email: emailText?.toLowerCase().trim(),
-        phone: this.userform.value.phone?.trim(),
-        color: generatedColor, // <-- Die berechnete Farbe mitsenden
-      });
-      if (error) {
-        console.error('Konnte Kontakt nicht erstellen:', error.message);
-        return;
-      }
-      this.userform.reset();
-      this.formSubmitted.set(false);
-      this.close();
+    if (!this.userform.valid) {
+      return;
+    }
+    try {
+      const newContactData = this.getFormData();
+      await this.contactService.addContact(newContactData);
+      this.contactService.showSuccessMessage.set(true);
+      this.resetAndCloseForm();
+      setTimeout(() => {
+        this.contactService.showSuccessMessage.set(false);
+      }, 3000);
+    } catch (error: any) {
+      console.error('contact couldn´t be created');
     }
   }
 }

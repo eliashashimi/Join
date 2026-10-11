@@ -1,9 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  imports: [],
   selector: 'app-privacy-policy',
-  styleUrl: './privacy-policy.scss',
+  standalone: true,
+  imports: [CommonModule, RouterLink],
   templateUrl: './privacy-policy.html',
+  styleUrl: './privacy-policy.scss'
 })
-export class PrivacyPolicy {}
+export class PrivacyPolicy {
+  goBack() {
+    window.history.back();
+  }
+}
