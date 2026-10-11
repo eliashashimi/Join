@@ -4,9 +4,13 @@ $join-light-blue: #29abe2; // Hellblau / Accent-Farbe (für Buttons, Logos, High
 $join-bg-light: #f6f7f8; // Sehr helles Grau/Weiß (für den allgemeinen Hintergrund)
 
 :root {
+--dark-blue: #2a3647; // Dunkles Blau (für Header, dunkle Hintergründe, Schriften)
 --active-menu: #091931; // Dunkles Blau für aktives Menü (Summery, ..., Contacts )
 --menu-hover: #2A3D59; // Aside-Menu Hovereffekt
 --header-initial-hover: #0c2e621f; // Hovereffekt der Initialien im Header
+--menu-text: #e7e7e7; // Menu-Text
+--light-blue: #29abe2; // Add-Button Hover
+
 
 }
 
