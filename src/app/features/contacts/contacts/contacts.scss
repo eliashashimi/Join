@@ -96,6 +96,7 @@
   display: flex;
   flex-direction: column;
   background-color: #f6f7f8;
+  overflow: hidden;
 }
 
 .top-header {
@@ -107,6 +108,7 @@
   background-color: white;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
   z-index: 10;
+  flex-shrink: 0;
 
   .header-title {
     font-size: 20px;
@@ -166,11 +168,29 @@
   }
 }
 
-/* Content Body */
+/* Content Body - Wichtig für das Scrollen der eingebetteten Views */
 .content-body {
   display: flex;
   flex: 1;
   overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+/* Scroll-Bereiche für Help, Legal und Privacy explizit freigeben */
+.help-scroll-area,
+.legal-scroll-area,
+.privacy-scroll-area {
+  flex: 1;
+  height: 100%;
+  overflow-y: auto !important;
+  padding: 40px 80px;
+  box-sizing: border-box;
+  width: 100%;
+
+  @media(max-width: 768px) {
+    padding: 24px 20px;
+  }
 }
 
 /* Linke Spalte (Kontaktliste) */
@@ -361,7 +381,7 @@
 @keyframes slideInFromRight {
   from {
     transform: translateX(100dvw);
-    opacitiy: 0;
+    opacity: 0;
   }
   to {
     transform: translateX(0);
@@ -416,7 +436,7 @@
         height: 100%;
         flex: 1;
         justify-content: center;
-        font-size: 0; // Text ausblenden
+        font-size: 0;
         gap: 0;
 
         &.active {
@@ -454,7 +474,7 @@
     display: none;
   }
 
-  /* Kontaktliste - volle Breite*/
+  /* Kontaktliste - volle Breite */
   .contacts-list-container {
     width: 100vw;
     border-right: none;
@@ -468,7 +488,7 @@
     width: 56px;
     height: 56px;
     border-radius: 50%;
-    font-size: 0; // Text ausblenden
+    font-size: 0;
     padding: 0;
     margin: 0;
 
@@ -482,7 +502,7 @@
   /* Detailansicht -> slide nach rechts */
   .contacts-detail-container {
     position: absolute;
-    top: 80;
+    top: 80px;
     left: 0;
     width: 100vw;
     height: 100%;
@@ -492,13 +512,11 @@
     transition: transform 0.3s ease-in-out;
     overflow-y: auto;
 
-    /* Wenn Kontakt ausgewählt - slide nach links*/
     &.mobile-open {
       transform: translateX(0);
     }
   }
 
-  /* Mobile-Zurück-Button */
   .mobile-back-btn {
     display: flex;
     align-items: center;
