@@ -60,7 +60,6 @@
       </a>
       <a
         (click)="currentView.set('contacts')"
-        routerLink="/contacts"
         class="nav-item"
         [class.active]="currentView() === 'contacts'"
       >
@@ -83,8 +82,18 @@
     </nav>
 
     <div class="sidebar-footer">
-      <a routerLink="/privacy-policy">Privacy Policy</a>
-      <a routerLink="/legal-notice">Legal notice</a>
+      <a
+        (click)="currentView.set('privacy')"
+        class="footer-link"
+        [class.active-footer-link]="currentView() === 'privacy'"
+        >Privacy Policy</a
+      >
+      <a
+        (click)="currentView.set('legal')"
+        class="footer-link"
+        [class.active-footer-link]="currentView() === 'legal'"
+        >Legal notice</a
+      >
     </div>
   </aside>
 
@@ -93,12 +102,7 @@
     <header class="top-header">
       <span class="header-title">Kanban Project Management Tool</span>
       <div class="user-profile">
-        <!-- Hilfe-Icon schaltet den View-Zustand um -->
-        <a
-          (click)="currentView.set('help')"
-          class="help-icon-link"
-          style="text-decoration: none; cursor: pointer"
-        >
+        <a (click)="currentView.set('help')" class="help-icon-link">
           <span class="help-icon" [class.active-help]="currentView() === 'help'">?</span>
         </a>
         <div class="user-avatar-sm">SM</div>
@@ -108,13 +112,12 @@
     <div class="content-body">
       <!-- ANSICHT 1: Kontakte -->
       @if (currentView() === 'contacts') {
-        <!-- Kontaktliste -->
         <div class="contacts-list-container">
           <button class="add-contact-btn" (click)="showAddContactModal.set(true)">
             Add new contact
             <span class="user-add-icon">
               <svg
-                xmlns="http://www.w3.org/2000/svg"
+                xmlns="http://w3.org/2000/svg"
                 width="32"
                 height="32"
                 fill="currentColor"
@@ -156,9 +159,7 @@
           </div>
         </div>
 
-        <!-- Detailansicht -->
         <div class="contacts-detail-container" [class.mobile-open]="isMobileDetailOpen()">
-          <!-- Mobile Zurück-Button (nur auf Smartphones sichtbar) -->
           <button class="mobile-back-btn" (click)="goBackToList()">
             <svg xmlns="http://w3.org" viewBox="0 0 32 32" width="32" height="32">
               <path
@@ -186,123 +187,19 @@
         </div>
       }
 
-      <!-- ANSICHT 2: Help-Page Inhalt -->
+      <!-- ANSICHT 2: Help-Page -->
       @if (currentView() === 'help') {
-        <div
-          class="help-scroll-area"
-          style="flex: 1; overflow-y: auto; padding: 40px 80px; width: 100%"
-        >
-          <div class="help-content-wrapper" style="max-width: 900px; margin: 0 auto">
-            <div
-              class="help-header-row"
-              style="
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 24px;
-              "
-            >
-              <h1 style="font-size: 61px; font-weight: 700; margin: 0">Help</h1>
-              <!-- Zurück-Button mit pfeil-icon.svg -->
-              <button
-                class="back-btn"
-                (click)="currentView.set('contacts')"
-                style="
-                  background: none;
-                  border: none;
-                  cursor: pointer;
-                  padding: 8px;
-                  border-radius: 50%;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                "
-              >
-                <img src="./assets/pfeil-icon.svg" alt="Back" width="24" height="24" />
-              </button>
-            </div>
+        <app-help-page (backClicked)="currentView.set('contacts')"></app-help-page>
+      }
 
-            <p class="intro-text" style="font-size: 18px; line-height: 1.5; margin-bottom: 32px">
-              Welcome to the help page for
-              <span class="highlight" style="color: #29abe2; font-weight: 500">Join</span>, your
-              guide to using our kanban project management tool. Here, we'll provide an overview of
-              what Join is, how it can benefit you, and how to use it.
-            </p>
+      <!-- ANSICHT 3: Legal Notice -->
+      @if (currentView() === 'legal') {
+        <app-legal-notice (backClicked)="currentView.set('contacts')"></app-legal-notice>
+      }
 
-            <section class="help-section" style="margin-bottom: 32px">
-              <h2 style="font-size: 27px; font-weight: 700; margin-bottom: 16px; color: #2a3642">
-                What is Join?
-              </h2>
-              <p style="font-size: 16px; line-height: 1.6; margin-bottom: 16px">
-                <span class="highlight" style="color: #29abe2; font-weight: 500">Join</span> is a
-                kanban-based project management tool designed and built by a group of dedicated
-                students as part of their web development bootcamp at the Developer Akademie.
-              </p>
-              <p style="font-size: 16px; line-height: 1.6; margin-bottom: 16px">
-                Kanban, a Japanese term meaning "billboard", is a highly effective method to
-                visualize work, limit work-in-progress, and maximize efficiency (or flow).
-                <span class="highlight" style="color: #29abe2; font-weight: 500">Join</span>
-                leverages the principles of kanban to help users manage their tasks and projects in
-                an intuitive, visual interface.
-              </p>
-              <p style="font-size: 16px; line-height: 1.6; margin-bottom: 16px">
-                It is important to note that
-                <span class="highlight" style="color: #29abe2; font-weight: 500">Join</span> is
-                designed as an educational exercise and is not intended for extensive business
-                usage. While we strive to ensure the best possible user experience, we cannot
-                guarantee consistent availability, reliability, accuracy, or other aspects of
-                quality regarding
-                <span class="highlight" style="color: #29abe2; font-weight: 500">Join</span>.
-              </p>
-            </section>
-
-            <section class="help-section" style="margin-bottom: 32px">
-              <h2 style="font-size: 27px; font-weight: 700; margin-bottom: 16px; color: #2a3642">
-                How to use it
-              </h2>
-              <p style="font-size: 16px; line-height: 1.6; margin-bottom: 16px">
-                Here is a step-by-step guide on how to use
-                <span class="highlight" style="color: #29abe2; font-weight: 500">Join</span>:
-              </p>
-
-              <ol class="help-steps" style="padding-left: 20px">
-                <li style="font-size: 16px; line-height: 1.6; margin-bottom: 16px">
-                  <strong style="font-size: 18px; color: #000">Exploring the Board</strong>
-                  <p style="margin-top: 4px; margin-bottom: 0">
-                    When you log in to Join, you'll find a default board. This board represents your
-                    project and contains four default lists: "To Do", "In Progress", "Await
-                    feedback" and "Done".
-                  </p>
-                </li>
-                <li style="font-size: 16px; line-height: 1.6; margin-bottom: 16px">
-                  <strong style="font-size: 18px; color: #000">Creating Contacts</strong>
-                  <p style="margin-top: 4px; margin-bottom: 0">
-                    In Join, you can add contacts to collaborate on your projects. Go to the
-                    "Contacts" section, click on "New contact", and fill in the required
-                    information. Once added, these contacts can be assigned tasks and they can
-                    interact with the tasks on the board.
-                  </p>
-                </li>
-                <li style="font-size: 16px; line-height: 1.6; margin-bottom: 16px">
-                  <strong style="font-size: 18px; color: #000">Adding Cards</strong>
-                  <p style="margin-top: 4px; margin-bottom: 0">
-                    Now that you've added your contacts, you can start adding cards. Cards represent
-                    individual tasks. Click the "+" button under the appropriate list to create a
-                    new card. Fill in the task details in the card, like task name, description, due
-                    date, assignees, etc.
-                  </p>
-                </li>
-                <li style="font-size: 16px; line-height: 1.6; margin-bottom: 16px">
-                  <strong style="font-size: 18px; color: #000">Moving Cards</strong>
-                  <p style="margin-top: 4px; margin-bottom: 0">
-                    As tasks progress, you can move them between lists by dragging and dropping them
-                    or by clicking the status arrows on the cards.
-                  </p>
-                </li>
-              </ol>
-            </section>
-          </div>
-        </div>
+      <!-- ANSICHT 4: Privacy Policy -->
+      @if (currentView() === 'privacy') {
+        <app-privacy-policy (backClicked)="currentView.set('contacts')"></app-privacy-policy>
       }
     </div>
   </main>

@@ -6,9 +6,21 @@ import { ContactDetailComponent } from '../contact-detail/contact-detail';
 import { AddContact } from '../contact-form/add-contact/add-contact';
 import { EditContact } from '../contact-form/edit-contact/edit-contact';
 import { ContactService } from '../../../service/contact-service';
+import { HelpPageComponent } from '../../help-page/help-page';
+import { LegalNotice } from '../../legal-notice/legal-notice';
+import { PrivacyPolicy } from '../../privacy-policy/privacy-policy';
 
 @Component({
-  imports: [CommonModule, RouterLink, ContactDetailComponent, AddContact, EditContact],
+  imports: [
+    CommonModule, 
+    RouterLink, 
+    ContactDetailComponent, 
+    AddContact, 
+    EditContact, 
+    HelpPageComponent, 
+    LegalNotice, 
+    PrivacyPolicy
+  ],
   selector: 'app-contacts',
   standalone: true,
   styleUrl: './contacts.scss',
@@ -16,8 +28,8 @@ import { ContactService } from '../../../service/contact-service';
 })
 export class ContactsComponent implements OnInit {
 
-  currentView = signal<'contacts' | 'help'>('contacts');
-  
+  currentView = signal<'contacts' | 'help' | 'legal' | 'privacy'>('contacts');
+
   selectedContactId = signal<string | null>(null);
   showAddContactModal = signal<boolean>(false);
   showEditContactModal = signal<boolean>(false);

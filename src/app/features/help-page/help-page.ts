@@ -1,18 +1,17 @@
-import { Component, inject } from '@angular/core';
+import { Component, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, Router } from '@angular/router';
 
 @Component({
   selector: 'app-help-page',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './help-page.html',
   styleUrl: './help-page.scss'
 })
 export class HelpPageComponent {
-  private router = inject(Router);
+  backClicked = output<void>();
 
-  goBack() {
-    window.history.back();
+  onBack() {
+    this.backClicked.emit();
   }
 }
