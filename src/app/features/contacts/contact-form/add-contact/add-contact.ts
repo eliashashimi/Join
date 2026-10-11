@@ -39,6 +39,7 @@ export class AddContact {
   supabase = inject(Supabase);
   formSubmitted = signal(false);
   closeModal = output<void>();
+  contactCreated = output<string>();
   contactService = inject(ContactService);
   emailExistingError = signal<boolean>(false);
 
@@ -121,9 +122,10 @@ export class AddContact {
     }
     try {
       const newContactData = this.getFormData();
-      await this.contactService.addContact(newContactData);
+      const createdContact = await this.contactService.addContact(newContactData);
       this.contactService.showSuccessMessage.set(true);
       this.resetAndCloseForm();
+      this.contactCreated.emit(createdContact.id);
       setTimeout(() => {
         this.contactService.showSuccessMessage.set(false);
       }, 3000);
