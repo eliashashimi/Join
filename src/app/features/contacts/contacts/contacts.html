@@ -105,7 +105,36 @@
         <a (click)="currentView.set('help')" class="help-icon-link">
           <span class="help-icon" [class.active-help]="currentView() === 'help'">?</span>
         </a>
-        <div class="user-avatar-sm">SM</div>
+        <button class="user-avatar-sm" (click)="toggleUserMenu()">SM</button>
+
+        @if (showUserMenu()) {
+          <div class="user-menu-backdrop" (click)="showUserMenu.set(false)"></div>
+
+          <nav class="user-menu">
+            <button
+              class="user-menu-item mobile-only"
+              [class.active]="currentView() === 'help'"
+              (click)="openView('help')"
+            >
+              Help
+            </button>
+            <button
+              class="user-menu-item"
+              [class.active]="currentView() === 'legal'"
+              (click)="openView('legal')"
+            >
+              Legal Notice
+            </button>
+            <button
+              class="user-menu-item"
+              [class.active]="currentView() === 'privacy'"
+              (click)="openView('privacy')"
+            >
+              Privacy Policy
+            </button>
+            <button class="user-menu-item" disabled>Log out</button>
+          </nav>
+        }
       </div>
     </header>
 
