@@ -71,6 +71,10 @@ export class ContactsComponent implements OnInit {
     this.showMobileMenu.set(false);
   }
 
+  onContactCreated(contactId: string): void {
+    this.selectedContactId.set(contactId);
+  }
+
   toggleMobileMenu(): void {
     this.showMobileMenu.update(val => !val);
   }

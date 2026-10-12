@@ -10,7 +10,7 @@
     <nav class="nav-menu">
       <a routerLink="/summary" class="nav-item">
         <svg
-          xmlns="http://w3.org"
+          xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           width="24"
           height="24"
@@ -27,7 +27,7 @@
       </a>
       <a routerLink="/add-task" class="nav-item">
         <svg
-          xmlns="http://w3.org"
+          xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           width="24"
           height="24"
@@ -43,7 +43,7 @@
       </a>
       <a routerLink="/board" class="nav-item">
         <svg
-          xmlns="http://w3.org"
+          xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           width="24"
           height="24"
@@ -64,7 +64,7 @@
         [class.active]="currentView() === 'contacts'"
       >
         <svg
-          xmlns="http://w3.org"
+          xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           width="24"
           height="24"
@@ -116,7 +116,7 @@
             Add new contact
             <span class="user-add-icon">
               <svg
-                xmlns="http://w3.org/2000/svg"
+                xmlns="http://www.w3.org/2000/svg"
                 width="32"
                 height="32"
                 fill="currentColor"
@@ -157,9 +157,10 @@
             }
           </div>
         </div>
+
         <div class="contacts-detail-container" [class.mobile-open]="isMobileDetailOpen()">
           <button class="mobile-back-btn" (click)="goBackToList()">
-            <svg xmlns="http://w3.org" viewBox="0 0 32 32" width="32" height="32">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
               <path
                 d="M26 16H6M14 8l-8 8 8 8"
                 fill="none"
@@ -183,6 +184,7 @@
           >
           </app-contact-detail>
         </div>
+
         @if (isMobileDetailOpen()) {
           <div class="mobile-fab-wrapper">
             @if (showMobileMenu()) {
@@ -274,7 +276,7 @@
     <div class="modal-content" (click)="$event.stopPropagation()">
       <app-add-contact
         (closeModal)="showAddContactModal.set(false)"
-        (contactCreated)="selectedContactId.set($event)"
+        (contactCreated)="onContactCreated($event)"
       ></app-add-contact>
     </div>
   </div>
