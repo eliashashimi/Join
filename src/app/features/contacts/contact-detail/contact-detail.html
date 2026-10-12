@@ -11,7 +11,7 @@
 </div> -->
 
 <ng-container *ngIf="!isLoading && !hasError && !isDeleted">
-  <div class="contact-detail-container" *ngIf="contact; else noContact">
+  <div class="contact-detail-container" *ngIf="contact">
     <div class="contact-header">
       <div class="contact-avatar" [style.background-color]="contact.color">
         {{ contact.initials }}
@@ -45,24 +45,24 @@
     </div>
   </div>
 
-  <ng-template #noContact>
-    <div class="no-contact-selected">
-      @if (contactService.showSuccessMessage()) {
-        <p>Der Kontakt wurde erfolgreich hinzugefügt!</p>
-      } @else if (contactService.showDeletedMessage()) {
-        <p>Der Kontakt wurde erfolgreich gelöscht.</p>
-      }
-    </div>
-  </ng-template>
-</ng-container>
-
-<div class="modal-backdrop" *ngIf="showDeleteModal">
-  <div class="delete-confirm-modal">
-    <h3>Kontakt löschen</h3>
-    <p>Möchtest du diesen Kontakt wirklich unwiderruflich löschen?</p>
-    <div class="modal-actions">
-      <button class="btn-cancel" (click)="cancelDelete()">Abbrechen</button>
-      <button class="btn-confirm" (click)="confirmDelete()">Löschen</button>
+  <div class="modal-backdrop" *ngIf="showDeleteModal">
+    <div class="delete-confirm-modal">
+      <h3>Kontakt löschen</h3>
+      <p>Möchtest du diesen Kontakt wirklich unwiderruflich löschen?</p>
+      <div class="modal-actions">
+        <button class="btn-cancel" (click)="cancelDelete()">Abbrechen</button>
+        <button class="btn-confirm" (click)="confirmDelete()">Löschen</button>
+      </div>
     </div>
   </div>
-</div>
+</ng-container>
+
+@if (contactService.showSuccessMessage() || contactService.showDeletedMessage()) {
+  <div class="successfully-added-deleted">
+    @if (contactService.showSuccessMessage()) {
+      <p>Contact successfully created</p>
+    } @else if (contactService.showDeletedMessage()) {
+      <p>Contact successfully deleted</p>
+    }
+  </div>
+}

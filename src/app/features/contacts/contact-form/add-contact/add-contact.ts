@@ -15,7 +15,8 @@ import { Supabase } from '../../../../service/supabase';
 import { ContactData } from '../../../../interface/contact-interface';
 import { ContactService } from '../../../../service/contact-service';
 
-const Name_Regex = '^[a-zA-ZäöüÄÖÜß]{2,}(?:[- ][a-zA-ZäöüÄÖÜß]{2,})*$';
+const Name_Regex =
+  /^(?!\s)(?!.*([a-zA-ZäöüÄÖÜß])\1\1)(?!.*[- ]{2,})[a-zA-ZäöüÄÖÜß]{2,}(?:[- ][a-zA-ZäöüÄÖÜß]{2,})*$/;
 const Email_Regex = '^[a-zA-Z0-9._+-]+@[a-zA-Z0-9-]+\\.[a-z]{2,4}$';
 const Phone_Regex = '^(?!^(\\d)\\1+$)(?!^\\s+$)[+0-9\\s/-]{3,20}$';
 
@@ -38,7 +39,9 @@ export class AddContact {
   supabase = inject(Supabase);
   formSubmitted = signal(false);
   closeModal = output<void>();
+  contactCreated = output<string>();
   contactService = inject(ContactService);
+  emailExistingError = signal<boolean>(false);
 
   close() {
     this.closeModal.emit();
@@ -101,23 +104,33 @@ export class AddContact {
     this.close();
   }
 
-  async onSubmit() {
-    console.log('onSubmit wurde ausgelöst');
-    this.formSubmitted.set(true);
+  private handleDuplicateEmailError(error: any): void {
+    const isDuplicate =
+      error.message?.toLowerCase().includes('unique_email') || error.code === '23505';
+    if (isDuplicate) {
+      this.emailExistingError.set(true);
+    } else {
+      console.log('Ein unerwarteter Datenbank-Fehler ist aufgetreten: ', error.message);
+    }
+  }
 
+  async onSubmit() {
+    this.formSubmitted.set(true);
+    this.emailExistingError.set(false);
     if (!this.userform.valid) {
       return;
     }
     try {
       const newContactData = this.getFormData();
-      await this.contactService.addContact(newContactData);
+      const createdContact = await this.contactService.addContact(newContactData);
       this.contactService.showSuccessMessage.set(true);
       this.resetAndCloseForm();
+      this.contactCreated.emit(createdContact.id);
       setTimeout(() => {
         this.contactService.showSuccessMessage.set(false);
       }, 3000);
     } catch (error: any) {
-      console.error('contact couldn´t be created');
+      this.handleDuplicateEmailError(error);
     }
   }
 }

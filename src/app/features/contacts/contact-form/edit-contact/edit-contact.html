@@ -39,7 +39,7 @@
                       {{ 'Enter your full name' }}
                     }
                     @if (name?.hasError('pattern') && name?.dirty) {
-                      {{ 'Remove space' }}
+                      {{ 'write your correct Name, please!' }}
                     }
                   }
                 </h5>
@@ -65,10 +65,10 @@
                     (email?.hasError('required') && formSubmitted())
                   ) {
                     @if (email?.hasError('required') && formSubmitted()) {
-                      {{ 'contact.error.emailRequired' }}
+                      {{ 'Your Email is required!' }}
                     }
                     @if ((email?.hasError('pattern') || email?.hasError('email')) && email?.dirty) {
-                      {{ 'contact.error.emailInvalid' }}
+                      {{ 'Your Email is not correct!' }}
                     }
                   }
                 </h5>
@@ -112,7 +112,7 @@
               </div>
             </div>
             <div class="contact__right--btn">
-              <button class="delete btn">Delete</button>
+              <button class="delete btn" (click)="onDelete()">Delete</button>
               <button class="save btn" (click)="onSubmit()">
                 Save <img src="assets/icons/check.svg" alt="okay icon" />
               </button>
