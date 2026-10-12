@@ -33,6 +33,7 @@ export class ContactsComponent implements OnInit {
   selectedContactId = signal<string | null>(null);
   showAddContactModal = signal<boolean>(false);
   showEditContactModal = signal<boolean>(false);
+  showMobileMenu = signal<boolean>(false);
   private contactService = inject(ContactService);
 
   contacts = this.contactService.contacts;
@@ -67,5 +68,33 @@ export class ContactsComponent implements OnInit {
 
   goBackToList(): void {
     this.selectedContactId.set(null);
+    this.showMobileMenu.set(false);
+  }
+
+  toggleMobileMenu(): void {
+    this.showMobileMenu.update(val => !val);
+  }
+
+  openEditModal(): void {
+    this.showEditContactModal.set(true);
+    this.showMobileMenu.set(false);
+  }
+
+  async onDeleteContact(): Promise<void> {
+    const contact = this.selectedContact();
+    if (!contact || !contact.id) return;
+
+    this.showMobileMenu.set(false);
+    
+    try {
+      await this.contactService.deleteContact(contact.id);
+      this.contactService.showDeletedMessage.set(true);
+      setTimeout(() => {
+        this.selectedContactId.set(null); // Zurück zur Liste nach Löschung
+        this.contactService.showDeletedMessage.set(false);
+      }, 3000);
+    } catch (err) {
+      console.error('Fehler beim Löschen des Kontakts:', err);
+    }
   }
 }
