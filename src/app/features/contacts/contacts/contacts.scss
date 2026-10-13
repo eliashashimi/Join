@@ -55,7 +55,9 @@
   transition: background 0.2s;
   flex-shrink: 0;
 
-  &:hover { background-color: var(--light-blue); }
+  &:hover {
+    background-color: var(--light-blue);
+  }
 
   .user-add-icon {
     display: flex;
@@ -93,7 +95,9 @@
   padding: 15px 16px;
   border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
 
   /* Normaler Hover (nur wenn NICHT selected) */
   &:hover:not(.selected) {
@@ -103,8 +107,12 @@
   /* Ausgewählter Zustand behält den dunklen Hintergrund und die Textfarben beim Hover */
   &.selected {
     background-color: var(--dark-blue) !important;
-    .contact-name { color: white !important; }
-    .contact-email { color: var(--light-blue) !important; }
+    .contact-name {
+      color: white !important;
+    }
+    .contact-email {
+      color: var(--light-blue) !important;
+    }
   }
 }
 
@@ -167,7 +175,8 @@
   display: flex;
   align-items: center;
   gap: 20px;
-  padding: 109px clamp(0px, calc(-8.421px + 2.807vw), 32px) 32px clamp(0px, calc(-10.526px + 3.509vw), 40px);
+  padding: 109px clamp(0px, calc(-8.421px + 2.807vw), 32px) 32px
+    clamp(0px, calc(-10.526px + 3.509vw), 40px);
 
   .hero-title {
     font-size: clamp(47px, calc(43.316px + 1.228vw), 61px);
@@ -209,23 +218,34 @@
 }
 
 @keyframes slideInFromRight {
-  from { transform: translateX(100dvw); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+  from {
+    transform: translateX(100dvw);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
-.mobile-back-btn, .mobile-fab-wrapper, .mobile-fab-backdrop {
+.mobile-back-btn,
+.mobile-fab-wrapper,
+.mobile-fab-backdrop {
   display: none;
 }
 
 /* Mobile & Tablet Responsive Layouts */
 @media (max-width: 768px) {
-  .contacts-container { position: relative; overflow: hidden; }
+  .contacts-container {
+    position: relative;
+    overflow: hidden;
+  }
 
-  .contacts-list-container { 
-    width: 100vw; 
-    height: 100%; 
-    border-right: none; 
-    padding: 16px 0; 
+  .contacts-list-container {
+    width: 100vw;
+    height: 100%;
+    border-right: none;
+    padding: 16px 0;
   }
 
   /* Runder FAB-Button (Figma) */
@@ -272,7 +292,9 @@
     transform: translateX(100%);
     transition: transform 0.3s ease-in-out;
 
-    &.mobile-open { transform: translateX(0); }
+    &.mobile-open {
+      transform: translateX(0);
+    }
   }
 
   .mobile-back-btn {
@@ -290,15 +312,27 @@
     flex-wrap: wrap;
     gap: 8px;
 
-    .hero-title { font-size: 47px; }
-    .hero-divider { display: none; }
-    .hero-subtitle { font-size: 20px; width: 100%; }
-    hr { width: 90px; border: 3px solid var(--light-blue); }
+    .hero-title {
+      font-size: 47px;
+    }
+    .hero-divider {
+      display: none;
+    }
+    .hero-subtitle {
+      font-size: 20px;
+      width: 100%;
+    }
+    hr {
+      width: 90px;
+      border: 3px solid var(--light-blue);
+    }
   }
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
-  .contacts-list-container { width: 100%; }
+  .contacts-list-container {
+    width: 100%;
+  }
 
   .contacts-detail-container {
     position: absolute;
@@ -310,8 +344,15 @@
     transform: translateX(100%);
     transition: transform 0.3s ease-in-out;
 
-    &.mobile-open { transform: translateX(0); }
+    &.mobile-open {
+      transform: translateX(0);
+    }
   }
 
-  .mobile-back-btn { display: flex; background: none; border: none; cursor: pointer; }
+  .mobile-back-btn {
+    display: flex;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
 }
