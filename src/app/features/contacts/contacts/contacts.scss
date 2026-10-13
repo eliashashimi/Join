@@ -253,6 +253,10 @@
     padding: 16px 0;
   }
 
+  .contacts-scroll-area {
+    padding-bottom: calc(112px + env(safe-area-inset-bottom, 0px));
+  }
+
   .add-contact-btn {
     position: fixed;
     right: 16px;
