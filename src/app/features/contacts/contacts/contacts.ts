@@ -15,6 +15,9 @@ import { ContactService } from '../../../service/contact-service';
   templateUrl: './contacts.html',
 })
 export class ContactsComponent implements OnInit {
+
+  currentView = signal<'contacts' | 'help'>('contacts');
+  
   selectedContactId = signal<string | null>(null);
   showAddContactModal = signal<boolean>(false);
   showEditContactModal = signal<boolean>(false);
