@@ -8,127 +8,13 @@
   overflow: hidden;
 }
 
-/* Sidebar */
-.sidebar {
-  width: 232px;
-  background-color: var(--dark-blue);
-  color: var(--menu-text);
-  display: flex;
-  flex-direction: column;
-  padding: 40px 0;
-}
-
-.logo-area {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 232px;
-}
-
-.nav-menu {
-  display: flex;
-  flex-direction: column;
-  margin-top: 114px;
-  height: 100%;
-}
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 12px 48px;
-  color: var(--menu-text);
-  text-decoration: none;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background 0.2s;
-
-  &:hover { background-color: var(--menu-hover); }
-  &.active {
-    background-color: var(--active-menu);
-    color: white;
-    font-weight: 500;
-  }
-}
-
-.sidebar-footer {
-  padding-left: 48px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  font-size: 14px;
-  a {
-    color: var(--menu-text);
-    text-decoration: none;
-    &:hover { color: var(--light-blue); }
-  }
-}
-
-/* Main Area & Header */
+/* Main Area & Header Wrapper */
 .main-content {
   flex: 1;
   display: flex;
   flex-direction: column;
   background-color: #f6f7f8;
   overflow: hidden;
-}
-
-.top-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 40px;
-  height: 80px;
-  background-color: white;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
-  position: relative;
-  z-index: 150;
-  flex-shrink: 0;
-
-  .header-title {
-    font-size: 20px;
-    color: black;
-    margin-right: auto;
-    padding-left: 16px;
-  }
-
-  .user-profile {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-
-    .help-icon {
-      width: 20px;
-      height: 20px;
-      border: 1px solid #686868;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: var(--dark-blue);
-      font-weight: bold;
-
-      &:hover { transform: scale(1.3); }
-    }
-
-    .user-avatar-sm {
-      width: 56px;
-      height: 56px;
-      background-color: white;
-      border: 3px solid var(--dark-blue);
-      color: var(--dark-blue);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 16px;
-      cursor: pointer;
-
-      &:hover { background-color: var(--header-initial-hover); }
-    }
-  }
 }
 
 .content-body {
@@ -167,6 +53,12 @@
   transition: background 0.2s;
 
   &:hover { background-color: var(--light-blue); }
+
+  .user-add-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .contacts-scroll-area {
@@ -196,16 +88,18 @@
   padding: 15px 16px;
   border-radius: 10px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background-color 0.2s ease, transform 0.1s ease;
 
-  &:hover {
+  /* Normaler Hover (nur wenn NICHT selected) */
+  &:hover:not(.selected) {
     background: linear-gradient(180deg, rgba(249, 249, 249, 1) 0%, rgba(240, 240, 240, 1) 100%);
   }
 
+  /* Ausgewählter Zustand behält den dunklen Hintergrund und die Textfarben beim Hover */
   &.selected {
-    background-color: var(--dark-blue);
-    .contact-name { color: white; }
-    .contact-email { color: var(--light-blue); }
+    background-color: var(--dark-blue) !important;
+    .contact-name { color: white !important; }
+    .contact-email { color: var(--light-blue) !important; }
   }
 }
 
@@ -231,7 +125,7 @@
   flex: 1;
 }
 
-/* Text-Kürzung (...) wieder aktiv */
+/* Text-Kürzung (...) */
 .contact-name {
   font-size: 20px;
   font-weight: 400;
@@ -322,67 +216,41 @@
 @media (max-width: 768px) {
   .contacts-container { position: relative; overflow: hidden; }
 
-  .sidebar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100vw;
-    height: 80px;
-    flex-direction: row;
-    padding: 0;
-    z-index: 100;
-    justify-content: space-around;
-    align-items: center;
-
-    .logo-area, .sidebar-footer { display: none; }
-
-    .nav-menu {
-      flex-direction: row;
-      margin-top: 0;
-      width: 100%;
-      height: 100%;
-      justify-content: space-around;
-      align-items: center;
-
-      .nav-item {
-        padding: 0;
-        height: 100%;
-        width: 80px;
-        justify-content: center;
-        font-size: 13px;
-        flex-direction: column;
-        border-radius: 16px;
-        gap: 0;
-
-        &.active { background-color: rgba(0, 0, 0, 0.2); }
-      }
-    }
-  }
-
-  .main-content { height: calc(100vh - 64px); }
-
-  .top-header {
-    background-image: url(../../../../../public/assets/Join-logo.png);
-    background-size: 32px 39px;
-    background-repeat: no-repeat;
-    background-position: 16px;
-    padding: 20px 16px;
-    justify-content: flex-end;
-  }
-
-  .header-title { display: none; }
   .contacts-list-container { width: 100vw; border-right: none; padding: 16px 0; }
 
+  /* Runder FAB-Button (Figma): Text ausblenden, Icon mittig im Kreis */
   .add-contact-btn {
     position: fixed;
     right: 16px;
     bottom: 112px;
     width: 56px;
     height: 56px;
-    border-radius: 50%;
-    font-size: 0;
+    min-width: 56px;
+    min-height: 56px;
     padding: 0;
     margin: 0;
+    gap: 0;                 /* sonst schiebt der gap das Icon nach rechts */
+    border-radius: 50%;
+    font-size: 0;           /* Button-Text unsichtbar */
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.3);
+    z-index: 50;
+
+    /* Icon aus dem Textfluss nehmen und exakt im Kreis zentrieren */
+    .user-add-icon {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      padding: 0;
+
+      svg {
+        width: 24px;
+        height: 24px;
+        transform: translateX(-1px); /* optischer Ausgleich, bei Bedarf -2px */
+      }
+    }
   }
 
   .contacts-detail-container {

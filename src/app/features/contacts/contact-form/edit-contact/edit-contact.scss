@@ -186,17 +186,40 @@
       @media screen and (max-width: 1149px) {
         align-self: center;
       }
-      .delete {
-        border: 1px solid #2a3647;
-      }
-      .save {
-        color: white;
-        background-color: #2a3647;
-      }
+
       .btn {
         font-size: 21px;
-        padding: 10px;
-        border-radius: 8px;
+        font-weight: 700;
+        padding: 10px 24px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+
+        &:hover {
+          transform: translateY(-1px);
+        }
+      }
+
+      .delete {
+        background-color: #ffffff;
+        color: #2a3647;
+        border: 1px solid #2a3647;
+
+        &:hover {
+          background-color: #f6f7f8;
+          border-color: #ff0000;
+          color: #ff0000;
+        }
+      }
+
+      .save {
+        background-color: #2a3647;
+        color: #ffffff;
+        border: none;
+
+        &:hover {
+          background-color: #29abe2;
+        }
       }
     }
   }
