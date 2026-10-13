@@ -16,7 +16,8 @@ import { ContactService } from '../../../../service/contact-service';
 import { CommonModule } from '@angular/common';
 
 // Verbesserter Regex für Vor- und Nachname mit Umlauten und Sonderzeichen (z.B. José)
-const Name_Regex = /^[a-zA-ZäöüÄÖÜßàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ]+(\s+[a-zA-ZäöüÄÖÜßàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ-]+)+$/;
+const Name_Regex =
+  /^[a-zA-ZäöüÄÖÜßàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ]+(\s+[a-zA-ZäöüÄÖÜßàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ-]+)+$/;
 const Email_Regex = '^[a-zA-Z0-9._+-]+@[a-zA-Z0-9-]+\\.[a-z]{2,4}$';
 const Phone_Regex = '^[+]?[0-9\\s/-]{3,20}$';
 
@@ -60,9 +61,15 @@ export class EditContact {
     phone: ['', [Validators.required, Validators.pattern(Phone_Regex)]],
   });
 
-  get name() { return this.userform.get('name'); }
-  get email() { return this.userform.get('email'); }
-  get phone() { return this.userform.get('phone'); }
+  get name() {
+    return this.userform.get('name');
+  }
+  get email() {
+    return this.userform.get('email');
+  }
+  get phone() {
+    return this.userform.get('phone');
+  }
 
   async loadContactData(id: string) {
     const { data, error } = await this.supabase.client
@@ -75,14 +82,17 @@ export class EditContact {
       console.error('no contact loaded: ', error.message);
       return;
     }
-    if (data) {
-      this.contactColor = data.color || '#cccccc';
-      this.userform.patchValue({
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-      });
-    }
+    this.applyContactData(data);
+  }
+
+  private applyContactData(data: any) {
+    if (!data) return;
+    this.contactColor = data.color || '#cccccc';
+    this.userform.patchValue({
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+    });
   }
 
   getInitials() {

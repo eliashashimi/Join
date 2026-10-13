@@ -10,7 +10,10 @@
       <button type="button" class="close-btn-right" (click)="close()">X</button>
       <div class="contact__right--middle">
         <div class="person-name-img">
-          <div class="avatar-circle" [style.background-color]="getInitials() ? contactColor : '#ffffff'">
+          <div
+            class="avatar-circle"
+            [style.background-color]="getInitials() ? contactColor : '#ffffff'"
+          >
             @if (getInitials()) {
               {{ getInitials() }}
             } @else {
@@ -118,7 +121,11 @@
             <div class="contact__right--btn">
               <button type="button" class="delete btn" (click)="onDelete()">Delete</button>
               <button type="submit" class="save btn" [disabled]="isSubmitting()">
-                @if (isSubmitting()) { Saving... } @else { Save <img src="assets/icons/check.svg" alt="okay icon" /> }
+                @if (isSubmitting()) {
+                  Saving...
+                } @else {
+                  Save <img src="assets/icons/check.svg" alt="okay icon" />
+                }
               </button>
             </div>
           </div>
