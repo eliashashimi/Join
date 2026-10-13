@@ -15,7 +15,7 @@ export class ContactDetailComponent {
   @Output() contactDeleted = new EventEmitter<void>();
   @Output() editClicked = new EventEmitter<void>();
 
-  private srv = inject(ContactService);
+  contactService = inject(ContactService);
 
   isLoading: boolean = false;
   hasError: boolean = false;
@@ -67,7 +67,7 @@ export class ContactDetailComponent {
    */
   private async delExec(id: string): Promise<void> {
     try {
-      await this.srv.deleteContact(id);
+      await this.contactService.deleteContact(id);
       this.handleDelSuccess();
     } catch (err) {
       this.handleDelError(err);
@@ -80,10 +80,10 @@ export class ContactDetailComponent {
    * Behandelt den erfolgreichen Löschvorgang.
    */
   private handleDelSuccess(): void {
-    this.srv.showDeletedMessage.set(true);
+    this.contactService.showDeletedMessage.set(true);
     setTimeout(() => {
       this.contactDeleted.emit();
-      this.srv.showDeletedMessage.set(false);
+      this.contactService.showDeletedMessage.set(false);
     }, 3000);
   }
 
