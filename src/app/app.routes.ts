@@ -10,4 +10,10 @@ export const routes: Routes = [
     { path: 'help', component: HelpPageComponent },
     { path: 'privacy-policy', component: PrivacyPolicy },
     { path: 'legal-notice', component: LegalNotice },
+    // Platzhalter-Routen für Summary, Add Task und Board (behelfsweise auf Contacts gerichtet, bis die Komponenten existieren)
+    { path: 'summary', redirectTo: 'contacts', pathMatch: 'full' },
+    { path: 'add-task', redirectTo: 'contacts', pathMatch: 'full' },
+    { path: 'board', redirectTo: 'contacts', pathMatch: 'full' },
+    // Wildcard-Route gegen weiße Seiten bei ungültigen URLs
+    { path: '**', redirectTo: 'contacts' }
 ];

@@ -51,7 +51,7 @@ export class ContactDetailComponent {
         this.contactService.showDeletedMessage.set(false);
       }, 3000);
     } catch (err) {
-      console.error('Fehler beim Löschen des Kontakts:', err);
+      console.error('Error deleting contact:', err);
       this.hasError = true;
     } finally {
       this.isLoading = false;

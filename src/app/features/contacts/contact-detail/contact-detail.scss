@@ -55,7 +55,6 @@ $join-bg-light: #f6f7f8;
 
         h2 {
           font-size: clamp(36px, calc(33.105px + 0.965vw), 47px);
-          // white-space: nowrap;
         }
       }
 
@@ -79,9 +78,7 @@ $join-bg-light: #f6f7f8;
           padding: 0;
           border-radius: 8px;
           box-sizing: border-box;
-          transition:
-            background-color 0.2s,
-            transform 0.1s;
+          transition: background-color 0.2s, transform 0.1s;
 
           &:hover {
             background-color: rgba(42, 54, 71, 0.05);
@@ -162,31 +159,34 @@ $join-bg-light: #f6f7f8;
   }
 }
 
+/* Toast fix: Zentriert / responsiv statt festem right: 500px */
 .successfully-added-deleted {
   @include styles.flex-center;
   position: fixed;
   bottom: 120px;
-  right: 500px;
-  z-index: 10;
+  right: 50%;
+  transform: translateX(50%);
+  z-index: 1000;
 
   width: auto;
   min-width: 280px;
-  padding: 26px 24px;
+  padding: 16px 24px;
   color: #ffffff;
   background-color: #2a3647;
   font-size: 1.125rem;
   border-radius: 20px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
 
-  animation: slideInFromRight 0.4s ease-out forwards;
+  animation: slideInFromBottom 0.4s ease-out forwards;
 }
 
-@keyframes slideInFromRight {
+@keyframes slideInFromBottom {
   from {
-    transform: translateX(120%);
+    transform: translate(50%, 120%);
     opacity: 0;
   }
   to {
-    transform: translateX(0);
+    transform: translate(50%, 0);
     opacity: 1;
   }
 }
@@ -271,4 +271,3 @@ $join-bg-light: #f6f7f8;
     }
   }
 }
-
