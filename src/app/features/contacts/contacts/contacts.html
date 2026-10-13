@@ -22,6 +22,9 @@
   </button>
 
   <div class="contacts-scroll-area">
+    @if (loadError()) {
+      <p class="list-error">Contacts could not be loaded. Please try again later.</p>
+    }
     @for (group of groupedContacts(); track group.letter) {
       <div class="contact-group-header">{{ group.letter }}</div>
       <hr class="group-divider" />
@@ -152,3 +155,5 @@
     </div>
   </div>
 }
+
+<app-toast />

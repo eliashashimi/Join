@@ -1,17 +1,25 @@
 <section class="contact">
   <div class="content-wrapper">
     <div class="contact__form">
-      <button type="button" class="close-btn-left" (click)="close()">X</button>
+      <button type="button" class="close-btn close-btn-left" (click)="close()" aria-label="Close">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+          <path d="M1 1L11.5 11.5M11.5 1L1 11.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+      </button>
       <img class="logo-head-img" src="assets/images/Join-Logo-White.png" alt="Join Logo" />
       <h2>Add contact</h2>
       <p>Tasks are better with a team!</p>
       <img class="logo-underline" src="assets/icons/Vector 5.svg" alt="" />
     </div>
     <div class="contact__right">
-      <button type="button" class="close-btn-right" (click)="close()">X</button>
+      <button type="button" class="close-btn close-btn-right" (click)="close()" aria-label="Close">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+          <path d="M1 1L11.5 11.5M11.5 1L1 11.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+      </button>
       <div class="contact__right--middle">
         <div class="person-name-img">
-          <div class="avatar-circle" [style.background-color]="getInitials() ? getBackground() : '#ffffff'">
+          <div class="avatar-circle" [style.background-color]="getInitials() ? color : '#ffffff'">
             @if (getInitials()) {
               {{ getInitials() }}
             } @else {
@@ -49,6 +57,7 @@
                   type="text"
                   placeholder="Name"
                   autocomplete="off"
+                  maxlength="100"
                 />
                 <img class="inp-icon" src="assets/icons/person.svg" alt="Name Icon" />
               </div>
@@ -113,6 +122,9 @@
                 <img class="inp-icon" src="assets/icons/call.svg" alt="Phone Icon" />
               </div>
             </div>
+            @if (submitError()) {
+              <p class="submit-error">{{ submitError() }}</p>
+            }
             <div class="contact__right--btn">
               <button type="button" class="cancel btn" (click)="close()">
                 Cancel <img src="assets/icons/cancel-icon.svg" alt="" />

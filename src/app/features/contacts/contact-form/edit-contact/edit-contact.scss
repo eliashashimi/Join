@@ -15,6 +15,7 @@
     }
   }
   &__form {
+    position: relative;
     height: 100%;
     @include styles.flex-center(column);
     align-items: flex-start;
@@ -23,22 +24,6 @@
     padding: 0px 46px 60px;
     border-top-left-radius: 30px;
     border-bottom-left-radius: 30px;
-    .close-btn-left {
-      @media screen and (min-width: 1149px) {
-        display: none;
-      }
-      @media screen and (max-width: 1149px) {
-        width: 13.3px;
-        height: 13.3px;
-        font-size: 18px;
-        color: white;
-        border-style: none;
-        background-color: #2a3647;
-        position: fixed;
-        top: -20px;
-        right: 30px;
-      }
-    }
     @media screen and (max-width: 1149px) {
       width: 100%;
       height: 410px;
@@ -69,6 +54,7 @@
     }
   }
   &__right {
+    position: relative;
     @include styles.flex-center(column);
     justify-content: flex-end;
     height: 100%;
@@ -77,17 +63,6 @@
     border-top-right-radius: 30px;
     border-bottom-right-radius: 30px;
     background-color: white;
-    .close-btn-right {
-      font-size: 18px;
-      width: 100%;
-      text-align: end;
-      border-style: none;
-      background-color: white;
-      margin-bottom: 57px;
-      @media screen and (max-width: 1149px) {
-        display: none;
-      }
-    }
     @media screen and (max-width: 1149px) {
       height: 460px;
       padding: 42px 16px 0px;
@@ -173,10 +148,19 @@
       input {
         width: clamp(280px, calc(243.158px + 12.281vw), 420px);
         height: 50px;
-        border: 1px solid #124658;
+        border: 1px solid #959595;
         border-radius: 10px;
         padding: 10px 48px 10px 10px;
         font-size: 20px;
+        outline: none;
+
+        &:focus {
+          border-color: #124658;
+        }
+
+        @media screen and (max-width: 1149px) {
+          width: min(364px, calc(100vw - 64px));
+        }
       }
     }
     &--btn {
@@ -225,6 +209,47 @@
   }
 }
 
+.close-btn {
+  @include styles.flex-center;
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color 0.1s;
+}
+
+.close-btn-right {
+  top: 48px;
+  right: 48px;
+  color: #2a3647;
+
+  &:hover {
+    background-color: #eeeeee;
+  }
+
+  @media screen and (max-width: 1149px) {
+    display: none;
+  }
+}
+
+.close-btn-left {
+  top: 24px;
+  right: 16px;
+  color: #ffffff;
+
+  &:hover {
+    background-color: #124658;
+  }
+
+  @media screen and (min-width: 1150px) {
+    display: none;
+  }
+}
+
 .inp-icon {
   position: fixed;
   transform: translateX(-40px) translateY(14px);
@@ -244,8 +269,15 @@ input:invalid {
   h5 {
     color: red;
   }
-  .inp {
+  .inp,
+  .inp:focus {
     color: red;
     border: 1px solid red;
   }
+}
+
+.submit-error {
+  color: red;
+  font-size: 13px;
+  margin: 0;
 }

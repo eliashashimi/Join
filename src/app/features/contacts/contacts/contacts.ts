@@ -1,40 +1,26 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, signal, computed, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { ContactInterface, GroupedContacts } from '../../../interface/contact-interface';
 import { ContactDetailComponent } from '../contact-detail/contact-detail';
 import { AddContact } from '../contact-form/add-contact/add-contact';
 import { EditContact } from '../contact-form/edit-contact/edit-contact';
 import { ContactService } from '../../../service/contact-service';
-import { HelpPageComponent } from '../../help-page/help-page';
-import { LegalNotice } from '../../legal-notice/legal-notice';
-import { PrivacyPolicy } from '../../privacy-policy/privacy-policy';
+import { Toast } from '../../../shared/toast/toast';
 
 @Component({
-  imports: [
-    CommonModule,
-    RouterLink,
-    ContactDetailComponent, 
-    AddContact, 
-    EditContact,
-    HelpPageComponent,
-    LegalNotice,
-    PrivacyPolicy
-  ],
+  imports: [CommonModule, ContactDetailComponent, AddContact, EditContact, Toast],
   selector: 'app-contacts',
   standalone: true,
   styleUrl: './contacts.scss',
   templateUrl: './contacts.html',
 })
 export class ContactsComponent implements OnInit {
-
-  currentView = signal<'contacts' | 'help' | 'legal' | 'privacy'>('contacts');
   selectedContactId = signal<string | null>(null);
   showAddContactModal = signal<boolean>(false);
   showEditContactModal = signal<boolean>(false);
   showMobileMenu = signal<boolean>(false);
-  showUserMenu = signal<boolean>(false);
-  
+  loadError = signal<boolean>(false);
+
   private contactService = inject(ContactService);
   contacts = this.contactService.contacts;
 
@@ -45,9 +31,13 @@ export class ContactsComponent implements OnInit {
     return this.contacts().find((c) => c.id === id) || null;
   });
 
-  /** Lädt beim Initialisieren der Komponente die Kontakte vom Service. */
+  /** Lädt beim Initialisieren die Kontakte und merkt sich einen Ladefehler. */
   async ngOnInit(): Promise<void> {
-    await this.contactService.getContacts();
+    try {
+      await this.contactService.getContacts();
+    } catch {
+      this.loadError.set(true);
+    }
   }
 
   /** Gruppiert und sortiert alle Kontakte alphabetisch nach Anfangsbuchstaben. */
@@ -72,25 +62,17 @@ export class ContactsComponent implements OnInit {
     this.showMobileMenu.set(false);
   }
 
-  /** Setzt den neu erstellten Kontakt als aktiv. */
+  /**
+   * Setzt den neu erstellten Kontakt als aktiv.
+   * @param contactId ID des neuen Kontakts
+   */
   onContactCreated(contactId: string): void {
     this.selectedContactId.set(contactId);
   }
 
   /** Schaltet das mobile Menü um. */
   toggleMobileMenu(): void {
-    this.showMobileMenu.update(val => !val);
-  }
-
-  /** Schaltet das Benutzer-Profil-Menü um. */
-  toggleUserMenu(): void {
-    this.showUserMenu.update((open) => !open);
-  }
-
-  /** Öffnt eine bestimmte Ansicht und schließt das Benutzermenü. */
-  openView(view: 'help' | 'legal' | 'privacy'): void {
-    this.currentView.set(view);
-    this.showUserMenu.set(false);
+    this.showMobileMenu.update((val) => !val);
   }
 
   /** Öffnet das Bearbeitungsmodal für Kontakte. */
@@ -107,15 +89,16 @@ export class ContactsComponent implements OnInit {
     await this.executeContactDeletion(contact.id);
   }
 
-  /** Führt den Löschvorgang über den Service aus. */
+  /**
+   * Löscht den Kontakt, setzt die Auswahl sofort zurück und blendet die Meldung nach 3 Sekunden aus.
+   * @param id ID des Kontakts
+   */
   private async executeContactDeletion(id: string): Promise<void> {
     try {
       await this.contactService.deleteContact(id);
+      this.selectedContactId.set(null);
       this.contactService.showDeletedMessage.set(true);
-      setTimeout(() => {
-        this.selectedContactId.set(null);
-        this.contactService.showDeletedMessage.set(false);
-      }, 3000);
+      setTimeout(() => this.contactService.showDeletedMessage.set(false), 3000);
     } catch (err) {
       console.error('Fehler beim Löschen des Kontakts:', err);
     }

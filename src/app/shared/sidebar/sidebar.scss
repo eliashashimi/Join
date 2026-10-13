@@ -8,6 +8,7 @@
   flex-direction: column;
   padding: 40px 0;
   height: 100%;
+  overflow-y: auto;
 }
 
 .logo-area {
@@ -21,7 +22,7 @@
   display: flex;
   flex-direction: column;
   margin-top: 114px;
-  height: 100%;
+  flex: 1 0 auto;
 }
 
 .nav-item {
@@ -33,7 +34,7 @@
   text-decoration: none;
   font-size: 16px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.1s;
 
   &:hover { background-color: var(--menu-hover); }
   &.active {
@@ -50,11 +51,12 @@
   gap: 8px;
   font-size: 14px;
   cursor: pointer;
-  transition: color 0.2s ease;
+  transition: color 0.1s ease;
 
   a {
     color: var(--menu-text);
     text-decoration: none;
+    cursor: pointer;
 
     &:hover, &.active-footer-link {
       color: var(--light-blue);
@@ -98,5 +100,25 @@
         &.active { background-color: rgba(0, 0, 0, 0.2); }
       }
     }
+  }
+}
+
+/* Handy quer (z. B. 844x390): Desktop-Sidebar, aber wenig Höhe, daher kompakter */
+@media (min-width: 769px) and (max-height: 520px) {
+  .sidebar {
+    padding: 16px 0;
+  }
+
+  .nav-menu {
+    margin-top: 24px;
+  }
+
+  .nav-item {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .sidebar-footer {
+    padding-bottom: 8px;
   }
 }

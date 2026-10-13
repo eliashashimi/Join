@@ -1,31 +1,10 @@
 import { inject, Service, signal } from '@angular/core';
 import { ContactData, ContactInterface, ContactRow } from '../interface/contact-interface';
 import { Supabase } from './supabase';
+import { getInitials, randomColor } from '../shared/contact-utils';
 
 /** Tabelle in Supabase. */
 const TABLE = 'contacts';
-
-/**
- * Avatar-Farben
- * Bekommt ein neuer Kontakt keine Farbe mit, wird zufällig eine davon vergeben.
- */
-const CONTACT_COLORS = [
-  '#FF7A00',
-  '#FF5EB3',
-  '#6E52FF',
-  '#9327FF',
-  '#00BEE8',
-  '#1FD7C1',
-  '#FF745E',
-  '#FFA35E',
-  '#FC71FF',
-  '#FFC701',
-  '#0038FF',
-  '#C3FF2B',
-  '#FFE62B',
-  '#FF4646',
-  '#FFBB2B',
-];
 
 /**
  * Lädt und löscht Kontakte in Supabase.
@@ -137,16 +116,6 @@ function toContact(row: ContactRow): ContactInterface {
 }
 
 /**
- * Berechnet die Initialen wie im Formular: erster Buchstabe des ersten und des
- * letzten Wortes, bei nur einem Wort die ersten zwei Buchstaben.
- */
-function getInitials(name: string): string {
-  const parts = name.trim().split(/\s+/);
-  if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
-  return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
-}
-
-/**
  * Übersetzt Formulardaten in Datenbank-Spalten.
  * Felder, die nicht übergeben wurden, bleiben `undefined` und werden nicht gesendet.
  * Eine leere Telefonnummer wird als NULL gespeichert, eine leere Farbe ignoriert.
@@ -163,9 +132,4 @@ function toRow(data: Partial<ContactData>): Partial<ContactRow> {
 /** Sortiert alphabetisch nach Namen. */
 function sortContacts(contacts: ContactInterface[]): ContactInterface[] {
   return [...contacts].sort((a, b) => a.name.localeCompare(b.name, 'de'));
-}
-
-/** Wählt zufällig eine der Avatar-Farben. */
-function randomColor(): string {
-  return CONTACT_COLORS[Math.floor(Math.random() * CONTACT_COLORS.length)];
 }

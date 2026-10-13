@@ -1,6 +1,7 @@
 .app-layout {
   display: flex;
   height: 100vh;
+  height: 100dvh;
   width: 100vw;
   overflow: hidden;
 }
@@ -15,6 +16,8 @@
 
 .app-content {
   flex: 1;
+  width: 100%;
+  max-width: calc(1440px - 232px);
   overflow: hidden;
   position: relative;
 }

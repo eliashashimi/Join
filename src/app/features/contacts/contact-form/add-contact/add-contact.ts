@@ -1,14 +1,15 @@
 import { Component, inject, signal, output } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Supabase } from '../../../../service/supabase';
 import { ContactData } from '../../../../interface/contact-interface';
 import { ContactService } from '../../../../service/contact-service';
-
-const Name_Regex =
-  /^[a-zA-ZäöüÄÖÜßàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ]+(\s+[a-zA-ZäöüÄÖÜßàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ-]+)+$/;
-const Email_Regex = '^[a-zA-Z0-9._+-]+@[a-zA-Z0-9-]+\\.[a-z]{2,4}$';
-const Phone_Regex = '^[+]?[0-9\\s/-]{3,20}$';
+import {
+  EMAIL_REGEX,
+  NAME_REGEX,
+  PHONE_REGEX,
+  getInitials as initialsOf,
+  isDuplicateEmail,
+  randomColor,
+} from '../../../../shared/contact-utils';
 
 @Component({
   imports: [ReactiveFormsModule],
@@ -17,24 +18,23 @@ const Phone_Regex = '^[+]?[0-9\\s/-]{3,20}$';
   templateUrl: './add-contact.html',
 })
 export class AddContact {
-  fb = inject(FormBuilder);
-  router = inject(Router);
-  supabase = inject(Supabase);
+  private fb = inject(FormBuilder);
+  private contactService = inject(ContactService);
+
+  /** Avatar-Farbe: einmal beim Öffnen gewählt und beim Speichern übernommen. */
+  readonly color = randomColor();
+
   formSubmitted = signal(false);
   isSubmitting = signal(false);
+  emailExistingError = signal<boolean>(false);
+  submitError = signal('');
   closeModal = output<void>();
   contactCreated = output<string>();
-  contactService = inject(ContactService);
-  emailExistingError = signal<boolean>(false);
-
-  close() {
-    this.closeModal.emit();
-  }
 
   userform = this.fb.group({
-    name: ['', [Validators.required, Validators.pattern(Name_Regex)]],
-    email: ['', [Validators.required, Validators.email, Validators.pattern(Email_Regex)]],
-    phone: ['', [Validators.required, Validators.pattern(Phone_Regex)]],
+    name: ['', [Validators.required, Validators.pattern(NAME_REGEX)]],
+    email: ['', [Validators.required, Validators.email, Validators.pattern(EMAIL_REGEX)]],
+    phone: ['', [Validators.required, Validators.pattern(PHONE_REGEX)]],
   });
 
   get name() {
@@ -47,39 +47,33 @@ export class AddContact {
     return this.userform.get('phone');
   }
 
+  /** Schließt das Modal. */
+  close(): void {
+    this.closeModal.emit();
+  }
+
+  /**
+   * Liefert die Initialen des aktuell eingegebenen Namens.
+   * @returns die Initialen oder ein leerer String
+   */
   getInitials(): string {
-    const nameValue = this.name?.value;
-    if (!nameValue || !nameValue?.trim()) return '';
-    const parts = nameValue.trim().split(/\s+/);
-    if (parts.length === 1) {
-      return parts[0].substring(0, 2).toUpperCase();
-    }
-    const firstinitial = parts[0].charAt(0);
-    const lastinitial = parts[parts.length - 1].charAt(0);
-    return (firstinitial + lastinitial).toUpperCase();
+    return initialsOf(this.name?.value ?? '');
   }
 
-  getBackground(): string {
-    const nameValue = this.name?.value;
-    if (!nameValue || nameValue.trim().length < 2) {
-      return '#cccccc';
-    }
-    let hash = 0;
-    for (let i = 0; i < nameValue.length; i++) {
-      hash = nameValue.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const color = Math.abs(hash % 360);
-    return `hsl(${color}, 70%, 45%)`;
-  }
-
+  /**
+   * Liest die Formularwerte und ergänzt die gewählte Avatar-Farbe.
+   * @returns die bereinigten Kontaktdaten
+   */
   private getFormData(): ContactData {
     return {
       name: this.userform.value.name?.trim() || '',
       email: this.userform.value.email?.toLowerCase().trim() || '',
       phone: this.userform.value.phone?.trim() || '',
+      color: this.color,
     };
   }
 
+  /** Setzt das Formular zurück und schließt das Modal. */
   private resetAndCloseForm(): void {
     this.userform.reset();
     this.formSubmitted.set(false);
@@ -87,35 +81,44 @@ export class AddContact {
     this.close();
   }
 
-  private handleDuplicateEmailError(error: any): void {
-    const isDuplicate =
-      error.message?.toLowerCase().includes('unique_email') || error.code === '23505';
-    if (isDuplicate) {
-      this.emailExistingError.set(true);
-    } else {
-      console.log('Ein unerwarteter Datenbank-Fehler ist aufgetreten: ', error.message);
-    }
-    this.isSubmitting.set(false);
-  }
-
-  private handleSuccess(contactId: string) {
+  /**
+   * Zeigt die Erfolgsmeldung und meldet den neuen Kontakt an die Liste.
+   * @param contactId ID des neuen Kontakts
+   */
+  private handleSuccess(contactId: string): void {
     this.contactService.showSuccessMessage.set(true);
     this.resetAndCloseForm();
     this.contactCreated.emit(contactId);
     setTimeout(() => this.contactService.showSuccessMessage.set(false), 3000);
   }
 
-  async onSubmit() {
+  /**
+   * Zeigt je nach Fehler den Hinweis an der E-Mail oder eine allgemeine Meldung.
+   * @param error der abgefangene Fehler
+   */
+  private handleError(error: unknown): void {
+    if (isDuplicateEmail(error)) this.emailExistingError.set(true);
+    else this.submitError.set('Contact could not be saved. Please try again.');
+    this.isSubmitting.set(false);
+  }
+
+  /** Speichert den Kontakt in der Datenbank. */
+  private async createContact(): Promise<void> {
+    try {
+      const created = await this.contactService.addContact(this.getFormData());
+      this.handleSuccess(created.id);
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  /** Prüft das Formular und legt bei gültigen Eingaben den Kontakt an. */
+  async onSubmit(): Promise<void> {
     this.formSubmitted.set(true);
     this.emailExistingError.set(false);
+    this.submitError.set('');
     if (!this.userform.valid || this.isSubmitting()) return;
-
     this.isSubmitting.set(true);
-    try {
-      const createdContact = await this.contactService.addContact(this.getFormData());
-      this.handleSuccess(createdContact.id);
-    } catch (error: any) {
-      this.handleDuplicateEmailError(error);
-    }
+    await this.createContact();
   }
 }

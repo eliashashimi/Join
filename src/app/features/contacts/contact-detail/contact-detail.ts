@@ -77,14 +77,12 @@ export class ContactDetailComponent {
   }
 
   /**
-   * Behandelt den erfolgreichen Löschvorgang.
+   * Schließt die Detailansicht sofort und blendet die Meldung nach 3 Sekunden aus.
    */
   private handleDelSuccess(): void {
+    this.contactDeleted.emit();
     this.srv.showDeletedMessage.set(true);
-    setTimeout(() => {
-      this.contactDeleted.emit();
-      this.srv.showDeletedMessage.set(false);
-    }, 3000);
+    setTimeout(() => this.srv.showDeletedMessage.set(false), 3000);
   }
 
   /**
