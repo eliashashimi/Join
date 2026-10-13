@@ -2,7 +2,6 @@ import { Component, inject, signal, input, output, effect } from '@angular/core'
 import {
   FormControl,
   FormBuilder,
-  FormArray,
   Validators,
   ValidationErrors,
   AbstractControl,
@@ -11,22 +10,15 @@ import {
   FormGroup,
 } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ContactData, ContactInterface } from '../../../../interface/contact-interface';
+import { ContactData } from '../../../../interface/contact-interface';
 import { Supabase } from '../../../../service/supabase';
 import { ContactService } from '../../../../service/contact-service';
 import { CommonModule } from '@angular/common';
 
-const Name_Regex =
-  /^(?!\s)(?!.*([a-zA-ZäöüÄÖÜß])\1\1)(?!.*[- ]{2,})[a-zA-ZäöüÄÖÜß]{2,}(?:[- ][a-zA-ZäöüÄÖÜß]{2,})*$/;
+// Verbesserter Regex für Vor- und Nachname mit Umlauten und Sonderzeichen (z.B. José)
+const Name_Regex = /^[a-zA-ZäöüÄÖÜßàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ]+(\s+[a-zA-ZäöüÄÖÜßàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ-]+)+$/;
 const Email_Regex = '^[a-zA-Z0-9._+-]+@[a-zA-Z0-9-]+\\.[a-z]{2,4}$';
-const Phone_Regex = '^(?!^(\\d)\\1+$)(?!^\\s+$)[+0-9\\s/-]{3,20}$';
-
-export function forbiddenNameValidator(nameRe: RegExp): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const forbidden = nameRe.test(control.value);
-    return forbidden ? { forbiddenName: { value: control.value } } : null;
-  };
-}
+const Phone_Regex = '^[+]?[0-9\\s/-]{3,20}$';
 
 @Component({
   imports: [ReactiveFormsModule, CommonModule],
@@ -41,12 +33,12 @@ export class EditContact {
   supabase = inject(Supabase);
   contactService = inject(ContactService);
   formSubmitted = signal(false);
+  isSubmitting = signal(false);
   contactColor: string = '#cccccc';
   existingContactId!: string;
   contactId = input.required<string>();
   closeModal = output<void>();
   contactDeleted = output<void>();
-  showDeleteModal: boolean = false;
 
   constructor() {
     effect(() => {
@@ -63,31 +55,21 @@ export class EditContact {
   }
 
   userform = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(4), Validators.pattern(Name_Regex)]],
+    name: ['', [Validators.required, Validators.pattern(Name_Regex)]],
     email: ['', [Validators.required, Validators.email, Validators.pattern(Email_Regex)]],
     phone: ['', [Validators.required, Validators.pattern(Phone_Regex)]],
   });
 
-  get name() {
-    return this.userform.get('name');
-  }
-
-  get email() {
-    return this.userform.get('email');
-  }
-
-  get phone() {
-    return this.userform.get('phone');
-  }
+  get name() { return this.userform.get('name'); }
+  get email() { return this.userform.get('email'); }
+  get phone() { return this.userform.get('phone'); }
 
   async loadContactData(id: string) {
-    // const data = await this.contactService.getContactById(id);
     const { data, error } = await this.supabase.client
       .from('contacts')
       .select('*')
       .eq('id', id)
       .single();
-    console.log(data);
 
     if (error) {
       console.error('no contact loaded: ', error.message);
@@ -115,19 +97,6 @@ export class EditContact {
     return (firstinitial + lastinitial).toUpperCase();
   }
 
-  getBackground(): string {
-    const nameValue = this.name?.value;
-    if (!nameValue || nameValue.trim().length < 2) {
-      return '#cccccc';
-    }
-    let hash = 0;
-    for (let i = 0; i < nameValue.length; i++) {
-      hash = nameValue.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const color = Math.abs(hash % 360);
-    return `hsl(${color}, 70%, 45%)`;
-  }
-
   private getFormData(): ContactData {
     return {
       name: this.userform.value.name?.trim() || '',
@@ -139,20 +108,23 @@ export class EditContact {
   private resetAndCloseForm(): void {
     this.userform.reset();
     this.formSubmitted.set(false);
+    this.isSubmitting.set(false);
     this.close();
   }
 
   async onSubmit() {
     this.formSubmitted.set(true);
-    if (!this.userform.valid) {
+    if (!this.userform.valid || this.isSubmitting()) {
       return;
     }
+    this.isSubmitting.set(true);
     try {
       const updateData = this.getFormData();
       await this.contactService.updateContact(this.existingContactId, updateData);
       this.resetAndCloseForm();
     } catch (error: any) {
       console.error('no contact loaded:', error.message);
+      this.isSubmitting.set(false);
     }
   }
 

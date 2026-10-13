@@ -1,31 +1,17 @@
 import { Component, inject, signal, output } from '@angular/core';
 import {
-  FormControl,
   FormBuilder,
-  FormArray,
   Validators,
-  ValidationErrors,
-  AbstractControl,
-  ValidatorFn,
   ReactiveFormsModule,
-  FormGroup,
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Supabase } from '../../../../service/supabase';
 import { ContactData } from '../../../../interface/contact-interface';
 import { ContactService } from '../../../../service/contact-service';
 
-const Name_Regex =
-  /^(?!\s)(?!.*([a-zA-ZäöüÄÖÜß])\1\1)(?!.*[- ]{2,})[a-zA-ZäöüÄÖÜß]{2,}(?:[- ][a-zA-ZäöüÄÖÜß]{2,})*$/;
+const Name_Regex = /^[a-zA-ZäöüÄÖÜßàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ]+(\s+[a-zA-ZäöüÄÖÜßàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ-]+)+$/;
 const Email_Regex = '^[a-zA-Z0-9._+-]+@[a-zA-Z0-9-]+\\.[a-z]{2,4}$';
-const Phone_Regex = '^(?!^(\\d)\\1+$)(?!^\\s+$)[+0-9\\s/-]{3,20}$';
-
-export function forbiddenNameValidator(nameRe: RegExp): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const forbidden = nameRe.test(control.value);
-    return forbidden ? { forbiddenName: { value: control.value } } : null;
-  };
-}
+const Phone_Regex = '^[+]?[0-9\\s/-]{3,20}$';
 
 @Component({
   imports: [ReactiveFormsModule],
@@ -38,6 +24,7 @@ export class AddContact {
   router = inject(Router);
   supabase = inject(Supabase);
   formSubmitted = signal(false);
+  isSubmitting = signal(false);
   closeModal = output<void>();
   contactCreated = output<string>();
   contactService = inject(ContactService);
@@ -48,22 +35,14 @@ export class AddContact {
   }
 
   userform = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(4), Validators.pattern(Name_Regex)]],
+    name: ['', [Validators.required, Validators.pattern(Name_Regex)]],
     email: ['', [Validators.required, Validators.email, Validators.pattern(Email_Regex)]],
     phone: ['', [Validators.required, Validators.pattern(Phone_Regex)]],
   });
 
-  get name() {
-    return this.userform.get('name');
-  }
-
-  get email() {
-    return this.userform.get('email');
-  }
-
-  get phone() {
-    return this.userform.get('phone');
-  }
+  get name() { return this.userform.get('name'); }
+  get email() { return this.userform.get('email'); }
+  get phone() { return this.userform.get('phone'); }
 
   getInitials(): string {
     const nameValue = this.name?.value;
@@ -101,6 +80,7 @@ export class AddContact {
   private resetAndCloseForm(): void {
     this.userform.reset();
     this.formSubmitted.set(false);
+    this.isSubmitting.set(false);
     this.close();
   }
 
@@ -112,14 +92,16 @@ export class AddContact {
     } else {
       console.log('Ein unerwarteter Datenbank-Fehler ist aufgetreten: ', error.message);
     }
+    this.isSubmitting.set(false);
   }
 
   async onSubmit() {
     this.formSubmitted.set(true);
     this.emailExistingError.set(false);
-    if (!this.userform.valid) {
+    if (!this.userform.valid || this.isSubmitting()) {
       return;
     }
+    this.isSubmitting.set(true);
     try {
       const newContactData = this.getFormData();
       const createdContact = await this.contactService.addContact(newContactData);

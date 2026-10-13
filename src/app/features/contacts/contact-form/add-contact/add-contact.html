@@ -1,14 +1,14 @@
 <section class="contact">
   <div class="content-wrapper">
     <div class="contact__form">
-      <button class="close-btn-left" (click)="close()">X</button>
+      <button type="button" class="close-btn-left" (click)="close()">X</button>
       <img class="logo-head-img" src="assets/images/Join-Logo-White.png" alt="Join Logo" />
       <h2>Add contact</h2>
       <p>Tasks are better with a team!</p>
       <img class="logo-underline" src="assets/icons/Vector 5.svg" alt="" />
     </div>
     <div class="contact__right">
-      <button class="close-btn-right" (click)="close()">X</button>
+      <button type="button" class="close-btn-right" (click)="close()">X</button>
       <div class="contact__right--middle">
         <div class="person-name-img">
           <div class="avatar-circle" [style.background-color]="getInitials() ? getBackground() : '#ffffff'">
@@ -19,7 +19,7 @@
             }
           </div>
         </div>
-        <form [formGroup]="userform">
+        <form [formGroup]="userform" (ngSubmit)="onSubmit()">
           <div class="contact__right--input">
             <div class="contact__right--input--box">
               <div
@@ -37,11 +37,8 @@
                     @if (name?.hasError('required') && formSubmitted()) {
                       {{ 'Your name is required' }}
                     }
-                    @if (name?.hasError('minlength') && name?.dirty) {
-                      {{ 'Enter your full name' }}
-                    }
                     @if (name?.hasError('pattern') && name?.dirty) {
-                      {{ ' correct, please!' }}
+                      {{ 'Please enter a valid first and last name.' }}
                     }
                   }
                 </h5>
@@ -101,7 +98,7 @@
                       {{ 'Your Number is required' }}
                     }
                     @if ((phone?.hasError('pattern') || phone?.hasError('phone')) && phone?.dirty) {
-                      {{ 'Your Number is not correct' }}
+                      {{ 'Please enter a valid phone number (digits only, optional +)' }}
                     }
                   }
                 </h5>
@@ -117,11 +114,11 @@
               </div>
             </div>
             <div class="contact__right--btn">
-              <button class="cancel btn" (click)="close()">
+              <button type="button" class="cancel btn" (click)="close()">
                 Cancel <img src="assets/icons/cancel-icon.svg" alt="" />
               </button>
-              <button class="create btn" (click)="onSubmit()">
-                Create contact <img src="assets/icons/check.svg" alt="okay icon" />
+              <button type="submit" class="create btn" [disabled]="isSubmitting()">
+                @if (isSubmitting()) { Creating... } @else { Create contact <img src="assets/icons/check.svg" alt="okay icon" /> }
               </button>
             </div>
           </div>

@@ -1,13 +1,13 @@
 <section class="contact">
   <div class="content-wrapper">
     <div class="contact__form">
-      <button class="close-btn-left" (click)="close()">X</button>
+      <button type="button" class="close-btn-left" (click)="close()">X</button>
       <img class="logo-head-img" src="assets/images/Join-Logo-White.png" alt="Join Logo" />
       <h2>Edit contact</h2>
       <img class="logo-underline" src="assets/icons/Vector 5.svg" alt="" />
     </div>
     <div class="contact__right">
-      <button class="close-btn-right" (click)="close()">X</button>
+      <button type="button" class="close-btn-right" (click)="close()">X</button>
       <div class="contact__right--middle">
         <div class="person-name-img">
           <div class="avatar-circle" [style.background-color]="getInitials() ? contactColor : '#ffffff'">
@@ -18,7 +18,7 @@
             }
           </div>
         </div>
-        <form [formGroup]="userform">
+        <form [formGroup]="userform" (ngSubmit)="onSubmit()">
           <div class="contact__right--input">
             <div class="contact__right--input--box">
               <div
@@ -40,7 +40,7 @@
                       {{ 'Enter your full name' }}
                     }
                     @if (name?.hasError('pattern') && name?.dirty) {
-                      {{ 'write your correct Name, please!' }}
+                      {{ 'Please enter a valid first and last name.' }}
                     }
                   }
                 </h5>
@@ -97,10 +97,10 @@
                     (phone?.hasError('required') && formSubmitted())
                   ) {
                     @if (phone?.hasError('required') && formSubmitted()) {
-                      {{ 'contact.error.phoneRequired' }}
+                      {{ 'Your Phone number is required' }}
                     }
                     @if ((phone?.hasError('pattern') || phone?.hasError('phone')) && phone?.dirty) {
-                      {{ 'contact.error.phoneInvalid' }}
+                      {{ 'Please enter a valid phone number (digits only, optional +)' }}
                     }
                   }
                 </h5>
@@ -116,9 +116,9 @@
               </div>
             </div>
             <div class="contact__right--btn">
-              <button class="delete btn" (click)="onDelete()">Delete</button>
-              <button class="save btn" (click)="onSubmit()">
-                Save <img src="assets/icons/check.svg" alt="okay icon" />
+              <button type="button" class="delete btn" (click)="onDelete()">Delete</button>
+              <button type="submit" class="save btn" [disabled]="isSubmitting()">
+                @if (isSubmitting()) { Saving... } @else { Save <img src="assets/icons/check.svg" alt="okay icon" /> }
               </button>
             </div>
           </div>
