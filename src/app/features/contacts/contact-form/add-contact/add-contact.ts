@@ -1,15 +1,12 @@
 import { Component, inject, signal, output } from '@angular/core';
-import {
-  FormBuilder,
-  Validators,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Supabase } from '../../../../service/supabase';
 import { ContactData } from '../../../../interface/contact-interface';
 import { ContactService } from '../../../../service/contact-service';
 
-const Name_Regex = /^[a-zA-ZäöüÄÖÜßàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ]+(\s+[a-zA-ZäöüÄÖÜßàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ-]+)+$/;
+const Name_Regex =
+  /^[a-zA-ZäöüÄÖÜßàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ]+(\s+[a-zA-ZäöüÄÖÜßàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ-]+)+$/;
 const Email_Regex = '^[a-zA-Z0-9._+-]+@[a-zA-Z0-9-]+\\.[a-z]{2,4}$';
 const Phone_Regex = '^[+]?[0-9\\s/-]{3,20}$';
 
@@ -40,9 +37,15 @@ export class AddContact {
     phone: ['', [Validators.required, Validators.pattern(Phone_Regex)]],
   });
 
-  get name() { return this.userform.get('name'); }
-  get email() { return this.userform.get('email'); }
-  get phone() { return this.userform.get('phone'); }
+  get name() {
+    return this.userform.get('name');
+  }
+  get email() {
+    return this.userform.get('email');
+  }
+  get phone() {
+    return this.userform.get('phone');
+  }
 
   getInitials(): string {
     const nameValue = this.name?.value;
@@ -95,22 +98,22 @@ export class AddContact {
     this.isSubmitting.set(false);
   }
 
+  private handleSuccess(contactId: string) {
+    this.contactService.showSuccessMessage.set(true);
+    this.resetAndCloseForm();
+    this.contactCreated.emit(contactId);
+    setTimeout(() => this.contactService.showSuccessMessage.set(false), 3000);
+  }
+
   async onSubmit() {
     this.formSubmitted.set(true);
     this.emailExistingError.set(false);
-    if (!this.userform.valid || this.isSubmitting()) {
-      return;
-    }
+    if (!this.userform.valid || this.isSubmitting()) return;
+
     this.isSubmitting.set(true);
     try {
-      const newContactData = this.getFormData();
-      const createdContact = await this.contactService.addContact(newContactData);
-      this.contactService.showSuccessMessage.set(true);
-      this.resetAndCloseForm();
-      this.contactCreated.emit(createdContact.id);
-      setTimeout(() => {
-        this.contactService.showSuccessMessage.set(false);
-      }, 3000);
+      const createdContact = await this.contactService.addContact(this.getFormData());
+      this.handleSuccess(createdContact.id);
     } catch (error: any) {
       this.handleDuplicateEmailError(error);
     }
