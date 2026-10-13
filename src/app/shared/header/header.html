@@ -1,0 +1,20 @@
+<header class="top-header">
+  <span class="header-title">Kanban Project Management Tool</span>
+  <div class="user-profile">
+    <a routerLink="/help" class="help-icon-link">
+      <span class="help-icon">?</span>
+    </a>
+    <button class="user-avatar-sm" (click)="toggleUserMenu()">SM</button>
+
+    @if (showUserMenu()) {
+      <div class="user-menu-backdrop" (click)="showUserMenu.set(false)"></div>
+
+      <nav class="user-menu">
+        <a routerLink="/help" class="user-menu-item mobile-only" (click)="showUserMenu.set(false)">Help</a>
+        <a routerLink="/legal-notice" class="user-menu-item" (click)="showUserMenu.set(false)">Legal Notice</a>
+        <a routerLink="/privacy-policy" class="user-menu-item" (click)="showUserMenu.set(false)">Privacy Policy</a>
+        <button class="user-menu-item" disabled>Log out</button>
+      </nav>
+    }
+  </div>
+</header>
