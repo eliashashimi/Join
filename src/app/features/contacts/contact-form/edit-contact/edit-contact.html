@@ -1,12 +1,13 @@
 <section class="contact">
   <div class="content-wrapper">
     <div class="contact__form">
-      <img src="assets/images/Join-Logo-White.png" alt="Join Logo" />
+      <button class="close-btn-left" (click)="close()">X</button>
+      <img class="logo-head-img" src="assets/images/Join-Logo-White.png" alt="Join Logo" />
       <h2>Edit contact</h2>
       <img class="logo-underline" src="assets/icons/Vector 5.svg" alt="" />
     </div>
     <div class="contact__right">
-      <button class="close-btn" (click)="close()">X</button>
+      <button class="close-btn-right" (click)="close()">X</button>
       <div class="contact__right--middle">
         <div class="person-name-img">
           @if (getInitials()) {
@@ -49,6 +50,7 @@
                   formControlName="name"
                   type="text"
                   placeholder="Name"
+                  autocomplete="off"
                 />
                 <img class="inp-icon" src="assets/icons/person.svg" alt="Name Icon" />
               </div>
@@ -78,6 +80,7 @@
                   formControlName="email"
                   type="text"
                   placeholder="Email"
+                  autocomplete="off"
                 />
                 <img class="inp-icon" src="assets/icons/mail.svg" alt="Email-Icon" />
               </div>
@@ -107,6 +110,7 @@
                   formControlName="phone"
                   type="text"
                   placeholder="Phone"
+                  autocomplete="off"
                 />
                 <img class="inp-icon" src="assets/icons/call.svg" alt="Phone Icon" />
               </div>

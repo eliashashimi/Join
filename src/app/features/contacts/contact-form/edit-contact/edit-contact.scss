@@ -8,6 +8,11 @@
   .content-wrapper {
     @include styles.flex-center;
     height: 600px;
+    @media screen and (max-width: 1149px) {
+      @include styles.flex-center(column);
+      width: 100%;
+      height: 751px;
+    }
   }
   &__form {
     height: 100%;
@@ -18,6 +23,35 @@
     padding: 0px 46px 60px;
     border-top-left-radius: 30px;
     border-bottom-left-radius: 30px;
+    .close-btn-left {
+      @media screen and (min-width: 1149px) {
+        display: none;
+      }
+      @media screen and (max-width: 1149px) {
+        width: 13.3px;
+        height: 13.3px;
+        font-size: 18px;
+        color: white;
+        border-style: none;
+        background-color: #2a3647;
+        position: fixed;
+        top: -20px;
+        right: 30px;
+      }
+    }
+    @media screen and (max-width: 1149px) {
+      width: 100%;
+      height: 410px;
+      flex: 0 0 410px;
+      border-top-left-radius: 30px;
+      border-bottom-left-radius: 0px;
+      border-top-right-radius: 30px;
+      padding: 141px 24px 141px;
+      gap: 8px;
+      .logo-head-img {
+        display: none;
+      }
+    }
 
     img {
       width: 54px;
@@ -25,35 +59,66 @@
       margin-bottom: 16px;
     }
     h2 {
-      font-size: 61px;
+      font-size: clamp(42px, calc(37px + 1.667vw), 61px);
       font-weight: bold;
       color: white;
     }
     .logo-underline {
-      height: auto;
+      height: 3px;
+      width: 90px;
     }
   }
   &__right {
     @include styles.flex-center(column);
     justify-content: flex-end;
     height: 100%;
-    padding: 0px 48px 135px 95px;
+    padding: 0 clamp(32px, calc(27.789px + 1.404vw), 48px) 135px
+      clamp(15px, calc(-6.053px + 7.018vw), 95px);
     border-top-right-radius: 30px;
     border-bottom-right-radius: 30px;
     background-color: white;
-    .close-btn {
+    .close-btn-right {
       font-size: 18px;
       width: 100%;
       text-align: end;
       border-style: none;
       background-color: white;
       margin-bottom: 57px;
+      @media screen and (max-width: 1149px) {
+        display: none;
+        // width: auto;
+        // margin-bottom: 0;
+        // background-color: #2a3647;
+        // color: white;
+        // position: fixed;
+        // top: 0;
+        // right: 20px;
+        // transform: translateY(-100px);
+      }
+    }
+    @media screen and (max-width: 1149px) {
+      height: 460px;
+      padding: 42px 16px 0px;
+      border-top-right-radius: 0px;
+      border-bottom-right-radius: 30px;
+      border-bottom-left-radius: 30px;
     }
     &--middle {
       @include styles.flex-center;
-      gap: 72px;
+      gap: clamp(45px, calc(37.105px + 2.632vw), 75px);
+      @media screen and (max-width: 1149px) {
+        @include styles.flex-center(column);
+        gap: 32px;
+      }
       .person-name-img {
         padding-bottom: 50px;
+        img {
+          width: 130px;
+          height: 130px;
+        }
+        @media screen and (max-width: 1149px) {
+          padding-bottom: 0;
+        }
       }
       .avatar-circle {
         @include styles.flex-center;
@@ -67,15 +132,24 @@
         font-weight: bold;
         text-transform: uppercase;
       }
+      @media screen and (max-width: 1149px) {
+        transform: translateY(-80px);
+      }
     }
     &--input {
       @include styles.flex-center(column);
       align-items: flex-start;
       gap: 48px;
+      @media screen and (max-width: 1149px) {
+        gap: 32px;
+      }
       &--box {
         @include styles.flex-center(column);
         align-items: flex-start;
         gap: 32px;
+        @media screen and (max-width: 1149px) {
+          gap: 24px;
+        }
         div {
           position: relative;
           width: 100%;
@@ -89,22 +163,27 @@
           font-size: 13px;
           font-weight: 400;
           white-space: nowrap;
+          @media screen and (max-width: 1149px) {
+            bottom: -18px;
+          }
         }
       }
       input {
-        width: 420px;
+        width: clamp(280px, calc(243.158px + 12.281vw), 420px);
         height: 50px;
         border: 1px solid #124658;
         border-radius: 10px;
-        padding: 10px;
+        padding: 10px 48px 10px 10px;
         font-size: 20px;
       }
     }
     &--btn {
-      @include styles.flex-center;
-      justify-content: flex-start;
+      display: flex;
       gap: 25px;
       height: 57px;
+      @media screen and (max-width: 1149px) {
+        align-self: center;
+      }
       .delete {
         border: 1px solid #2a3647;
       }
@@ -122,7 +201,8 @@
 }
 
 .inp-icon {
-  transform: translateX(-40px) translateY(4px);
+  position: fixed;
+  transform: translateX(-40px) translateY(14px);
 }
 
 button:hover,
