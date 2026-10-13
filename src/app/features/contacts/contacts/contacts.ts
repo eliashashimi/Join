@@ -34,6 +34,7 @@ export class ContactsComponent implements OnInit {
   showAddContactModal = signal<boolean>(false);
   showEditContactModal = signal<boolean>(false);
   showMobileMenu = signal<boolean>(false);
+  showUserMenu = signal<boolean>(false);
   private contactService = inject(ContactService);
 
   contacts = this.contactService.contacts;
@@ -77,6 +78,15 @@ export class ContactsComponent implements OnInit {
 
   toggleMobileMenu(): void {
     this.showMobileMenu.update(val => !val);
+  }
+
+  toggleUserMenu(): void {
+    this.showUserMenu.update((open) => !open);
+  }
+
+  openView(view: 'help' | 'legal' | 'privacy'): void {
+    this.currentView.set(view);
+    this.showUserMenu.set(false);
   }
 
   openEditModal(): void {
