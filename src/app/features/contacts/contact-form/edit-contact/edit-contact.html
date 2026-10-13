@@ -10,13 +10,13 @@
       <button class="close-btn-right" (click)="close()">X</button>
       <div class="contact__right--middle">
         <div class="person-name-img">
-          @if (getInitials()) {
-            <div class="avatar-circle" [style.background-color]="contactColor">
+          <div class="avatar-circle" [style.background-color]="getInitials() ? contactColor : '#ffffff'">
+            @if (getInitials()) {
               {{ getInitials() }}
-            </div>
-          } @else {
-            <img src="assets/images/Group 13.png" alt="contact Icon" />
-          }
+            } @else {
+              <img class="default-avatar-img" src="assets/images/Group 13.png" alt="contact Icon" />
+            }
+          </div>
         </div>
         <form [formGroup]="userform">
           <div class="contact__right--input">
