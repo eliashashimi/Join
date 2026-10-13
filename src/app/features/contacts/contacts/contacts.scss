@@ -1,6 +1,5 @@
 @use '../../../../../public/assets/styles';
 
-/* Host-Element von <app-contacts>: Liste und Detailansicht liegen nebeneinander */
 :host {
   display: flex;
   position: relative;
@@ -19,7 +18,6 @@
   overflow: hidden;
 }
 
-/* Main Area & Header Wrapper */
 .main-content {
   flex: 1;
   display: flex;
@@ -36,7 +34,6 @@
   position: relative;
 }
 
-/* Kontaktliste & Items */
 .contacts-list-container {
   width: 453px;
   background: white;
@@ -171,7 +168,6 @@
   display: block;
 }
 
-/* --- DESKTOP STANDARD --- */
 .contacts-detail-container {
   flex: 1;
   display: flex;
@@ -210,7 +206,6 @@
   }
 }
 
-/* Modals Overlay */
 .modal-overlay {
   @include styles.flex-center;
   position: fixed;
@@ -245,7 +240,6 @@
   display: none;
 }
 
-/* --- MOBILE & TABLET LAYOUTS --- */
 @media (max-width: 768px) {
   .contacts-container {
     position: relative;
@@ -302,7 +296,7 @@
     transform: translateX(100%);
     transition: transform 0.3s ease-in-out;
     overflow-y: auto;
-    padding-bottom: 100px; /* Platz für FAB unten */
+    padding-bottom: 100px;
 
     &.mobile-open {
       transform: translateX(0);
@@ -317,7 +311,6 @@
     cursor: pointer;
   }
 
-  /* Mobiler runder FAB-Button (Figma) */
   .mobile-fab-wrapper {
     display: block;
     position: fixed;
