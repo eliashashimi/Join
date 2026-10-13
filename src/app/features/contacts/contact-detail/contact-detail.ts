@@ -15,7 +15,7 @@ export class ContactDetailComponent {
   @Output() contactDeleted = new EventEmitter<void>();
   @Output() editClicked = new EventEmitter<void>();
 
-  private srv = inject(ContactService);
+  public srv = inject(ContactService);
 
   isLoading: boolean = false;
   hasError: boolean = false;
@@ -34,14 +34,14 @@ export class ContactDetailComponent {
    */
   onDelete(): void {
     if (!this.contact?.id) return;
-    this.showDeleteModal = true;
+    this.srv.showDeleteModal.set(true);
   }
 
   /**
    * Schließt das Löschmodal.
    */
   cancelDelete(): void {
-    this.showDeleteModal = false;
+    this.srv.showDeleteModal.set(false);
   }
 
   /**
@@ -57,7 +57,7 @@ export class ContactDetailComponent {
    * Bereitet das Löschen vor.
    */
   private prepDel(): void {
-    this.showDeleteModal = false;
+    this.srv.showDeleteModal.set(false);
     this.isLoading = true;
     this.hasError = false;
   }

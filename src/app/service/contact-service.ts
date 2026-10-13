@@ -55,6 +55,8 @@ export class ContactService {
   readonly contacts = this.contactList.asReadonly();
   showSuccessMessage = signal<boolean>(false);
   showDeletedMessage = signal<boolean>(false);
+  showDeleteModal = signal<boolean>(false);
+  triggerDeleteInDetail = signal<boolean>(false);
 
   /**
    * READ: Lädt alle Kontakte und legt sie im Signal `contacts` ab.

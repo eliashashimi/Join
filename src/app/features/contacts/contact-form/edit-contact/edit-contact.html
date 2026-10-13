@@ -119,8 +119,13 @@
               </div>
             </div>
             <div class="contact__right--btn">
-              <button type="button" class="delete btn" (click)="onDelete()">Delete</button>
-              <button type="submit" class="save btn" [disabled]="isSubmitting()">
+              <button type="button" class="delete btn" (click)="onDeleteClick()">Delete</button>
+              <button
+                type="submit"
+                class="save btn"
+                [disabled]="isSubmitting()"
+                (click)="onSubmit()"
+              >
                 @if (isSubmitting()) {
                   Saving...
                 } @else {

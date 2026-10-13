@@ -44,7 +44,7 @@
   </div>
 }
 
-@if (showDeleteModal) {
+@if (srv.showDeleteModal()) {
   <div class="modal-backdrop">
     <div class="delete-confirm-modal">
       <h3>Delete contact</h3>
@@ -57,11 +57,11 @@
   </div>
 }
 
-@if (contactService.showSuccessMessage() || contactService.showDeletedMessage()) {
+@if (srv.showSuccessMessage() || srv.showDeletedMessage()) {
   <div class="successfully-added-deleted">
-    @if (contactService.showSuccessMessage()) {
+    @if (srv.showSuccessMessage()) {
       <p>Contact successfully created</p>
-    } @else if (contactService.showDeletedMessage()) {
+    } @else if (srv.showDeletedMessage()) {
       <p>Contact successfully deleted</p>
     }
   </div>

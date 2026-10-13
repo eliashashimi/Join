@@ -1,4 +1,4 @@
-import { Component, inject, signal, input, output, effect } from '@angular/core';
+import { Component, inject, signal, input, output, effect, EventEmitter } from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -15,7 +15,6 @@ import { Supabase } from '../../../../service/supabase';
 import { ContactService } from '../../../../service/contact-service';
 import { CommonModule } from '@angular/common';
 
-// Verbesserter Regex für Vor- und Nachname mit Umlauten und Sonderzeichen (z.B. José)
 const Name_Regex =
   /^[a-zA-ZäöüÄÖÜßàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ]+(\s+[a-zA-ZäöüÄÖÜßàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ-]+)+$/;
 const Email_Regex = '^[a-zA-Z0-9._+-]+@[a-zA-Z0-9-]+\\.[a-z]{2,4}$';
@@ -40,6 +39,11 @@ export class EditContact {
   contactId = input.required<string>();
   closeModal = output<void>();
   contactDeleted = output<void>();
+
+  onDeleteClick(): void {
+    this.contactService.showDeleteModal.set(true);
+    this.close();
+  }
 
   constructor() {
     effect(() => {
