@@ -15,7 +15,7 @@ export class ContactDetailComponent {
   @Output() contactDeleted = new EventEmitter<void>();
   @Output() editClicked = new EventEmitter<void>();
 
-  contactService = inject(ContactService);
+  private contactService = inject(ContactService);
 
   isLoading: boolean = false;
   hasError: boolean = false;
@@ -77,14 +77,12 @@ export class ContactDetailComponent {
   }
 
   /**
-   * Behandelt den erfolgreichen Löschvorgang.
+   * Schließt die Detailansicht sofort und blendet die Meldung nach 3 Sekunden aus.
    */
   private handleDelSuccess(): void {
+    this.contactDeleted.emit();
     this.contactService.showDeletedMessage.set(true);
-    setTimeout(() => {
-      this.contactDeleted.emit();
-      this.contactService.showDeletedMessage.set(false);
-    }, 3000);
+    setTimeout(() => this.contactService.showDeletedMessage.set(false), 3000);
   }
 
   /**

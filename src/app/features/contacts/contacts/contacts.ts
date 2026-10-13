@@ -6,20 +6,15 @@ import { ContactDetailComponent } from '../contact-detail/contact-detail';
 import { AddContact } from '../contact-form/add-contact/add-contact';
 import { EditContact } from '../contact-form/edit-contact/edit-contact';
 import { ContactService } from '../../../service/contact-service';
-import { HelpPageComponent } from '../../help-page/help-page';
-import { LegalNotice } from '../../legal-notice/legal-notice';
-import { PrivacyPolicy } from '../../privacy-policy/privacy-policy';
+import { Toast } from '../../../shared/toast/toast';
 
 @Component({
   imports: [
     CommonModule,
-    RouterLink,
-    ContactDetailComponent, 
-    AddContact, 
+    ContactDetailComponent,
+    AddContact,
     EditContact,
-    HelpPageComponent,
-    LegalNotice,
-    PrivacyPolicy
+    Toast,
   ],
   selector: 'app-contacts',
   standalone: true,

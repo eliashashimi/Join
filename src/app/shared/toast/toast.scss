@@ -1,0 +1,36 @@
+.toast {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  bottom: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  min-width: 280px;
+  box-sizing: border-box;
+  padding: 16px 24px;
+  color: #ffffff;
+  background-color: #2a3647;
+  font-size: 1.125rem;
+  border-radius: 20px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  animation: slideInFromBottom 0.1s ease-out forwards;
+
+  p {
+    margin: 0;
+  }
+}
+
+@keyframes slideInFromBottom {
+  from {
+    transform: translate(-50%, 120%);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+}

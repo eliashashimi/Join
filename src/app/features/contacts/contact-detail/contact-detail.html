@@ -56,13 +56,3 @@
     </div>
   </div>
 }
-
-@if (contactService.showSuccessMessage() || contactService.showDeletedMessage()) {
-  <div class="successfully-added-deleted">
-    @if (contactService.showSuccessMessage()) {
-      <p>Contact successfully created</p>
-    } @else if (contactService.showDeletedMessage()) {
-      <p>Contact successfully deleted</p>
-    }
-  </div>
-}

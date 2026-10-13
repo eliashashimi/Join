@@ -1,0 +1,5 @@
+@if (contactService.showSuccessMessage()) {
+  <div class="toast"><p>Contact successfully created</p></div>
+} @else if (contactService.showDeletedMessage()) {
+  <div class="toast"><p>Contact successfully deleted</p></div>
+}
