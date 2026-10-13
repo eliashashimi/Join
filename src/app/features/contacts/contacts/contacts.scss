@@ -318,6 +318,12 @@
   font-weight: 400;
   line-height: 120%;
   color: black;
+  
+  /* Text-Truncation für zu lange Namen */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
 }
 
 .contact-email {
@@ -327,7 +333,7 @@
   color: #007cee;
   text-decoration: none;
   
-  /* Text-Truncation (Abschneiden mit ...) */
+  /* Text-Truncation für E-Mails */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
