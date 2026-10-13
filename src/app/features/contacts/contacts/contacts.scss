@@ -35,7 +35,7 @@
 }
 
 .contacts-list-container {
-  width: 453px;
+  width: 424px;
   background: white;
   border-right: 1px solid #e2e2e2;
   display: flex;
@@ -228,6 +228,10 @@
   border-radius: 30px;
   box-shadow: 0px 0px 16px 4px rgba(0, 0, 0, 0.1);
   animation: slideInFromRight 0.5s ease-out forwards;
+
+  @media screen and (max-width: 1149px) {
+    width: min(396px, calc(100vw - 32px));
+  }
 }
 
 @keyframes slideInFromRight {

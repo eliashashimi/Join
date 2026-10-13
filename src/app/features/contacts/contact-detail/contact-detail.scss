@@ -44,15 +44,20 @@ $join-bg-light: #f6f7f8;
 
       .contact-name {
         font-size: clamp(36px, calc(33.105px + 0.965vw), 47px);
-        font-weight: 700;
+        font-weight: 500;
         margin: 0;
-        color: var(--text-color, $join-dark-blue);
+        color: #000000;
         line-height: 1.2;
         word-break: break-word;
         width: 100%;
 
+        @media screen and (max-width: 768px) {
+          font-weight: 700;
+        }
+
         h2 {
           font-size: clamp(36px, calc(33.105px + 0.965vw), 47px);
+          font-weight: inherit;
         }
       }
 
@@ -143,7 +148,7 @@ $join-bg-light: #f6f7f8;
         word-break: break-all;
 
         &.email-link {
-          color: var(--light-blue);
+          color: #007cee;
           &:hover {
             text-decoration: underline;
           }
