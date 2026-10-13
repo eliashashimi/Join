@@ -1,65 +1,46 @@
 import { Component, inject, signal, input, output, effect } from '@angular/core';
-import {
-  FormControl,
-  FormBuilder,
-  Validators,
-  ValidationErrors,
-  AbstractControl,
-  ValidatorFn,
-  ReactiveFormsModule,
-  FormGroup,
-} from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { ContactData } from '../../../../interface/contact-interface';
-import { Supabase } from '../../../../service/supabase';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { ContactData, ContactInterface } from '../../../../interface/contact-interface';
 import { ContactService } from '../../../../service/contact-service';
-import { CommonModule } from '@angular/common';
-
-// Verbesserter Regex für Vor- und Nachname mit Umlauten und Sonderzeichen (z.B. José)
-const Name_Regex =
-  /^[a-zA-ZäöüÄÖÜßàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ]+(\s+[a-zA-ZäöüÄÖÜßàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ-]+)+$/;
-const Email_Regex = '^[a-zA-Z0-9._+-]+@[a-zA-Z0-9-]+\\.[a-z]{2,4}$';
-const Phone_Regex = '^[+]?[0-9\\s/-]{3,20}$';
+import {
+  EMAIL_REGEX,
+  NAME_REGEX,
+  PHONE_REGEX,
+  getInitials as initialsOf,
+  isDuplicateEmail,
+} from '../../../../shared/contact-utils';
 
 @Component({
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule],
   selector: 'app-edit-contact',
   styleUrl: './edit-contact.scss',
   templateUrl: './edit-contact.html',
 })
 export class EditContact {
-  fb = inject(FormBuilder);
-  router = inject(Router);
-  route = inject(ActivatedRoute);
-  supabase = inject(Supabase);
-  contactService = inject(ContactService);
+  private fb = inject(FormBuilder);
+  private contactService = inject(ContactService);
+
   formSubmitted = signal(false);
   isSubmitting = signal(false);
-  contactColor: string = '#cccccc';
-  existingContactId!: string;
+  emailExistingError = signal<boolean>(false);
+  submitError = signal('');
+  contactColor = signal('#cccccc');
   contactId = input.required<string>();
   closeModal = output<void>();
   contactDeleted = output<void>();
 
+  userform = this.fb.group({
+    name: ['', [Validators.required, Validators.pattern(NAME_REGEX)]],
+    email: ['', [Validators.required, Validators.email, Validators.pattern(EMAIL_REGEX)]],
+    phone: ['', [Validators.required, Validators.pattern(PHONE_REGEX)]],
+  });
+
   constructor() {
     effect(() => {
       const id = this.contactId();
-      if (id) {
-        this.existingContactId = id;
-        this.loadContactData(id);
-      }
+      if (id) this.loadContactData(id);
     });
   }
-
-  close() {
-    this.closeModal.emit();
-  }
-
-  userform = this.fb.group({
-    name: ['', [Validators.required, Validators.pattern(Name_Regex)]],
-    email: ['', [Validators.required, Validators.email, Validators.pattern(Email_Regex)]],
-    phone: ['', [Validators.required, Validators.pattern(Phone_Regex)]],
-  });
 
   get name() {
     return this.userform.get('name');
@@ -71,42 +52,49 @@ export class EditContact {
     return this.userform.get('phone');
   }
 
-  async loadContactData(id: string) {
-    const { data, error } = await this.supabase.client
-      .from('contacts')
-      .select('*')
-      .eq('id', id)
-      .single();
-
-    if (error) {
-      console.error('no contact loaded: ', error.message);
-      return;
-    }
-    this.applyContactData(data);
+  /** Schließt das Modal. */
+  close(): void {
+    this.closeModal.emit();
   }
 
-  private applyContactData(data: any) {
-    if (!data) return;
-    this.contactColor = data.color || '#cccccc';
+  /**
+   * Lädt den Kontakt und füllt das Formular.
+   * @param id ID des Kontakts
+   */
+  private async loadContactData(id: string): Promise<void> {
+    try {
+      const contact = await this.contactService.getContactById(id);
+      if (contact) this.applyContactData(contact);
+    } catch {
+      this.submitError.set('Contact could not be loaded.');
+    }
+  }
+
+  /**
+   * Übernimmt die Daten des Kontakts ins Formular.
+   * @param contact der geladene Kontakt
+   */
+  private applyContactData(contact: ContactInterface): void {
+    this.contactColor.set(contact.color || '#cccccc');
     this.userform.patchValue({
-      name: data.name,
-      email: data.email,
-      phone: data.phone,
+      name: contact.name,
+      email: contact.email,
+      phone: contact.phone,
     });
   }
 
-  getInitials() {
-    const nameValue = this.name?.value;
-    if (!nameValue) return '';
-    const parts = nameValue.trim().split(/\s+/);
-    if (parts.length === 1) {
-      return parts[0].substring(0, 2).toUpperCase();
-    }
-    const firstinitial = parts[0].charAt(0);
-    const lastinitial = parts[parts.length - 1].charAt(0);
-    return (firstinitial + lastinitial).toUpperCase();
+  /**
+   * Liefert die Initialen des aktuell eingegebenen Namens.
+   * @returns die Initialen oder ein leerer String
+   */
+  getInitials(): string {
+    return initialsOf(this.name?.value ?? '');
   }
 
+  /**
+   * Liest die Formularwerte. Die Farbe bleibt unverändert.
+   * @returns die bereinigten Kontaktdaten
+   */
   private getFormData(): ContactData {
     return {
       name: this.userform.value.name?.trim() || '',
@@ -115,6 +103,7 @@ export class EditContact {
     };
   }
 
+  /** Setzt das Formular zurück und schließt das Modal. */
   private resetAndCloseForm(): void {
     this.userform.reset();
     this.formSubmitted.set(false);
@@ -122,34 +111,46 @@ export class EditContact {
     this.close();
   }
 
-  async onSubmit() {
-    this.formSubmitted.set(true);
-    if (!this.userform.valid || this.isSubmitting()) {
-      return;
-    }
-    this.isSubmitting.set(true);
+  /**
+   * Zeigt je nach Fehler den Hinweis an der E-Mail oder eine allgemeine Meldung.
+   * @param error der abgefangene Fehler
+   */
+  private handleError(error: unknown): void {
+    if (isDuplicateEmail(error)) this.emailExistingError.set(true);
+    else this.submitError.set('Contact could not be saved. Please try again.');
+    this.isSubmitting.set(false);
+  }
+
+  /** Speichert die Änderungen in der Datenbank. */
+  private async saveContact(): Promise<void> {
     try {
-      const updateData = this.getFormData();
-      await this.contactService.updateContact(this.existingContactId, updateData);
+      await this.contactService.updateContact(this.contactId(), this.getFormData());
       this.resetAndCloseForm();
-    } catch (error: any) {
-      console.error('no contact loaded:', error.message);
-      this.isSubmitting.set(false);
+    } catch (error) {
+      this.handleError(error);
     }
   }
 
-  async onDelete() {
-    if (!this.existingContactId) return;
+  /** Prüft das Formular und speichert bei gültigen Eingaben. */
+  async onSubmit(): Promise<void> {
+    this.formSubmitted.set(true);
+    this.emailExistingError.set(false);
+    this.submitError.set('');
+    if (!this.userform.valid || this.isSubmitting()) return;
+    this.isSubmitting.set(true);
+    await this.saveContact();
+  }
+
+  /** Löscht den Kontakt, zeigt die Meldung an und schließt das Modal. */
+  async onDelete(): Promise<void> {
     try {
-      await this.contactService.deleteContact(this.existingContactId);
+      await this.contactService.deleteContact(this.contactId());
       this.contactService.showDeletedMessage.set(true);
+      setTimeout(() => this.contactService.showDeletedMessage.set(false), 3000);
       this.resetAndCloseForm();
       this.contactDeleted.emit();
-      setTimeout(() => {
-        this.contactService.showDeletedMessage.set(false);
-      }, 3000);
-    } catch (error: any) {
-      console.error('Kontakt konnte nicht gelöscht werden: ', error.message);
+    } catch {
+      this.submitError.set('Contact could not be deleted. Please try again.');
     }
   }
 }

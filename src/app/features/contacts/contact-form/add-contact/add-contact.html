@@ -11,7 +11,7 @@
       <button type="button" class="close-btn-right" (click)="close()">X</button>
       <div class="contact__right--middle">
         <div class="person-name-img">
-          <div class="avatar-circle" [style.background-color]="getInitials() ? getBackground() : '#ffffff'">
+          <div class="avatar-circle" [style.background-color]="getInitials() ? color : '#ffffff'">
             @if (getInitials()) {
               {{ getInitials() }}
             } @else {
@@ -49,6 +49,7 @@
                   type="text"
                   placeholder="Name"
                   autocomplete="off"
+                  maxlength="100"
                 />
                 <img class="inp-icon" src="assets/icons/person.svg" alt="Name Icon" />
               </div>
@@ -113,6 +114,9 @@
                 <img class="inp-icon" src="assets/icons/call.svg" alt="Phone Icon" />
               </div>
             </div>
+            @if (submitError()) {
+              <p class="submit-error">{{ submitError() }}</p>
+            }
             <div class="contact__right--btn">
               <button type="button" class="cancel btn" (click)="close()">
                 Cancel <img src="assets/icons/cancel-icon.svg" alt="" />
