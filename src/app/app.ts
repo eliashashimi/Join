@@ -10,4 +10,4 @@ import { SidebarComponent } from './shared/sidebar/sidebar';
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
-export class AppComponent {}
+export class App {}

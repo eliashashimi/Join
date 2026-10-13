@@ -32,6 +32,8 @@
   border-right: 1px solid #e2e2e2;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  overflow: hidden;
   padding: 24px 0;
   box-sizing: border-box;
 }
@@ -51,6 +53,7 @@
   margin: 12px 16px;
   cursor: pointer;
   transition: background 0.2s;
+  flex-shrink: 0;
 
   &:hover { background-color: var(--light-blue); }
 
@@ -64,7 +67,9 @@
 .contacts-scroll-area {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 0 16px;
+  width: 100%;
 }
 
 .contact-group-header {
@@ -216,9 +221,14 @@
 @media (max-width: 768px) {
   .contacts-container { position: relative; overflow: hidden; }
 
-  .contacts-list-container { width: 100vw; border-right: none; padding: 16px 0; }
+  .contacts-list-container { 
+    width: 100vw; 
+    height: 100%; 
+    border-right: none; 
+    padding: 16px 0; 
+  }
 
-  /* Runder FAB-Button (Figma): Text ausblenden, Icon mittig im Kreis */
+  /* Runder FAB-Button (Figma) */
   .add-contact-btn {
     position: fixed;
     right: 16px;
@@ -229,13 +239,12 @@
     min-height: 56px;
     padding: 0;
     margin: 0;
-    gap: 0;                 /* sonst schiebt der gap das Icon nach rechts */
+    gap: 0;
     border-radius: 50%;
-    font-size: 0;           /* Button-Text unsichtbar */
+    font-size: 0;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.3);
     z-index: 50;
 
-    /* Icon aus dem Textfluss nehmen und exakt im Kreis zentrieren */
     .user-add-icon {
       position: absolute;
       inset: 0;
@@ -248,7 +257,7 @@
       svg {
         width: 24px;
         height: 24px;
-        transform: translateX(-1px); /* optischer Ausgleich, bei Bedarf -2px */
+        transform: translateX(-1px);
       }
     }
   }
