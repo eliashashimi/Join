@@ -12,14 +12,10 @@ import { PrivacyPolicy } from '../../privacy-policy/privacy-policy';
 
 @Component({
   imports: [
-    CommonModule, 
-    RouterLink, 
+    CommonModule,
     ContactDetailComponent, 
     AddContact, 
     EditContact, 
-    HelpPageComponent, 
-    LegalNotice, 
-    PrivacyPolicy
   ],
   selector: 'app-contacts',
   standalone: true,
