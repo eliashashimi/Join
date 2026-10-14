@@ -47,6 +47,14 @@ export function getInitials(name: string): string {
   return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
 }
 
+export function capitalizeFirstLetter(str: string): string {
+  if (!str) return str;
+  return str
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
 /**
  * Prüft, ob ein Datenbankfehler von einer doppelten E-Mail-Adresse kommt.
  * @param error der abgefangene Fehler
