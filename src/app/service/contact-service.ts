@@ -35,6 +35,7 @@ export class ContactService {
   showSuccessMessage = signal<boolean>(false);
   showDeletedMessage = signal<boolean>(false);
   showUpdatedMessage = signal<boolean>(false);
+  showDeleteErrorMessage = signal<boolean>(false);
   showDeleteModal = signal<boolean>(false);
 
   /**
@@ -100,6 +101,17 @@ export class ContactService {
   async deleteContact(id: string): Promise<void> {
     await this.db.from(TABLE).delete().eq('id', id).throwOnError();
     this.contactList.update((list) => list.filter((c) => c.id !== id));
+  }
+
+  /**
+   * Prüft, ob die E-Mail-Adresse schon bei einem anderen Kontakt vergeben ist.
+   * @param email die zu prüfende E-Mail-Adresse
+   * @param exceptId ID des Kontakts, der beim Bearbeiten nicht mitzählt
+   * @returns `true`, wenn die Adresse schon vergeben ist
+   */
+  isEmailTaken(email: string, exceptId?: string): boolean {
+    const wanted = email.toLowerCase();
+    return this.contactList().some((c) => c.id !== exceptId && c.email.toLowerCase() === wanted);
   }
 }
 
