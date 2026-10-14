@@ -82,20 +82,19 @@ export class ContactsComponent implements OnInit {
     this.showMobileMenu.set(false);
   }
 
-  /** Bereitet das Löschen des Kontakts vor. */
-  async onDeleteContact(): Promise<void> {
-    const contact = this.selectedContact();
-    if (!contact?.id) return;
+  /** Schließt das mobile Menü und öffnet den Lösch-Dialog. */
+  onDeleteContact(): void {
+    if (!this.selectedContact()?.id) return;
     this.showMobileMenu.set(false);
-    await this.executeContactDeletion(contact.id);
+    this.contactService.showDeleteModal.set(true);
   }
 
   /** Schließt den Dialog und löscht den ausgewählten Kontakt. */
-async confirmDelete(): Promise<void> {
-  const id = this.selectedContactId();
-  this.contactService.showDeleteModal.set(false);
-  if (id) await this.executeContactDeletion(id);
-}
+  async confirmDelete(): Promise<void> {
+    const id = this.selectedContactId();
+    this.contactService.showDeleteModal.set(false);
+    if (id) await this.executeContactDeletion(id);
+  }
 
   /**
    * Löscht den Kontakt, setzt die Auswahl sofort zurück und blendet die Meldung nach 3 Sekunden aus.
