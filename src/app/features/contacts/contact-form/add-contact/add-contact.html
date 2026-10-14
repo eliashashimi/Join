@@ -3,18 +3,28 @@
     <div class="contact__form">
       <button type="button" class="close-btn close-btn-left" (click)="close()" aria-label="Close">
         <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
-          <path d="M1 1L11.5 11.5M11.5 1L1 11.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          <path
+            d="M1 1L11.5 11.5M11.5 1L1 11.5"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
         </svg>
       </button>
       <img class="logo-head-img" src="assets/images/Join-Logo-White.png" alt="Join Logo" />
       <h2>Add contact</h2>
       <p>Tasks are better with a team!</p>
-      <img class="logo-underline" src="assets/icons/Vector 5.svg" alt="" />
+      <img class="logo-underline" src="assets/icons/blaue-trenlinie.svg" alt="" />
     </div>
     <div class="contact__right">
       <button type="button" class="close-btn close-btn-right" (click)="close()" aria-label="Close">
         <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
-          <path d="M1 1L11.5 11.5M11.5 1L1 11.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          <path
+            d="M1 1L11.5 11.5M11.5 1L1 11.5"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
         </svg>
       </button>
       <div class="contact__right--middle">
@@ -23,7 +33,11 @@
             @if (getInitials()) {
               {{ getInitials() }}
             } @else {
-              <img class="default-avatar-img" src="assets/images/Group 13.png" alt="contact Icon" />
+              <img
+                class="default-avatar-img"
+                src="assets/images/add-contact-avatar.png"
+                alt="contact Icon"
+              />
             }
           </div>
         </div>
@@ -130,7 +144,11 @@
                 Cancel <img src="assets/icons/cancel-icon.svg" alt="" />
               </button>
               <button type="submit" class="create btn" [disabled]="isSubmitting()">
-                @if (isSubmitting()) { Creating... } @else { Create contact <img src="assets/icons/check.svg" alt="okay icon" /> }
+                @if (isSubmitting()) {
+                  Creating...
+                } @else {
+                  Create contact <img src="assets/icons/check.svg" alt="okay icon" />
+                }
               </button>
             </div>
           </div>
