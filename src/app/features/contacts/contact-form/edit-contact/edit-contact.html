@@ -130,18 +130,13 @@
             }
             <div class="contact__right--btn">
               <button type="button" class="delete btn" (click)="onDeleteClick()">Delete</button>
-              <button
-                type="submit"
-                class="save btn"
-                [disabled]="isSubmitting()"
-                (click)="onSubmit()"
-              >
-                @if (isSubmitting()) {
-                  Saving...
-                } @else {
-                  Save <img src="assets/icons/check.svg" alt="okay icon" />
-                }
-              </button>
+              <button type="submit" class="save btn" [disabled]="isSubmitting()">
+  @if (isSubmitting()) {
+    Saving...
+  } @else {
+    Save <img src="assets/icons/check.svg" alt="okay icon" />
+  }
+</button>
             </div>
           </div>
         </form>

@@ -70,10 +70,7 @@
   </div>
 
   @if (selectedContact(); as contact) {
-    <app-contact-detail
-      [contact]="contact"
-      (editClicked)="showEditContactModal.set(true)"
-    >
+    <app-contact-detail [contact]="contact" (editClicked)="showEditContactModal.set(true)">
     </app-contact-detail>
 
     <div class="mobile-fab-wrapper">
@@ -138,7 +135,6 @@
       <app-edit-contact
         [contactId]="contact.id"
         (closeModal)="showEditContactModal.set(false)"
-        (contactDeleted)="selectedContactId.set(null)"
       ></app-edit-contact>
     </div>
   </div>

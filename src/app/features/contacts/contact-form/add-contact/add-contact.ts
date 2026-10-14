@@ -37,12 +37,17 @@ export class AddContact {
     phone: ['', [Validators.required, Validators.pattern(PHONE_REGEX)]],
   });
 
+  /** Formularfeld für den Namen. */
   get name() {
     return this.userform.get('name');
   }
+
+  /** Formularfeld für die E-Mail-Adresse. */
   get email() {
     return this.userform.get('email');
   }
+
+  /** Formularfeld für die Telefonnummer. */
   get phone() {
     return this.userform.get('phone');
   }
@@ -68,7 +73,7 @@ export class AddContact {
     return {
       name: this.userform.value.name?.trim() || '',
       email: this.userform.value.email?.toLowerCase().trim() || '',
-      phone: this.userform.value.phone?.trim() || '',
+      phone: this.userform.value.phone?.replace(/\s+/g, '') || '',
       color: this.color,
     };
   }

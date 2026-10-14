@@ -1,4 +1,4 @@
-import { Component, inject, signal, input, output, effect, EventEmitter } from '@angular/core';
+import { Component, inject, signal, input, output, effect } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ContactData, ContactInterface } from '../../../../interface/contact-interface';
 import { ContactService } from '../../../../service/contact-service';
@@ -9,12 +9,6 @@ import {
   getInitials as initialsOf,
   isDuplicateEmail,
 } from '../../../../shared/contact-utils';
-import { CommonModule } from '@angular/common';
-
-const Name_Regex =
-  /^[a-zA-ZäöüÄÖÜßàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ]+(\s+[a-zA-ZäöüÄÖÜßàâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ-]+)+$/;
-const Email_Regex = '^[a-zA-Z0-9._+-]+@[a-zA-Z0-9-]+\\.[a-z]{2,4}$';
-const Phone_Regex = '^[+]?[0-9\\s/-]{3,20}$';
 
 @Component({
   imports: [ReactiveFormsModule],
@@ -33,7 +27,6 @@ export class EditContact {
   contactColor = signal('#cccccc');
   contactId = input.required<string>();
   closeModal = output<void>();
-  contactDeleted = output<void>();
 
   userform = this.fb.group({
     name: ['', [Validators.required, Validators.pattern(NAME_REGEX)]],
@@ -41,12 +34,7 @@ export class EditContact {
     phone: ['', [Validators.required, Validators.pattern(PHONE_REGEX)]],
   });
 
-  /** Öffnet den Lösch-Dialog und schließt das Edit-Modal. */
-  onDeleteClick(): void {
-    this.contactService.showDeleteModal.set(true);
-    this.close();
-  }
-
+  /** Lädt die Kontaktdaten neu, sobald sich die ID ändert. */
   constructor() {
     effect(() => {
       const id = this.contactId();
@@ -54,14 +42,25 @@ export class EditContact {
     });
   }
 
+  /** Formularfeld für den Namen. */
   get name() {
     return this.userform.get('name');
   }
+
+  /** Formularfeld für die E-Mail-Adresse. */
   get email() {
     return this.userform.get('email');
   }
+
+  /** Formularfeld für die Telefonnummer. */
   get phone() {
     return this.userform.get('phone');
+  }
+
+  /** Öffnet den Lösch-Dialog und schließt das Edit-Modal. */
+  onDeleteClick(): void {
+    this.contactService.showDeleteModal.set(true);
+    this.close();
   }
 
   /** Schließt das Modal. */
@@ -87,13 +86,13 @@ export class EditContact {
    * @param contact der geladene Kontakt
    */
   private applyContactData(contact: ContactInterface): void {
-  this.contactColor.set(contact.color || '#cccccc');
-  this.userform.patchValue({
-    name: contact.name,
-    email: contact.email,
-    phone: (contact.phone ?? '').replace(/\s+/g, ''),
-  });
-}
+    this.contactColor.set(contact.color || '#cccccc');
+    this.userform.patchValue({
+      name: contact.name,
+      email: contact.email,
+      phone: (contact.phone ?? '').replace(/\s+/g, ''),
+    });
+  }
 
   /**
    * Liefert die Initialen des aktuell eingegebenen Namens.
@@ -151,18 +150,5 @@ export class EditContact {
     if (!this.userform.valid || this.isSubmitting()) return;
     this.isSubmitting.set(true);
     await this.saveContact();
-  }
-
-  /** Löscht den Kontakt, zeigt die Meldung an und schließt das Modal. */
-  async onDelete(): Promise<void> {
-    try {
-      await this.contactService.deleteContact(this.contactId());
-      this.contactService.showDeletedMessage.set(true);
-      setTimeout(() => this.contactService.showDeletedMessage.set(false), 3000);
-      this.resetAndCloseForm();
-      this.contactDeleted.emit();
-    } catch {
-      this.submitError.set('Contact could not be deleted. Please try again.');
-    }
   }
 }
