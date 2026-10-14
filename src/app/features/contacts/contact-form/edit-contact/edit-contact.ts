@@ -28,6 +28,7 @@ export class EditContact {
   contactColor = signal('#cccccc');
   contactId = input.required<string>();
   closeModal = output<void>();
+  isClosing = false;
 
   userform = this.fb.group({
     name: ['', [Validators.required, Validators.pattern(NAME_REGEX)]],
@@ -66,7 +67,12 @@ export class EditContact {
 
   /** Schließt das Modal. */
   close(): void {
-    this.closeModal.emit();
+    this.isClosing = true;
+
+    setTimeout(() => {
+      this.closeModal.emit();
+      this.isClosing = false;
+    }, 250);
   }
 
   /**

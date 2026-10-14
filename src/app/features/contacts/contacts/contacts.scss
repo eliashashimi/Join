@@ -191,6 +191,18 @@
   gap: 20px;
   padding: 109px clamp(0px, calc(-8.421px + 2.807vw), 32px) 32px
     clamp(0px, calc(-10.526px + 3.509vw), 40px);
+  @media screen and (min-width: 1025px) and (max-width: 1269px) {
+    flex-direction: column;
+    align-items: flex-start;
+    .hero-divider {
+      display: none;
+    }
+    hr {
+      width: 90px;
+      border: 1.5px solid var(--light-blue);
+      margin-bottom: 15px;
+    }
+  }
 
   .hero-title {
     font-size: clamp(47px, calc(43.316px + 1.228vw), 61px);
@@ -220,6 +232,7 @@
   padding: 16px;
   box-sizing: border-box;
   overflow-y: auto;
+  overflow-x: hidden;
   overscroll-behavior: contain;
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 1000;
@@ -326,6 +339,7 @@
     background: none;
     border: none;
     cursor: pointer;
+    transform: translateY(-80px);
   }
 
   .mobile-fab-wrapper {
@@ -411,14 +425,21 @@
     }
     hr {
       width: 90px;
-      border: 3px solid var(--light-blue);
+      border: 1.5px solid var(--light-blue);
+      margin-bottom: 15px;
     }
   }
 }
 
 @keyframes fadeInPopup {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
@@ -446,5 +467,7 @@
     background: none;
     border: none;
     cursor: pointer;
+    position: absolute;
+    right: 10px;
   }
 }
