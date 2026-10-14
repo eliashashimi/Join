@@ -41,6 +41,7 @@ export class EditContact {
     phone: ['', [Validators.required, Validators.pattern(PHONE_REGEX)]],
   });
 
+  /** Öffnet den Lösch-Dialog und schließt das Edit-Modal. */
   onDeleteClick(): void {
     this.contactService.showDeleteModal.set(true);
     this.close();
@@ -86,13 +87,13 @@ export class EditContact {
    * @param contact der geladene Kontakt
    */
   private applyContactData(contact: ContactInterface): void {
-    this.contactColor.set(contact.color || '#cccccc');
-    this.userform.patchValue({
-      name: contact.name,
-      email: contact.email,
-      phone: contact.phone,
-    });
-  }
+  this.contactColor.set(contact.color || '#cccccc');
+  this.userform.patchValue({
+    name: contact.name,
+    email: contact.email,
+    phone: (contact.phone ?? '').replace(/\s+/g, ''),
+  });
+}
 
   /**
    * Liefert die Initialen des aktuell eingegebenen Namens.
@@ -110,7 +111,7 @@ export class EditContact {
     return {
       name: this.userform.value.name?.trim() || '',
       email: this.userform.value.email?.toLowerCase().trim() || '',
-      phone: this.userform.value.phone?.trim() || '',
+      phone: this.userform.value.phone?.replace(/\s+/g, '') || '',
     };
   }
 
