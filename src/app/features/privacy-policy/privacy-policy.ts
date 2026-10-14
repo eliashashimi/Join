@@ -1,17 +1,17 @@
-import { Component, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-privacy-policy',
   standalone: true,
-  imports: [CommonModule],
   templateUrl: './privacy-policy.html',
-  styleUrl: './privacy-policy.scss'
+  styleUrl: './privacy-policy.scss',
 })
 export class PrivacyPolicy {
-  backClicked = output<void>();
+  private location = inject(Location);
 
-  onBack() {
-    this.backClicked.emit();
+  /** Geht zur vorherigen Seite zurück. */
+  onBack(): void {
+    this.location.back();
   }
 }
