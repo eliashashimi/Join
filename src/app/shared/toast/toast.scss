@@ -1,0 +1,55 @@
+.toast {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: 195px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  min-width: min(326px, calc(100vw - 32px));
+  box-sizing: border-box;
+  padding: 25px 24px;
+  color: #ffffff;
+  background-color: #2a3647;
+  font-size: 21px;
+  line-height: 24px;
+  border-radius: 20px;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.15);
+  animation: slideInFromBottom 0.1s ease-out forwards;
+
+  p {
+    margin: 0;
+  }
+}
+
+@media (min-width: 1025px) {
+  .toast {
+    left: min(514px, calc(100% - 350px));
+    bottom: 149px;
+    transform: none;
+    animation-name: slideInFromRight;
+  }
+}
+
+@keyframes slideInFromBottom {
+  from {
+    transform: translate(-50%, 120%);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100vw);
+  }
+  to {
+    transform: translateX(0);
+  }
+}

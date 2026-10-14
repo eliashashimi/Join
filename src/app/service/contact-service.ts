@@ -1,31 +1,10 @@
 import { inject, Service, signal } from '@angular/core';
 import { ContactData, ContactInterface, ContactRow } from '../interface/contact-interface';
 import { Supabase } from './supabase';
+import { getInitials, randomColor } from '../shared/contact-utils';
 
 /** Tabelle in Supabase. */
 const TABLE = 'contacts';
-
-/**
- * Avatar-Farben
- * Bekommt ein neuer Kontakt keine Farbe mit, wird zufällig eine davon vergeben.
- */
-const CONTACT_COLORS = [
-  '#FF7A00',
-  '#FF5EB3',
-  '#6E52FF',
-  '#9327FF',
-  '#00BEE8',
-  '#1FD7C1',
-  '#FF745E',
-  '#FFA35E',
-  '#FC71FF',
-  '#FFC701',
-  '#0038FF',
-  '#C3FF2B',
-  '#FFE62B',
-  '#FF4646',
-  '#FFBB2B',
-];
 
 /**
  * Lädt und löscht Kontakte in Supabase.
@@ -55,6 +34,9 @@ export class ContactService {
   readonly contacts = this.contactList.asReadonly();
   showSuccessMessage = signal<boolean>(false);
   showDeletedMessage = signal<boolean>(false);
+  showUpdatedMessage = signal<boolean>(false);
+  showDeleteErrorMessage = signal<boolean>(false);
+  showDeleteModal = signal<boolean>(false);
 
   /**
    * READ: Lädt alle Kontakte und legt sie im Signal `contacts` ab.
@@ -107,6 +89,8 @@ export class ContactService {
     if (!data) throw new Error(`Kontakt ${id} wurde nicht gefunden.`);
     const updated = toContact(data);
     this.contactList.update((list) => sortContacts(list.map((c) => (c.id === id ? updated : c))));
+    this.showUpdatedMessage.set(true);
+    setTimeout(() => this.showUpdatedMessage.set(false), 3000);
     return updated;
   }
 
@@ -117,6 +101,17 @@ export class ContactService {
   async deleteContact(id: string): Promise<void> {
     await this.db.from(TABLE).delete().eq('id', id).throwOnError();
     this.contactList.update((list) => list.filter((c) => c.id !== id));
+  }
+
+  /**
+   * Prüft, ob die E-Mail-Adresse schon bei einem anderen Kontakt vergeben ist.
+   * @param email die zu prüfende E-Mail-Adresse
+   * @param exceptId ID des Kontakts, der beim Bearbeiten nicht mitzählt
+   * @returns `true`, wenn die Adresse schon vergeben ist
+   */
+  isEmailTaken(email: string, exceptId?: string): boolean {
+    const wanted = email.toLowerCase();
+    return this.contactList().some((c) => c.id !== exceptId && c.email.toLowerCase() === wanted);
   }
 }
 
@@ -132,16 +127,6 @@ function toContact(row: ContactRow): ContactInterface {
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
-}
-
-/**
- * Berechnet die Initialen wie im Formular: erster Buchstabe des ersten und des
- * letzten Wortes, bei nur einem Wort die ersten zwei Buchstaben.
- */
-function getInitials(name: string): string {
-  const parts = name.trim().split(/\s+/);
-  if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
-  return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
 }
 
 /**
@@ -161,9 +146,4 @@ function toRow(data: Partial<ContactData>): Partial<ContactRow> {
 /** Sortiert alphabetisch nach Namen. */
 function sortContacts(contacts: ContactInterface[]): ContactInterface[] {
   return [...contacts].sort((a, b) => a.name.localeCompare(b.name, 'de'));
-}
-
-/** Wählt zufällig eine der Avatar-Farben. */
-function randomColor(): string {
-  return CONTACT_COLORS[Math.floor(Math.random() * CONTACT_COLORS.length)];
 }

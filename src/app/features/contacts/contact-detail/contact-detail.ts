@@ -1,60 +1,31 @@
 import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ContactInterface } from '../../../interface/contact-interface';
 import { ContactService } from '../../../service/contact-service';
 
 @Component({
   selector: 'app-contact-detail',
   standalone: true,
-  imports: [CommonModule],
   templateUrl: './contact-detail.html',
   styleUrls: ['./contact-detail.scss'],
 })
 export class ContactDetailComponent {
   @Input() contact: ContactInterface | null = null;
-  @Output() contactDeleted = new EventEmitter<void>();
   @Output() editClicked = new EventEmitter<void>();
 
-  private contactService = inject(ContactService);
+  private srv = inject(ContactService);
 
-  isLoading: boolean = false;
-  hasError: boolean = false;
-  isDeleted: boolean = false;
-
-  showDeleteModal: boolean = false;
-
-  onEdit() {
+  /**
+   * Sendet das Edit-Event ab.
+   */
+  onEdit(): void {
     this.editClicked.emit();
   }
 
-  onDelete() {
-    if (!this.contact || !this.contact.id) return;
-    this.showDeleteModal = true;
-  }
-
-  cancelDelete() {
-    this.showDeleteModal = false;
-  }
-
-  async confirmDelete() {
-    if (!this.contact || !this.contact.id) return;
-
-    this.showDeleteModal = false;
-    this.isLoading = true;
-    this.hasError = false;
-
-    try {
-      await this.contactService.deleteContact(this.contact.id);
-      this.contactService.showDeletedMessage.set(true);
-      setTimeout(() => {
-        this.contactDeleted.emit();
-        this.contactService.showDeletedMessage.set(false);
-      }, 3000);
-    } catch (err) {
-      console.error('Fehler beim Löschen des Kontakts:', err);
-      this.hasError = true;
-    } finally {
-      this.isLoading = false;
-    }
+  /**
+   * Öffnet den Lösch-Dialog.
+   */
+  onDelete(): void {
+    if (!this.contact?.id) return;
+    this.srv.showDeleteModal.set(true);
   }
 }

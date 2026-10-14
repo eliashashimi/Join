@@ -1,12 +1,17 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-legal-notice',
   standalone: true,
-  imports: [CommonModule, RouterLink],
   templateUrl: './legal-notice.html',
-  styleUrl: './legal-notice.scss'
+  styleUrl: './legal-notice.scss',
 })
-export class LegalNotice {}
+export class LegalNotice {
+  private location = inject(Location);
+
+  /** Geht zur vorherigen Seite zurück. */
+  onBack(): void {
+    this.location.back();
+  }
+}

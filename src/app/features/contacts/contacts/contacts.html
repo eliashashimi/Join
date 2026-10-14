@@ -1,311 +1,131 @@
-<div class="contacts-container">
-  <!-- Linke Sidebar -->
-  <aside class="sidebar">
-    <div class="logo-area">
-      <div class="logo-icon">
-        <img src="./assets/join-logo-white.png" alt="Join-Logo" />
-      </div>
-    </div>
-
-    <nav class="nav-menu">
-      <a routerLink="/summary" class="nav-item">
-        <svg
-          xmlns="http://w3.org"
-          viewBox="0 0 24 24"
-          width="24"
-          height="24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path
-            d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z M15 3v18 M3 12h12"
-          /></svg
-        >Summary
-      </a>
-      <a routerLink="/add-task" class="nav-item">
-        <svg
-          xmlns="http://w3.org"
-          viewBox="0 0 24 24"
-          width="24"
-          height="24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg
-        >Add Task
-      </a>
-      <a routerLink="/board" class="nav-item">
-        <svg
-          xmlns="http://w3.org"
-          viewBox="0 0 24 24"
-          width="24"
-          height="24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path
-            d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z M7.5 3v18 M12 3v18 M16.5 3v18"
-          /></svg
-        >Board
-      </a>
-      <a
-        (click)="currentView.set('contacts')"
-        routerLink="/contacts"
-        class="nav-item"
-        [class.active]="currentView() === 'contacts'"
+<div class="contacts-list-container">
+  <button class="add-contact-btn" (click)="showAddContactModal.set(true)">
+    Add new contact
+    <span class="user-add-icon">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="32"
+        height="32"
+        fill="currentColor"
+        class="bi bi-person-plus"
+        viewBox="0 0 16 16"
       >
-        <svg
-          xmlns="http://w3.org"
-          viewBox="0 0 24 24"
-          width="24"
-          height="24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+        <path
+          d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"
+        />
+        <path
+          fill-rule="evenodd"
+          d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5"
+        />
+      </svg>
+    </span>
+  </button>
+
+  <div class="contacts-scroll-area">
+    @if (loadError()) {
+      <p class="list-error">Contacts could not be loaded. Please try again later.</p>
+    }
+    @for (group of groupedContacts(); track group.letter) {
+      <div class="contact-group-header">{{ group.letter }}</div>
+      <hr class="group-divider" />
+
+      @for (contact of group.contacts; track contact.id) {
+        <div
+          class="contact-item"
+          [class.selected]="selectedContact()?.id === contact.id"
+          (click)="selectedContactId.set(contact.id)"
         >
-          <rect x="3" y="5" width="18" height="16" rx="3" />
-          <path d="M7 5V2M17 5V2M6 19c0-3.5 12-3.5 12 0" />
-          <circle cx="12" cy="11" r="2.5" /></svg
-        >Contacts
-      </a>
-    </nav>
-
-    <div class="sidebar-footer">
-      <a routerLink="/privacy-policy">Privacy Policy</a>
-      <a routerLink="/legal-notice">Legal notice</a>
-    </div>
-  </aside>
-
-  <!-- Hauptbereich -->
-  <main class="main-content">
-    <header class="top-header">
-      <span class="header-title">Kanban Project Management Tool</span>
-      <div class="user-profile">
-        <!-- Hilfe-Icon schaltet den View-Zustand um -->
-        <a
-          (click)="currentView.set('help')"
-          class="help-icon-link"
-          style="text-decoration: none; cursor: pointer"
-        >
-          <span class="help-icon" [class.active-help]="currentView() === 'help'">?</span>
-        </a>
-        <div class="user-avatar-sm">SM</div>
-      </div>
-    </header>
-
-    <div class="content-body">
-      <!-- ANSICHT 1: Kontakte -->
-      @if (currentView() === 'contacts') {
-        <!-- Kontaktliste -->
-        <div class="contacts-list-container">
-          <button class="add-contact-btn" (click)="showAddContactModal.set(true)">
-            Add new contact
-            <span class="user-add-icon">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="32"
-                fill="currentColor"
-                class="bi bi-person-plus"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"
-                />
-                <path
-                  fill-rule="evenodd"
-                  d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5"
-                />
-              </svg>
-            </span>
-          </button>
-
-          <div class="contacts-scroll-area">
-            @for (group of groupedContacts(); track group.letter) {
-              <div class="contact-group-header">{{ group.letter }}</div>
-              <hr class="group-divider" />
-
-              @for (contact of group.contacts; track contact.id) {
-                <div
-                  class="contact-item"
-                  [class.selected]="selectedContact()?.id === contact.id"
-                  (click)="selectedContactId.set(contact.id)"
-                >
-                  <div class="contact-avatar" [style.background-color]="contact.color">
-                    {{ contact.initials }}
-                  </div>
-                  <div class="contact-info">
-                    <span class="contact-name">{{ contact.name }}</span>
-                    <span class="contact-email">{{ contact.email }}</span>
-                  </div>
-                </div>
-              }
-            }
+          <div class="contact-avatar" [style.background-color]="contact.color">
+            {{ contact.initials }}
+          </div>
+          <div class="contact-info">
+            <span class="contact-name">{{ contact.name }}</span>
+            <span class="contact-email">{{ contact.email }}</span>
           </div>
         </div>
+      }
+    }
+  </div>
+</div>
 
-        <!-- Detailansicht -->
-        <div class="contacts-detail-container" [class.mobile-open]="isMobileDetailOpen()">
-          <!-- Mobile Zurück-Button (nur auf Smartphones sichtbar) -->
-          <button class="mobile-back-btn" (click)="goBackToList()">
-            <svg xmlns="http://w3.org" viewBox="0 0 32 32" width="32" height="32">
+<!-- Detailansicht: Auf Desktop immer im Flex-Layout, mobil gesteuert über mobile-open -->
+<div class="contacts-detail-container" [class.mobile-open]="isMobileDetailOpen()">
+  <div class="detail-hero">
+    <h1 class="hero-title">Contacts</h1>
+    <div class="hero-divider"></div>
+    <button class="mobile-back-btn" (click)="goBackToList()">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+        <path
+          d="M26 16H6M14 8l-8 8 8 8"
+          fill="none"
+          stroke="#124658"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+    <p class="hero-subtitle">Better with a team</p>
+    <hr />
+  </div>
+
+  @if (selectedContact(); as contact) {
+    <app-contact-detail [contact]="contact" (editClicked)="showEditContactModal.set(true)">
+    </app-contact-detail>
+
+    <div class="mobile-fab-wrapper">
+      <button class="mobile-fab-btn" (click)="toggleMobileMenu()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="white"
+        >
+          <circle cx="12" cy="4.5" r="2.5" />
+          <circle cx="12" cy="12" r="2.5" />
+          <circle cx="12" cy="19.5" r="2.5" />
+        </svg>
+      </button>
+
+      @if (showMobileMenu()) {
+        <div class="mobile-menu-popup" (click)="$event.stopPropagation()">
+          <button class="menu-item" (click)="openEditModal()">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+            >
               <path
-                d="M26 16H6M14 8l-8 8 8 8"
-                fill="none"
-                stroke="#124658"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"
               />
             </svg>
+            Edit
           </button>
-
-          <div class="detail-hero">
-            <h1 class="hero-title">Contacts</h1>
-            <div class="hero-divider"></div>
-            <p class="hero-subtitle">Better with a team</p>
-          </div>
-          <app-contact-detail
-            [contact]="selectedContact()"
-            (contactDeleted)="selectedContactId.set(null)"
-            (editClicked)="showEditContactModal.set(true)"
-          >
-          </app-contact-detail>
-        </div>
-      }
-
-      <!-- ANSICHT 2: Help-Page Inhalt -->
-      @if (currentView() === 'help') {
-        <div
-          class="help-scroll-area"
-          style="flex: 1; overflow-y: auto; padding: 40px 80px; width: 100%"
-        >
-          <div class="help-content-wrapper" style="max-width: 900px; margin: 0 auto">
-            <div
-              class="help-header-row"
-              style="
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 24px;
-              "
+          <button class="menu-item delete" (click)="onDeleteContact()">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              fill="currentColor"
+              viewBox="0 0 16 16"
             >
-              <h1 style="font-size: 61px; font-weight: 700; margin: 0">Help</h1>
-              <!-- Zurück-Button mit pfeil-icon.svg -->
-              <button
-                class="back-btn"
-                (click)="currentView.set('contacts')"
-                style="
-                  background: none;
-                  border: none;
-                  cursor: pointer;
-                  padding: 8px;
-                  border-radius: 50%;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                "
-              >
-                <img src="./assets/pfeil-icon.svg" alt="Back" width="24" height="24" />
-              </button>
-            </div>
-
-            <p class="intro-text" style="font-size: 18px; line-height: 1.5; margin-bottom: 32px">
-              Welcome to the help page for
-              <span class="highlight" style="color: #29abe2; font-weight: 500">Join</span>, your
-              guide to using our kanban project management tool. Here, we'll provide an overview of
-              what Join is, how it can benefit you, and how to use it.
-            </p>
-
-            <section class="help-section" style="margin-bottom: 32px">
-              <h2 style="font-size: 27px; font-weight: 700; margin-bottom: 16px; color: #2a3642">
-                What is Join?
-              </h2>
-              <p style="font-size: 16px; line-height: 1.6; margin-bottom: 16px">
-                <span class="highlight" style="color: #29abe2; font-weight: 500">Join</span> is a
-                kanban-based project management tool designed and built by a group of dedicated
-                students as part of their web development bootcamp at the Developer Akademie.
-              </p>
-              <p style="font-size: 16px; line-height: 1.6; margin-bottom: 16px">
-                Kanban, a Japanese term meaning "billboard", is a highly effective method to
-                visualize work, limit work-in-progress, and maximize efficiency (or flow).
-                <span class="highlight" style="color: #29abe2; font-weight: 500">Join</span>
-                leverages the principles of kanban to help users manage their tasks and projects in
-                an intuitive, visual interface.
-              </p>
-              <p style="font-size: 16px; line-height: 1.6; margin-bottom: 16px">
-                It is important to note that
-                <span class="highlight" style="color: #29abe2; font-weight: 500">Join</span> is
-                designed as an educational exercise and is not intended for extensive business
-                usage. While we strive to ensure the best possible user experience, we cannot
-                guarantee consistent availability, reliability, accuracy, or other aspects of
-                quality regarding
-                <span class="highlight" style="color: #29abe2; font-weight: 500">Join</span>.
-              </p>
-            </section>
-
-            <section class="help-section" style="margin-bottom: 32px">
-              <h2 style="font-size: 27px; font-weight: 700; margin-bottom: 16px; color: #2a3642">
-                How to use it
-              </h2>
-              <p style="font-size: 16px; line-height: 1.6; margin-bottom: 16px">
-                Here is a step-by-step guide on how to use
-                <span class="highlight" style="color: #29abe2; font-weight: 500">Join</span>:
-              </p>
-
-              <ol class="help-steps" style="padding-left: 20px">
-                <li style="font-size: 16px; line-height: 1.6; margin-bottom: 16px">
-                  <strong style="font-size: 18px; color: #000">Exploring the Board</strong>
-                  <p style="margin-top: 4px; margin-bottom: 0">
-                    When you log in to Join, you'll find a default board. This board represents your
-                    project and contains four default lists: "To Do", "In Progress", "Await
-                    feedback" and "Done".
-                  </p>
-                </li>
-                <li style="font-size: 16px; line-height: 1.6; margin-bottom: 16px">
-                  <strong style="font-size: 18px; color: #000">Creating Contacts</strong>
-                  <p style="margin-top: 4px; margin-bottom: 0">
-                    In Join, you can add contacts to collaborate on your projects. Go to the
-                    "Contacts" section, click on "New contact", and fill in the required
-                    information. Once added, these contacts can be assigned tasks and they can
-                    interact with the tasks on the board.
-                  </p>
-                </li>
-                <li style="font-size: 16px; line-height: 1.6; margin-bottom: 16px">
-                  <strong style="font-size: 18px; color: #000">Adding Cards</strong>
-                  <p style="margin-top: 4px; margin-bottom: 0">
-                    Now that you've added your contacts, you can start adding cards. Cards represent
-                    individual tasks. Click the "+" button under the appropriate list to create a
-                    new card. Fill in the task details in the card, like task name, description, due
-                    date, assignees, etc.
-                  </p>
-                </li>
-                <li style="font-size: 16px; line-height: 1.6; margin-bottom: 16px">
-                  <strong style="font-size: 18px; color: #000">Moving Cards</strong>
-                  <p style="margin-top: 4px; margin-bottom: 0">
-                    As tasks progress, you can move them between lists by dragging and dropping them
-                    or by clicking the status arrows on the cards.
-                  </p>
-                </li>
-              </ol>
-            </section>
-          </div>
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"
+              />
+              <path
+                fill-rule="evenodd"
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+              />
+            </svg>
+            Delete
+          </button>
         </div>
       }
     </div>
-  </main>
+  }
 </div>
 
 <!-- Modals -->
@@ -323,7 +143,13 @@
 @if (showAddContactModal()) {
   <div class="modal-overlay" (click)="showAddContactModal.set(false)">
     <div class="modal-content" (click)="$event.stopPropagation()">
-      <app-add-contact (closeModal)="showAddContactModal.set(false)"></app-add-contact>
+      <app-add-contact
+        (closeModal)="showAddContactModal.set(false)"
+        (contactCreated)="onContactCreated($event)"
+      ></app-add-contact>
     </div>
   </div>
 }
+
+<app-toast />
+<app-delete-confirm (confirmed)="confirmDelete()" />
