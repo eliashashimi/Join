@@ -2,10 +2,10 @@
   <span class="header-title">Kanban Project Management Tool</span>
   <div class="user-profile">
     @if (isHelpVisible()) {
-  <a routerLink="/help" class="help-icon-link">
-    <span class="help-icon">?</span>
-  </a>
-}
+      <a routerLink="/help" class="help-icon-link">
+        <span class="help-icon">?</span>
+      </a>
+    }
     <button class="user-avatar-sm" (click)="toggleUserMenu()">SM</button>
 
     @if (showUserMenu()) {

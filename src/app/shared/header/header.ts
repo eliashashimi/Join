@@ -14,6 +14,7 @@ export class HeaderComponent {
 
   showUserMenu = signal(false);
 
+  /** Aktuelle URL, aktualisiert sich nach jeder Navigation. */
   private currentUrl = toSignal(
     this.router.events.pipe(
       filter((e): e is NavigationEnd => e instanceof NavigationEnd),
@@ -23,13 +24,19 @@ export class HeaderComponent {
     { initialValue: this.router.url },
   );
 
+  /** Seiten, auf denen das Hilfe-Symbol im Header ausgeblendet wird. */
   private hiddenHelpRoutes = ['/help', '/legal-notice', '/privacy-policy'];
 
+  /**
+   * Zeigt das Hilfe-Symbol nur auf Seiten, die nicht in `hiddenHelpRoutes` stehen.
+   * @returns `true`, wenn das Symbol sichtbar sein soll
+   */
   isHelpVisible = computed(
     () => !this.hiddenHelpRoutes.some((route) => this.currentUrl().startsWith(route)),
   );
 
-  toggleUserMenu() {
+  /** Öffnet oder schließt das Benutzermenü. */
+  toggleUserMenu(): void {
     this.showUserMenu.update((v) => !v);
   }
 }
