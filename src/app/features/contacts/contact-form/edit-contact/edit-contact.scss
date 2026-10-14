@@ -8,16 +8,18 @@
   .content-wrapper {
     @include styles.flex-center;
     height: 600px;
+    background-color: transparent;
     @media screen and (max-width: 1149px) {
       @include styles.flex-center(column);
-      width: 100%;
-      height: 751px;
+      justify-content: flex-start;
+      max-width: 396px;
+      height: auto;
     }
   }
   &__form {
-    position: relative;
-    height: 100%;
     @include styles.flex-center(column);
+    height: 100%;
+    position: relative;
     align-items: flex-start;
     gap: 16px;
     background: #2a3647;
@@ -26,12 +28,13 @@
     border-bottom-left-radius: 30px;
     @media screen and (max-width: 1149px) {
       width: 100%;
-      height: 410px;
-      flex: 0 0 410px;
+      height: auto;
+      max-height: 410px;
       border-top-left-radius: 30px;
       border-bottom-left-radius: 0px;
       border-top-right-radius: 30px;
-      padding: 141px 24px 141px;
+      padding: clamp(101px, calc(90.474px + 3.509vw), 141px) 24px
+        clamp(84px, calc(73.474px + 3.509vw), 124px);
       gap: 8px;
       .logo-head-img {
         display: none;
@@ -44,7 +47,7 @@
       margin-bottom: 16px;
     }
     h2 {
-      font-size: clamp(42px, calc(37px + 1.667vw), 61px);
+      font-size: clamp(36px, calc(29.421px + 2.193vw), 61px);
       font-weight: bold;
       color: white;
     }
@@ -54,8 +57,8 @@
     }
   }
   &__right {
-    position: relative;
     @include styles.flex-center(column);
+    position: relative;
     justify-content: flex-end;
     height: 100%;
     padding: 0 clamp(32px, calc(27.789px + 1.404vw), 48px) 135px
@@ -64,8 +67,11 @@
     border-bottom-right-radius: 30px;
     background-color: white;
     @media screen and (max-width: 1149px) {
-      height: 460px;
-      padding: 42px 16px 0px;
+      height: auto;
+      max-height: 460px;
+      width: 100%;
+      flex-shrink: 0;
+      padding: 0 16px clamp(0px, calc(-8.421px + 2.807vw), 32px);
       border-top-right-radius: 0px;
       border-bottom-right-radius: 30px;
       border-bottom-left-radius: 30px;
@@ -75,7 +81,7 @@
       gap: clamp(45px, calc(37.105px + 2.632vw), 75px);
       @media screen and (max-width: 1149px) {
         @include styles.flex-center(column);
-        gap: 32px;
+        gap: clamp(16px, calc(11.789px + 1.404vw), 32px);
       }
       .person-name-img {
         padding-bottom: 50px;
@@ -116,14 +122,15 @@
       align-items: flex-start;
       gap: 48px;
       @media screen and (max-width: 1149px) {
-        gap: 32px;
+        height: 100%;
+        gap: clamp(16px, calc(11.789px + 1.404vw), 32px);
       }
       &--box {
         @include styles.flex-center(column);
         align-items: flex-start;
         gap: 32px;
         @media screen and (max-width: 1149px) {
-          gap: 24px;
+          gap: clamp(16px, calc(13.895px + 0.702vw), 24px);
         }
         div {
           position: relative;
@@ -133,13 +140,10 @@
         h5 {
           position: absolute;
           bottom: -22px;
-          left: 0;
-          margin: 0;
           font-size: 13px;
           font-weight: 400;
           height: 16px;
           line-height: 16px;
-          white-space: nowrap;
           @media screen and (max-width: 1149px) {
             bottom: -18px;
           }
@@ -147,7 +151,7 @@
       }
       input {
         width: clamp(280px, calc(243.158px + 12.281vw), 420px);
-        height: 50px;
+        height: clamp(38px, calc(34.842px + 1.053vw), 50px);
         border: 1px solid #959595;
         border-radius: 10px;
         padding: 10px 48px 10px 10px;
@@ -177,7 +181,10 @@
         padding: 10px 24px;
         border-radius: 10px;
         cursor: pointer;
-        transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+        transition:
+          background-color 0.2s ease,
+          border-color 0.2s ease,
+          transform 0.1s ease;
 
         &:hover {
           transform: translateY(-1px);
@@ -253,6 +260,9 @@
 .inp-icon {
   position: fixed;
   transform: translateX(-40px) translateY(14px);
+  @media screen and (max-width: 650px) {
+    transform: translateX(-40px) translateY(12px);
+  }
 }
 
 button:hover,
