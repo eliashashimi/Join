@@ -9,7 +9,6 @@ import {
   getInitials as initialsOf,
   isDuplicateEmail,
   randomColor,
-  capitalizeFirstLetter,
 } from '../../../../shared/contact-utils';
 
 @Component({
@@ -58,10 +57,6 @@ export class AddContact {
     this.closeModal.emit();
   }
 
-  formatNameInput(str: string): string {
-    return capitalizeFirstLetter(str);
-  }
-
   /**
    * Liefert die Initialen des aktuell eingegebenen Namens.
    * @returns die Initialen oder ein leerer String
@@ -76,7 +71,7 @@ export class AddContact {
    */
   private getFormData(): ContactData {
     return {
-      name: this.formatNameInput(this.userform.value.name?.trim() || ''),
+      name: this.userform.value.name?.trim() || '',
       email: this.userform.value.email?.toLowerCase().trim() || '',
       phone: this.userform.value.phone?.replace(/\s+/g, '') || '',
       color: this.color,
@@ -128,6 +123,10 @@ export class AddContact {
     this.emailExistingError.set(false);
     this.submitError.set('');
     if (!this.userform.valid || this.isSubmitting()) return;
+    if (this.contactService.isEmailTaken(this.getFormData().email)) {
+      this.emailExistingError.set(true);
+      return;
+    }
     this.isSubmitting.set(true);
     await this.createContact();
   }

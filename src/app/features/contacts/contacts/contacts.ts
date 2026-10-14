@@ -106,8 +106,9 @@ export class ContactsComponent implements OnInit {
       this.selectedContactId.set(null);
       this.contactService.showDeletedMessage.set(true);
       setTimeout(() => this.contactService.showDeletedMessage.set(false), 3000);
-    } catch (err) {
-      console.error('Fehler beim Löschen des Kontakts:', err);
+    } catch {
+      this.contactService.showDeleteErrorMessage.set(true);
+      setTimeout(() => this.contactService.showDeleteErrorMessage.set(false), 3000);
     }
   }
 }

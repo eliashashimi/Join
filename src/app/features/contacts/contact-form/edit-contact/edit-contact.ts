@@ -8,7 +8,6 @@ import {
   PHONE_REGEX,
   getInitials as initialsOf,
   isDuplicateEmail,
-  capitalizeFirstLetter,
 } from '../../../../shared/contact-utils';
 
 @Component({
@@ -69,10 +68,6 @@ export class EditContact {
     this.closeModal.emit();
   }
 
-  formatNameInput(str: string): string {
-    return capitalizeFirstLetter(str);
-  }
-
   /**
    * Lädt den Kontakt und füllt das Formular.
    * @param id ID des Kontakts
@@ -113,7 +108,7 @@ export class EditContact {
    */
   private getFormData(): ContactData {
     return {
-      name: this.formatNameInput(this.userform.value.name?.trim() || ''),
+      name: this.userform.value.name?.trim() || '',
       email: this.userform.value.email?.toLowerCase().trim() || '',
       phone: this.userform.value.phone?.replace(/\s+/g, '') || '',
     };
@@ -153,6 +148,10 @@ export class EditContact {
     this.emailExistingError.set(false);
     this.submitError.set('');
     if (!this.userform.valid || this.isSubmitting()) return;
+    if (this.contactService.isEmailTaken(this.getFormData().email, this.contactId())) {
+      this.emailExistingError.set(true);
+      return;
+    }
     this.isSubmitting.set(true);
     await this.saveContact();
   }
