@@ -8,6 +8,7 @@ import {
   PHONE_REGEX,
   getInitials as initialsOf,
   isDuplicateEmail,
+  capitalizeFirstLetter,
 } from '../../../../shared/contact-utils';
 
 @Component({
@@ -108,7 +109,7 @@ export class EditContact {
    */
   private getFormData(): ContactData {
     return {
-      name: this.userform.value.name?.trim() || '',
+      name: capitalizeFirstLetter(this.userform.value.name?.trim() || ''),
       email: this.userform.value.email?.toLowerCase().trim() || '',
       phone: this.userform.value.phone?.replace(/\s+/g, '') || '',
     };

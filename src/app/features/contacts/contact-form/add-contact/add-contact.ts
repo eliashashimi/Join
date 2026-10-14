@@ -9,6 +9,7 @@ import {
   getInitials as initialsOf,
   isDuplicateEmail,
   randomColor,
+  capitalizeFirstLetter,
 } from '../../../../shared/contact-utils';
 
 @Component({
@@ -71,7 +72,7 @@ export class AddContact {
    */
   private getFormData(): ContactData {
     return {
-      name: this.userform.value.name?.trim() || '',
+      name: capitalizeFirstLetter(this.userform.value.name?.trim() || ''),
       email: this.userform.value.email?.toLowerCase().trim() || '',
       phone: this.userform.value.phone?.replace(/\s+/g, '') || '',
       color: this.color,

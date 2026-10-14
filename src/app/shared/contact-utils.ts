@@ -47,12 +47,13 @@ export function getInitials(name: string): string {
   return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
 }
 
+/**
+ * Schreibt den ersten Buchstaben jedes Namensteils groß, auch nach einem Bindestrich.
+ * @param str der eingegebene Name
+ * @returns der Name mit großen Anfangsbuchstaben, z. B. „Anna-Lena Müller-Lüdenscheidt“
+ */
 export function capitalizeFirstLetter(str: string): string {
-  if (!str) return str;
-  return str
-    .split(' ')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+  return str.replace(/(^|[\s-])\p{L}/gu, (match) => match.toUpperCase());
 }
 
 /**
