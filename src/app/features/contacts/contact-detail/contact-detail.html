@@ -56,13 +56,3 @@
     </div>
   </div>
 }
-
-@if (srv.showSuccessMessage() || srv.showDeletedMessage()) {
-  <div class="successfully-added-deleted">
-    @if (srv.showSuccessMessage()) {
-      <p>Contact successfully created</p>
-    } @else if (srv.showDeletedMessage()) {
-      <p>Contact successfully deleted</p>
-    }
-  </div>
-}
