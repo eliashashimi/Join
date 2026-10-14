@@ -34,6 +34,7 @@ export class ContactService {
   readonly contacts = this.contactList.asReadonly();
   showSuccessMessage = signal<boolean>(false);
   showDeletedMessage = signal<boolean>(false);
+  showUpdatedMessage = signal<boolean>(false);
   showDeleteModal = signal<boolean>(false);
   triggerDeleteInDetail = signal<boolean>(false);
 
@@ -83,13 +84,15 @@ export class ContactService {
    * @returns den geänderten Kontakt
    */
   async updateContact(id: string, changes: Partial<ContactData>): Promise<ContactInterface> {
-    const query = this.db.from(TABLE).update(toRow(changes)).eq('id', id).select().maybeSingle();
-    const { data } = await query.throwOnError();
-    if (!data) throw new Error(`Kontakt ${id} wurde nicht gefunden.`);
-    const updated = toContact(data);
-    this.contactList.update((list) => sortContacts(list.map((c) => (c.id === id ? updated : c))));
-    return updated;
-  }
+  const query = this.db.from(TABLE).update(toRow(changes)).eq('id', id).select().maybeSingle();
+  const { data } = await query.throwOnError();
+  if (!data) throw new Error(`Kontakt ${id} wurde nicht gefunden.`);
+  const updated = toContact(data);
+  this.contactList.update((list) => sortContacts(list.map((c) => (c.id === id ? updated : c))));
+  this.showUpdatedMessage.set(true);
+  setTimeout(() => this.showUpdatedMessage.set(false), 3000);
+  return updated;
+}
 
   /**
    * DELETE: Löscht einen Kontakt.
