@@ -1,12 +1,4 @@
-@if (isLoading) {
-  <div class="state-container">
-    <p>Loading contact data...</p>
-  </div>
-} @else if (hasError) {
-  <div class="state-container error-state">
-    <p>Contact could not be loaded.</p>
-  </div>
-} @else if (!isDeleted && contact) {
+@if (contact) {
   <div class="contact-detail-container">
     <div class="contact-header">
       <div class="contact-avatar" [style.background-color]="contact.color">
@@ -39,19 +31,6 @@
         <a href="tel:{{ contact.phone }}" class="info-value phone-link">
           {{ contact.phone || 'No phone number' }}
         </a>
-      </div>
-    </div>
-  </div>
-}
-
-@if (srv.showDeleteModal()) {
-  <div class="modal-backdrop">
-    <div class="delete-confirm-modal">
-      <h3>Delete contact</h3>
-      <p>Are you sure you want to delete this contact?</p>
-      <div class="modal-actions">
-        <button class="btn-cancel" (click)="cancelDelete()">Cancel</button>
-        <button class="btn-confirm" (click)="confirmDelete()">Delete</button>
       </div>
     </div>
   </div>

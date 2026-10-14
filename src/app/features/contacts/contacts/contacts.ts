@@ -6,9 +6,10 @@ import { AddContact } from '../contact-form/add-contact/add-contact';
 import { EditContact } from '../contact-form/edit-contact/edit-contact';
 import { ContactService } from '../../../service/contact-service';
 import { Toast } from '../../../shared/toast/toast';
+import { DeleteConfirm } from '../../../shared/delete-confirm/delete-confirm';
 
 @Component({
-  imports: [CommonModule, ContactDetailComponent, AddContact, EditContact, Toast],
+  imports: [CommonModule, ContactDetailComponent, AddContact, EditContact, Toast, DeleteConfirm],
   selector: 'app-contacts',
   standalone: true,
   styleUrl: './contacts.scss',
@@ -88,6 +89,13 @@ export class ContactsComponent implements OnInit {
     this.showMobileMenu.set(false);
     await this.executeContactDeletion(contact.id);
   }
+
+  /** Schließt den Dialog und löscht den ausgewählten Kontakt. */
+async confirmDelete(): Promise<void> {
+  const id = this.selectedContactId();
+  this.contactService.showDeleteModal.set(false);
+  if (id) await this.executeContactDeletion(id);
+}
 
   /**
    * Löscht den Kontakt, setzt die Auswahl sofort zurück und blendet die Meldung nach 3 Sekunden aus.

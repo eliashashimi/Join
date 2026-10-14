@@ -1,26 +1,18 @@
 import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ContactInterface } from '../../../interface/contact-interface';
 import { ContactService } from '../../../service/contact-service';
 
 @Component({
   selector: 'app-contact-detail',
   standalone: true,
-  imports: [CommonModule],
   templateUrl: './contact-detail.html',
   styleUrls: ['./contact-detail.scss'],
 })
 export class ContactDetailComponent {
   @Input() contact: ContactInterface | null = null;
-  @Output() contactDeleted = new EventEmitter<void>();
   @Output() editClicked = new EventEmitter<void>();
 
-  public srv = inject(ContactService);
-
-  isLoading: boolean = false;
-  hasError: boolean = false;
-  isDeleted: boolean = false;
-  showDeleteModal: boolean = false;
+  private srv = inject(ContactService);
 
   /**
    * Sendet das Edit-Event ab.
@@ -30,66 +22,10 @@ export class ContactDetailComponent {
   }
 
   /**
-   * Öffnet das Löschmodal.
+   * Öffnet den Lösch-Dialog.
    */
   onDelete(): void {
     if (!this.contact?.id) return;
     this.srv.showDeleteModal.set(true);
-  }
-
-  /**
-   * Schließt das Löschmodal.
-   */
-  cancelDelete(): void {
-    this.srv.showDeleteModal.set(false);
-  }
-
-  /**
-   * Bestätigt und führt den Löschprozess aus.
-   */
-  async confirmDelete(): Promise<void> {
-    if (!this.contact?.id) return;
-    this.prepDel();
-    await this.delExec(this.contact.id);
-  }
-
-  /**
-   * Bereitet das Löschen vor.
-   */
-  private prepDel(): void {
-    this.srv.showDeleteModal.set(false);
-    this.isLoading = true;
-    this.hasError = false;
-  }
-
-  /**
-   * Führt den API-Löschvorgang aus.
-   */
-  private async delExec(id: string): Promise<void> {
-    try {
-      await this.srv.deleteContact(id);
-      this.handleDelSuccess();
-    } catch (err) {
-      this.handleDelError(err);
-    } finally {
-      this.isLoading = false;
-    }
-  }
-
-  /**
-   * Schließt die Detailansicht sofort und blendet die Meldung nach 3 Sekunden aus.
-   */
-  private handleDelSuccess(): void {
-    this.contactDeleted.emit();
-    this.srv.showDeletedMessage.set(true);
-    setTimeout(() => this.srv.showDeletedMessage.set(false), 3000);
-  }
-
-  /**
-   * Behandelt den Fehler beim Löschen.
-   */
-  private handleDelError(err: unknown): void {
-    console.error('Error:', err);
-    this.hasError = true;
   }
 }

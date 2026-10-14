@@ -72,7 +72,6 @@
   @if (selectedContact(); as contact) {
     <app-contact-detail
       [contact]="contact"
-      (contactDeleted)="selectedContactId.set(null)"
       (editClicked)="showEditContactModal.set(true)"
     >
     </app-contact-detail>
@@ -156,4 +155,6 @@
   </div>
 }
 
+<app-toast />
+<app-delete-confirm (confirmed)="confirmDelete()" />
 <app-toast />
