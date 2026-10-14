@@ -17,6 +17,7 @@ import { DeleteConfirm } from '../../../shared/delete-confirm/delete-confirm';
 })
 export class ContactsComponent implements OnInit {
   selectedContactId = signal<string | null>(null);
+  isDetailAnimating = signal<boolean>(false);
   showAddContactModal = signal<boolean>(false);
   showEditContactModal = signal<boolean>(false);
   showMobileMenu = signal<boolean>(false);
@@ -24,6 +25,14 @@ export class ContactsComponent implements OnInit {
 
   private contactService = inject(ContactService);
   contacts = this.contactService.contacts;
+
+  selectContact(id: string): void {
+    this.isDetailAnimating.set(false);
+    this.selectedContactId.set(id);
+    setTimeout(() => {
+      this.isDetailAnimating.set(true);
+    }, 1);
+  }
 
   /** Berechnet den aktuell ausgewählten Kontakt anhand der ID. */
   selectedContact = computed(() => {
@@ -60,6 +69,7 @@ export class ContactsComponent implements OnInit {
   /** Setzt die Auswahl zurück und schließt das mobile Menü. */
   goBackToList(): void {
     this.selectedContactId.set(null);
+    this.isDetailAnimating.set(false);
     this.showMobileMenu.set(false);
   }
 
@@ -68,7 +78,8 @@ export class ContactsComponent implements OnInit {
    * @param contactId ID des neuen Kontakts
    */
   onContactCreated(contactId: string): void {
-    this.selectedContactId.set(contactId);
+    // this.selectedContactId.set(contactId);
+    this.selectContact(contactId);
   }
 
   /** Schaltet das mobile Menü um. */
