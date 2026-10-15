@@ -197,7 +197,8 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: var(--bg);
+  /* Füge hier den festen Hintergrund für den Light Mode hinzu: */
+  background-color: #ffffff; 
   overflow-x: hidden;
   overflow-y: auto;
   position: relative;
