@@ -31,7 +31,7 @@ export class AddContact {
   submitError = signal('');
   closeModal = output<void>();
   contactCreated = output<string>();
-  isClosing = false;
+  isClosing = signal(false);
 
   userform = this.fb.group({
     name: ['', [Validators.required, Validators.pattern(NAME_REGEX)]],
@@ -54,13 +54,14 @@ export class AddContact {
     return this.userform.get('phone');
   }
 
-  /** Schließt das Modal. */
+  /** Schließt das Modal nach der Slide-out-Animation. */
   close(): void {
-    this.isClosing = true;
+    if (this.isClosing()) return;
+    this.isClosing.set(true);
 
     setTimeout(() => {
       this.closeModal.emit();
-      this.isClosing = false;
+      this.isClosing.set(false);
     }, 250);
   }
 

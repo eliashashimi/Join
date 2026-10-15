@@ -130,9 +130,10 @@
 </div>
 
 @if (showEditContactModal() && selectedContact(); as contact) {
-  <div class="modal-overlay" (click)="showEditContactModal.set(false)">
+  <div class="modal-overlay" (click)="editModal.close()">
     <div class="modal-content" (click)="$event.stopPropagation()">
       <app-edit-contact
+        #editModal
         [contactId]="contact.id"
         (closeModal)="showEditContactModal.set(false)"
       ></app-edit-contact>
@@ -141,9 +142,10 @@
 }
 
 @if (showAddContactModal()) {
-  <div class="modal-overlay" (click)="showAddContactModal.set(false)">
+  <div class="modal-overlay" (click)="addModal.close()">
     <div class="modal-content" (click)="$event.stopPropagation()">
       <app-add-contact
+        #addModal
         (closeModal)="showAddContactModal.set(false)"
         (contactCreated)="onContactCreated($event)"
       ></app-add-contact>
