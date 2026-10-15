@@ -1,0 +1,29 @@
+<input
+    placeholder="Find Task"
+    [value]="taskService.searchText()"
+    (input)="taskService.searchText.set($any($event.target).value)"
+/>
+
+<section class="column">
+    <h3>To do</h3>
+
+    @for (task of todo(); track task.id) {
+        <article class="card">
+        <span class="badge">{{
+            task.category === 'user_story' ? 'User Story' : 'Technical Task'
+        }}</span>
+        <h4>{{ task.title }}</h4>
+        <p>{{ task.description }}</p>
+
+        @if (task.subtasks.length) {
+            <span>{{ doneCount(task) }}/{{ task.subtasks.length }} Subtasks</span>
+        }
+
+        @for (contact of assigneesOf(task); track contact.id) {
+            <span class="avatar" [style.background]="contact.color">{{ contact.initials }}</span>
+        }
+        </article>
+    } @empty {
+        <div class="empty">No tasks To do</div>
+    }
+</section>
