@@ -14,7 +14,7 @@
   max-width: 900px;
   margin: 0 auto;
   background: transparent;
-  color: #000000;
+  color: var(--text);
 }
 
 .privacy-header-row {
@@ -58,7 +58,7 @@
     font-size: clamp(20px, 4vw, 27px);
     font-weight: 700;
     margin-bottom: 16px;
-    color: #2a3642;
+    color: var(--text);
   }
 
   p {

@@ -1,0 +1,68 @@
+// Dark Mode Easter Egg: Klick auf das blaue Viereck im Join-Logo.
+// Kein Button im Template nötig, kein sichtbarer Klick-Effekt.
+const LOGO_SELECTOR = 'img[src*="join-logo"]'; // an Template anpassen
+const HOTSPOT = { left: 14, top: 22, width: 24, height: 22 }; // in % vom Logo
+const DEBUG = false; // true = roter Rahmen zum Einstellen
+const STORAGE_KEY = 'join-theme';
+const root = document.documentElement;
+
+function applyTheme(theme: 'light' | 'dark'): void {
+  if (theme === 'dark') root.setAttribute('data-theme', 'dark');
+  else root.removeAttribute('data-theme');
+  try {
+    localStorage.setItem(STORAGE_KEY, theme);
+  } catch {
+    /* egal */
+  }
+}
+
+function isInHotspot(e: MouseEvent, logo: Element): boolean {
+  const r = logo.getBoundingClientRect();
+  if (!r.width || !r.height) return false;
+  const x = ((e.clientX - r.left) / r.width) * 100;
+  const y = ((e.clientY - r.top) / r.height) * 100;
+  return (
+    x >= HOTSPOT.left && x <= HOTSPOT.left + HOTSPOT.width &&
+    y >= HOTSPOT.top && y <= HOTSPOT.top + HOTSPOT.height
+  );
+}
+
+function drawDebugOverlay(): void {
+  document.querySelectorAll(LOGO_SELECTOR).forEach((logo) => {
+    const r = logo.getBoundingClientRect();
+    const box = document.createElement('div');
+    Object.assign(box.style, {
+      position: 'fixed',
+      pointerEvents: 'none',
+      border: '1px solid red',
+      zIndex: '99999',
+      left: `${r.left + (r.width * HOTSPOT.left) / 100}px`,
+      top: `${r.top + (r.height * HOTSPOT.top) / 100}px`,
+      width: `${(r.width * HOTSPOT.width) / 100}px`,
+      height: `${(r.height * HOTSPOT.height) / 100}px`,
+    });
+    document.body.appendChild(box);
+  });
+}
+
+export function initDarkMode(): void {
+  try {
+    if (localStorage.getItem(STORAGE_KEY) === 'dark') applyTheme('dark');
+  } catch {
+    /* egal */
+  }
+
+  document.addEventListener(
+    'click',
+    (e) => {
+      const logo = (e.target as Element | null)?.closest?.(LOGO_SELECTOR);
+      if (!logo || !isInHotspot(e, logo)) return;
+      e.preventDefault();
+      e.stopPropagation();
+      applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    },
+    true,
+  );
+
+  if (DEBUG) window.addEventListener('load', drawDebugOverlay);
+}
