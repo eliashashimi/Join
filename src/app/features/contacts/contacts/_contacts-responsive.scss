@@ -1,0 +1,215 @@
+// Responsive Styles der Kontaktseite.
+// Die Mixins werden am Ende von contacts.scss eingebunden, damit sie die
+// Basis-Styles überschreiben (bei gleicher Spezifität gewinnt die spätere Regel).
+
+@keyframes fadeInPopup {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Handy: bis 768 px
+@mixin phone {
+  @media (max-width: 768px) {
+    .contacts-container {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contacts-list-container {
+      width: 100vw;
+      height: 100%;
+      border-right: none;
+      padding: 16px 0;
+    }
+
+    .contacts-scroll-area {
+      padding-bottom: calc(112px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .add-contact-btn {
+      position: fixed;
+      right: 16px;
+      bottom: 112px;
+      width: 56px;
+      height: 56px;
+      min-width: 56px;
+      min-height: 56px;
+      padding: 0;
+      margin: 0;
+      gap: 0;
+      border-radius: 50%;
+      font-size: 0;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.3);
+      z-index: 50;
+
+      .user-add-icon {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+
+        svg {
+          width: 24px;
+          height: 24px;
+          transform: translateX(-1px);
+        }
+      }
+    }
+
+    .contacts-detail-container {
+      position: absolute;
+      left: 0;
+      width: 100vw;
+      height: 100%;
+      background-color: #f6f7f8;
+      z-index: 50;
+      transform: translateX(100%);
+      transition: transform 0.3s ease-in-out;
+      overflow-y: auto;
+      padding-bottom: 100px;
+
+      &.mobile-open {
+        transform: translateX(0);
+      }
+    }
+
+    .mobile-back-btn {
+      display: flex;
+      gap: 8px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transform: translateY(-80px);
+    }
+
+    .mobile-fab-wrapper {
+      display: block;
+      position: fixed;
+      right: 24px;
+      bottom: 96px;
+      z-index: 100;
+
+      .mobile-fab-btn {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background-color: var(--dark-blue);
+        color: white;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.3);
+        transition: background-color 0.1s;
+
+        &:hover {
+          background-color: var(--light-blue);
+        }
+      }
+
+      .mobile-menu-popup {
+        position: absolute;
+        right: -10px;
+        bottom: -5px;
+        background: white;
+        border-radius: 20px 20px 0px 20px;
+        box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.25);
+        display: flex;
+        flex-direction: column;
+        padding: 8px 0;
+        min-width: 110px;
+        z-index: 110;
+        animation: fadeInPopup 0.2s ease-out;
+
+        .menu-item {
+          background: none;
+          border: none;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 12px 20px;
+          font-size: 16px;
+          color: var(--dark-blue);
+          cursor: pointer;
+          text-align: left;
+          width: 100%;
+
+          &:hover {
+            background-color: #f0f0f0;
+          }
+
+          &.delete {
+            color: var(--dark-blue);
+          }
+        }
+      }
+    }
+
+    .detail-hero {
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px 48px 20px;
+      flex-wrap: wrap;
+      gap: 8px;
+
+      .hero-title {
+        font-size: 47px;
+      }
+      .hero-divider {
+        display: none;
+      }
+      .hero-subtitle {
+        font-size: 20px;
+        width: 100%;
+      }
+      hr {
+        width: 90px;
+        border: 1.5px solid var(--light-blue);
+        margin-bottom: 15px;
+      }
+    }
+  }
+}
+
+// Tablet: 769 bis 1024 px
+@mixin tablet {
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .contacts-list-container {
+      width: 100%;
+    }
+
+    .contacts-detail-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 50;
+      transform: translateX(100%);
+      transition: transform 0.3s ease-in-out;
+
+      &.mobile-open {
+        transform: translateX(0);
+      }
+    }
+
+    .mobile-back-btn {
+      display: flex;
+      background: none;
+      border: none;
+      cursor: pointer;
+      position: absolute;
+      right: 10px;
+    }
+  }
+}
