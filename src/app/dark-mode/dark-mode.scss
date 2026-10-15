@@ -1,0 +1,47 @@
+:root[data-theme='dark'] .contact-actions img {
+  filter: brightness(0) invert(1);
+  --bg: #f6f7f8;
+  --surface: #ffffff;
+  --text: #2a3647;
+  --text-muted: #a8a8a8;
+  --border: #d1d1d1;
+}
+
+  html,
+  body, main {
+    background-color: var(--bg) !important;
+    color: var(--text) !important;
+  }
+
+  .help-scroll-area,
+  .legal-scroll-area,
+  .privacy-scroll-area {
+    background-color: var(--bg) !important;
+  }
+
+  .top-header {
+    .help-icon {
+      border-color: var(--text-muted) !important;
+      color: var(--text) !important;
+    }
+
+    .user-avatar-sm {
+      border-color: var(--text) !important;
+      color: var(--text) !important;
+    }
+  }
+
+
+:root[data-theme='dark'] {
+  --bg: #1b1f27;
+  --surface: #252b36;
+  --text: #e8eaed;
+  --text-muted: #9aa3b2;
+  --border: #3a4252;
+  color-scheme: dark;
+}
+
+img[src*='join-logo'] {
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
