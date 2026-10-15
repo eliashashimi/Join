@@ -255,6 +255,19 @@
   }
 }
 
+.contact.slide-out {
+  animation: slideOut 0.25s ease-in-out forwards;
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
 .inp-icon {
   position: fixed;
   transform: translateX(-40px) translateY(14px);

@@ -31,6 +31,7 @@ export class AddContact {
   submitError = signal('');
   closeModal = output<void>();
   contactCreated = output<string>();
+  isClosing = false;
 
   userform = this.fb.group({
     name: ['', [Validators.required, Validators.pattern(NAME_REGEX)]],
@@ -55,7 +56,12 @@ export class AddContact {
 
   /** Schließt das Modal. */
   close(): void {
-    this.closeModal.emit();
+    this.isClosing = true;
+
+    setTimeout(() => {
+      this.closeModal.emit();
+      this.isClosing = false;
+    }, 250);
   }
 
   /**
