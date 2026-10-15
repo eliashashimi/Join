@@ -1,23 +1,49 @@
-<section class="contact">
+<section class="contact" [class.slide-out]="isClosing()">
   <div class="content-wrapper">
     <div class="contact__form">
-      <img src="assets/images/Join-Logo-White.png" alt="Join Logo" />
+      <button type="button" class="close-btn close-btn-left" (click)="close()" aria-label="Close">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+          <path
+            d="M1 1L11.5 11.5M11.5 1L1 11.5"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
+      <img class="logo-head-img" src="assets/images/Join-Logo-White.png" alt="Join Logo" />
       <h2>Edit contact</h2>
-      <img class="logo-underline" src="assets/icons/Vector 5.svg" alt="" />
+      <img class="logo-underline" src="assets/icons/blaue-trenlinie.svg" alt="" />
     </div>
     <div class="contact__right">
-      <button class="close-btn" (click)="close()">X</button>
+      <button type="button" class="close-btn close-btn-right" (click)="close()" aria-label="Close">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+          <path
+            d="M1 1L11.5 11.5M11.5 1L1 11.5"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
       <div class="contact__right--middle">
         <div class="person-name-img">
-          @if (getInitials()) {
-            <div class="avatar-circle" [style.background-color]="contactColor">
+          <div
+            class="avatar-circle"
+            [style.background-color]="getInitials() ? contactColor() : '#ffffff'"
+          >
+            @if (getInitials()) {
               {{ getInitials() }}
-            </div>
-          } @else {
-            <img src="assets/images/Group 13.png" alt="contact Icon" />
-          }
+            } @else {
+              <img
+                class="default-avatar-img"
+                src="assets/images/add-contact-avatar.png"
+                alt="contact Icon"
+              />
+            }
+          </div>
         </div>
-        <form [formGroup]="userform">
+        <form [formGroup]="userform" (ngSubmit)="onSubmit()">
           <div class="contact__right--input">
             <div class="contact__right--input--box">
               <div
@@ -39,7 +65,7 @@
                       {{ 'Enter your full name' }}
                     }
                     @if (name?.hasError('pattern') && name?.dirty) {
-                      {{ 'Remove space' }}
+                      {{ 'Please enter a valid first and last name.' }}
                     }
                   }
                 </h5>
@@ -49,27 +75,28 @@
                   formControlName="name"
                   type="text"
                   placeholder="Name"
+                  autocomplete="off"
+                  maxlength="100"
                 />
                 <img class="inp-icon" src="assets/icons/person.svg" alt="Name Icon" />
               </div>
               <div
                 [class.has-error]="
                   (email?.invalid && email?.dirty) ||
-                  (email?.hasError('required') && formSubmitted())
+                  (email?.hasError('required') && formSubmitted()) ||
+                  emailExistingError()
                 "
-                [class.has-success]="email?.valid && email?.dirty"
+                [class.has-success]="email?.valid && email?.dirty && !emailExistingError()"
               >
                 <h5>
-                  @if (
-                    ((email?.hasError('pattern') || email?.hasError('email')) && email?.dirty) ||
-                    (email?.hasError('required') && formSubmitted())
+                  @if (email?.hasError('required') && formSubmitted()) {
+                    {{ 'Your Email is required!' }}
+                  } @else if (
+                    (email?.hasError('pattern') || email?.hasError('email')) && email?.dirty
                   ) {
-                    @if (email?.hasError('required') && formSubmitted()) {
-                      {{ 'contact.error.emailRequired' }}
-                    }
-                    @if ((email?.hasError('pattern') || email?.hasError('email')) && email?.dirty) {
-                      {{ 'contact.error.emailInvalid' }}
-                    }
+                    {{ 'Your Email is not correct!' }}
+                  } @else if (emailExistingError()) {
+                    {{ 'This email address is already taken!' }}
                   }
                 </h5>
                 <input
@@ -78,6 +105,8 @@
                   formControlName="email"
                   type="text"
                   placeholder="Email"
+                  autocomplete="off"
+                  (input)="emailExistingError.set(false)"
                 />
                 <img class="inp-icon" src="assets/icons/mail.svg" alt="Email-Icon" />
               </div>
@@ -94,10 +123,10 @@
                     (phone?.hasError('required') && formSubmitted())
                   ) {
                     @if (phone?.hasError('required') && formSubmitted()) {
-                      {{ 'contact.error.phoneRequired' }}
+                      {{ 'Your Phone number is required' }}
                     }
                     @if ((phone?.hasError('pattern') || phone?.hasError('phone')) && phone?.dirty) {
-                      {{ 'contact.error.phoneInvalid' }}
+                      {{ 'Please enter a valid phone number (digits only, optional +)' }}
                     }
                   }
                 </h5>
@@ -107,14 +136,22 @@
                   formControlName="phone"
                   type="text"
                   placeholder="Phone"
+                  autocomplete="off"
                 />
                 <img class="inp-icon" src="assets/icons/call.svg" alt="Phone Icon" />
               </div>
             </div>
+            @if (submitError()) {
+              <p class="submit-error">{{ submitError() }}</p>
+            }
             <div class="contact__right--btn">
-              <button class="delete btn" (click)="onDelete()">Delete</button>
-              <button class="save btn" (click)="onSubmit()">
-                Save <img src="assets/icons/check.svg" alt="okay icon" />
+              <button type="button" class="delete btn" (click)="onDeleteClick()">Delete</button>
+              <button type="submit" class="save btn" [disabled]="isSubmitting()">
+                @if (isSubmitting()) {
+                  Saving...
+                } @else {
+                  Save <img src="assets/icons/check.svg" alt="okay icon" />
+                }
               </button>
             </div>
           </div>

@@ -8,16 +8,37 @@
   .content-wrapper {
     @include styles.flex-center;
     height: 600px;
+    background-color: transparent;
+    @media screen and (max-width: 1149px) {
+      @include styles.flex-center(column);
+      justify-content: flex-start;
+      max-width: 396px;
+      height: auto;
+    }
   }
   &__form {
-    height: 100%;
     @include styles.flex-center(column);
+    height: 100%;
+    position: relative;
     align-items: flex-start;
     gap: 16px;
     background: #2a3647;
     padding: 0px 46px 55px;
     border-top-left-radius: 30px;
     border-bottom-left-radius: 30px;
+    @media screen and (max-width: 1149px) {
+      width: 100%;
+      height: auto;
+      flex-shrink: 0;
+      border-top-left-radius: 30px;
+      border-bottom-left-radius: 0px;
+      border-top-right-radius: 30px;
+      padding: clamp(101px, calc(90.474px + 3.509vw), 141px) 24px
+        clamp(84px, calc(73.474px + 3.509vw), 124px);
+      .logo-head-img {
+        display: none;
+      }
+    }
 
     img {
       width: 54px;
@@ -25,39 +46,50 @@
       margin-bottom: 16px;
     }
     h2 {
-      font-size: 61px;
+      font-size: clamp(36px, calc(29.421px + 2.193vw), 61px);
       font-weight: bold;
       color: white;
     }
     p {
-      font-size: 27px;
+      font-size: clamp(14px, calc(10.579px + 1.14vw), 27px);
       color: white;
     }
     .logo-underline {
-      height: auto;
+      height: 3px;
+      width: 90px;
     }
   }
   &__right {
     @include styles.flex-center(column);
+    position: relative;
     justify-content: flex-end;
     height: 100%;
-    padding: 0px 48px 135px 95px;
+    padding: 0 clamp(32px, calc(27.789px + 1.404vw), 48px) 135px
+      clamp(15px, calc(-6.053px + 7.018vw), 95px);
     border-top-right-radius: 30px;
     border-bottom-right-radius: 30px;
     background-color: white;
-    .close-btn {
-      font-size: 18px;
+    @media screen and (max-width: 1149px) {
+      height: auto;
       width: 100%;
-      text-align: end;
-      border-style: none;
-      background-color: white;
-      margin-bottom: 57px;
+      flex-shrink: 0;
+      padding: 0 16px clamp(0px, calc(-8.421px + 2.807vw), 32px);
+      border-top-right-radius: 0px;
+      border-bottom-right-radius: 30px;
+      border-bottom-left-radius: 30px;
     }
     &--middle {
       @include styles.flex-center;
-      gap: 72px;
+      gap: clamp(45px, calc(37.105px + 2.632vw), 75px);
+      @media screen and (max-width: 1149px) {
+        @include styles.flex-center(column);
+        gap: clamp(16px, calc(11.789px + 1.404vw), 32px);
+      }
       .person-name-img {
         padding-bottom: 50px;
+        @media screen and (max-width: 1149px) {
+          padding-bottom: 0;
+        }
       }
       .avatar-circle {
         @include styles.flex-center;
@@ -65,21 +97,47 @@
         height: 120px;
         border-radius: 50%;
         border: 3px solid #ffffff;
+        box-sizing: border-box;
         box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
         color: white;
         font-size: 47px;
         font-weight: bold;
         text-transform: uppercase;
+        background-color: #ffffff;
+        overflow: hidden;
+
+        .default-avatar-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 50%;
+          margin-bottom: 0;
+          transform: scale(1.15);
+        }
+
+        @media screen and (max-width: 1149px) {
+          padding-bottom: 0;
+        }
+      }
+      @media screen and (max-width: 1149px) {
+        transform: translateY(-70px);
       }
     }
     &--input {
       @include styles.flex-center(column);
       align-items: flex-start;
       gap: 48px;
+      @media screen and (max-width: 1149px) {
+        height: 100%;
+        gap: clamp(16px, calc(11.789px + 1.404vw), 32px);
+      }
       &--box {
         @include styles.flex-center(column);
         align-items: flex-start;
         gap: 32px;
+        @media screen and (max-width: 1149px) {
+          gap: clamp(16px, calc(13.895px + 0.702vw), 24px);
+        }
         div {
           position: relative;
           width: 100%;
@@ -88,20 +146,31 @@
         h5 {
           position: absolute;
           bottom: -22px;
-          left: 0;
-          margin: 0;
           font-size: 13px;
           font-weight: 400;
-          white-space: nowrap;
+          height: 16px;
+          line-height: 16px;
+          @media screen and (max-width: 1149px) {
+            bottom: -18px;
+          }
         }
       }
       input {
-        width: 420px;
-        height: 50px;
-        border: 1px solid #124658;
+        width: clamp(280px, calc(243.158px + 12.281vw), 420px);
+        height: clamp(38px, calc(34.842px + 1.053vw), 50px);
+        border: 1px solid #959595;
         border-radius: 10px;
-        padding: 10px;
+        padding: 10px 48px 10px 10px;
         font-size: 20px;
+        outline: none;
+
+        &:focus {
+          border-color: #124658;
+        }
+
+        @media screen and (max-width: 1149px) {
+          width: min(364px, calc(100vw - 64px));
+        }
       }
     }
     &--btn {
@@ -109,24 +178,121 @@
       justify-content: flex-start;
       gap: 25px;
       height: 57px;
-      .cancel {
-        border: 1px solid #2a3647;
+      @media screen and (max-width: 1149px) {
+        align-self: center;
       }
-      .create {
-        color: white;
-        background-color: #2a3647;
-      }
+
       .btn {
         font-size: 21px;
-        padding: 10px;
-        border-radius: 8px;
+        font-weight: 700;
+        padding: 10px 24px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition:
+          background-color 0.1s ease,
+          border-color 0.1s ease,
+          transform 0.1s ease;
+
+        &:hover {
+          transform: translateY(-1px);
+        }
+      }
+
+      .cancel {
+        background-color: #ffffff;
+        color: #2a3647;
+        border: 1px solid #2a3647;
+
+        @media screen and (max-width: 1149px) {
+          display: none;
+        }
+
+        &:hover {
+          background-color: #f6f7f8;
+          border-color: #29abe2;
+          color: #29abe2;
+        }
+      }
+
+      .create {
+        background-color: #2a3647;
+        color: #ffffff;
+        border: none;
+
+        @media screen and (max-width: 400px) {
+          width: clamp(180px, calc(169.474px + 3.509vw), 220px);
+          font-size: clamp(14px, calc(12.158px + 0.614vw), 21px);
+        }
+
+        &:hover {
+          background-color: #29abe2;
+        }
       }
     }
   }
 }
 
+.close-btn {
+  @include styles.flex-center;
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color 0.1s;
+}
+
+.close-btn-right {
+  top: 48px;
+  right: 48px;
+  color: #2a3647;
+
+  &:hover {
+    background-color: #eeeeee;
+  }
+
+  @media screen and (max-width: 1149px) {
+    display: none;
+  }
+}
+
+.close-btn-left {
+  top: 24px;
+  right: 16px;
+  color: #ffffff;
+
+  &:hover {
+    background-color: #124658;
+  }
+
+  @media screen and (min-width: 1150px) {
+    display: none;
+  }
+}
+
+.contact.slide-out {
+  animation: slideOut 0.25s ease-in-out forwards;
+  overflow-x: hidden;
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
 .inp-icon {
-  transform: translateX(-40px) translateY(4px);
+  position: fixed;
+  transform: translateX(-40px) translateY(14px);
+  @media screen and (max-width: 650px) {
+    transform: translateX(-40px) translateY(12px);
+  }
 }
 
 button:hover,
@@ -143,8 +309,14 @@ input:invalid {
   h5 {
     color: red;
   }
-  .inp {
-    color: red;
+  .inp,
+  .inp:focus {
     border: 1px solid red;
   }
+}
+
+.submit-error {
+  color: red;
+  font-size: 13px;
+  margin: 0;
 }

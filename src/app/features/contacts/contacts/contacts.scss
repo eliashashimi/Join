@@ -1,6 +1,17 @@
 @use '../../../../../public/assets/styles';
+@use 'contacts-modal';
+@use 'contacts-responsive' as responsive;
 
-/* Layout Grundgerüst */
+:host {
+  display: flex;
+  position: relative;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
 .contacts-container {
   display: flex;
   height: 100vh;
@@ -9,178 +20,33 @@
   overflow: hidden;
 }
 
-/* Sidebar */
-.sidebar {
-  width: 232px;
-  background-color: var(--dark-blue);
-  color: var(--menu-text);
-  display: flex;
-  flex-direction: column;
-  padding: 40px 0;
-}
-
-.logo-area {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 232px;
-  height: auto;
-}
-
-.logo-icon {
-  width: 100px;
-  height: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  border-radius: 4px;
-}
-
-.nav-menu {
-  display: flex;
-  flex-direction: column;
-  margin-top: 114px;
-  height: 100%;
-}
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 12px 48px;
-  color: var(--menu-text);
-  text-decoration: none;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background 0.2s;
-
-  &:hover {
-    background-color: var(--menu-hover);
-  }
-
-  &.active {
-    background-color: var(--active-menu);
-    color: white;
-    font-weight: 500;
-  }
-}
-
-.nav-icon {
-  width: 24px;
-  height: 24px;
-  fill: currentColor;
-}
-
-.sidebar-footer {
-  bottom: 0;
-  padding-left: 48px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  font-size: 14px;
-
-  a {
-    color: var(--menu-text);
-    text-decoration: none;
-
-    &:hover {
-      color: var(--light-blue);
-    }
-  }
-}
-
-/* Main Area */
 .main-content {
   flex: 1;
   display: flex;
   flex-direction: column;
   background-color: #f6f7f8;
+  overflow: hidden;
 }
 
-.top-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 40px;
-  height: 80px;
-  background-color: white;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.05);
-  z-index: 10;
-
-  .header-title {
-    font-size: 20px;
-    color: black;
-    margin-right: auto;
-    padding-left: 16px;
-  }
-
-  .user-profile {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-
-    .help-icon {
-      width: 20px;
-      height: 20px;
-      border: 1px solid #686868;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: var(--dark-blue);
-      font-weight: bold;
-      transition: transform .1s;
-
-      &:hover {
-        transform: scale(1.3);
-      }
-    }
-
-    .help-icon-link {
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .user-avatar-sm {
-      width: 56px;
-      height: 56px;
-      background-color: white;
-      border: 3px solid var(--dark-blue);
-      color: var(--dark-blue);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 16px;
-      box-sizing: border-box;
-
-      &:hover {
-        background-color: var(--header-initial-hover);
-      }
-    }
-  }
-}
-
-/* Content Body */
 .content-body {
   display: flex;
   flex: 1;
   overflow: hidden;
+  width: 100%;
+  position: relative;
 }
 
-/* Linke Spalte (Kontaktliste) */
 .contacts-list-container {
-  width: 453px;
+  width: 424px;
   background: white;
   border-right: 1px solid #e2e2e2;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  overflow: hidden;
   padding: 24px 0;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 .add-contact-btn {
@@ -191,44 +57,44 @@
   padding: 14px;
   font-size: 21px;
   font-weight: 700;
-  line-height: 120%;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 16px;
   margin: 12px 16px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.1s;
+  flex-shrink: 0;
 
   &:hover {
     background-color: var(--light-blue);
   }
-}
 
-.user-add-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 0;
-
-  svg {
-    display: block;
+  .user-add-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
 .contacts-scroll-area {
   flex: 1;
   overflow-y: auto;
-  padding: 0 24px;
+  overflow-x: hidden;
+  padding: 0 16px;
+  width: 100%;
+}
+
+.list-error {
+  padding: 16px 20px;
+  color: red;
+  font-size: 16px;
 }
 
 .contact-group-header {
-  width: 352px;
-  height: 58px;
   font-size: 20px;
   color: black;
-  padding: 17px 36px;
-  gap: 8px;
+  padding: 17px 20px;
 }
 
 .group-divider {
@@ -240,25 +106,28 @@
 .contact-item {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  width: 352px;
+  width: 100%;
   height: 78px;
-  gap: 35px;
-  padding: 15px 24px;
+  gap: 20px;
+  padding: 15px 16px;
   border-radius: 10px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition:
+    background-color 0.1s ease,
+    transform 0.1s ease;
 
-  &:hover {
-    background: linear-gradient(180deg,rgba(249, 249, 249, 1) 0%, rgba(240, 240, 240, 1) 100%);
+  &:hover:not(.selected) {
+    background: linear-gradient(180deg, rgba(249, 249, 249, 1) 0%, rgba(240, 240, 240, 1) 100%);
   }
 
   &.selected {
-    background-color: var(--dark-blue);
-    color: white;
+    background-color: var(--dark-blue) !important;
 
+    .contact-name {
+      color: white !important;
+    }
     .contact-email {
-      color: var(--light-blue);
+      color: var(--light-blue) !important;
     }
   }
 }
@@ -281,6 +150,8 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  min-width: 0;
+  flex: 1;
 }
 
 .contact-name {
@@ -288,6 +159,10 @@
   font-weight: 400;
   line-height: 120%;
   color: black;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
 }
 
 .contact-email {
@@ -296,27 +171,62 @@
   line-height: 120%;
   color: #007cee;
   text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
 }
 
-/* Rechte Spalte / Detailansicht-Container */
+// Detailansicht gleitet am Desktop von rechts herein
+@media (min-width: 1025px) and (prefers-reduced-motion: no-preference) {
+  app-contact-detail {
+    animation: detailSlideIn 0.25s ease-out;
+  }
+}
+
+@keyframes detailSlideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
 .contacts-detail-container {
   flex: 1;
   display: flex;
   flex-direction: column;
   background-color: #f6f7f8;
+  overflow-x: hidden;
   overflow-y: auto;
+  position: relative;
+  transform: none;
+  height: 100%;
 }
 
 .detail-hero {
   display: flex;
   align-items: center;
   gap: 20px;
-  padding: 109px 135px 32px 80px;
+  padding: 109px clamp(0px, calc(-8.421px + 2.807vw), 32px) 32px
+    clamp(0px, calc(-10.526px + 3.509vw), 40px);
+  @media screen and (min-width: 1025px) and (max-width: 1269px) {
+    flex-direction: column;
+    align-items: flex-start;
+    .hero-divider {
+      display: none;
+    }
+    hr {
+      width: 90px;
+      border: 1.5px solid var(--light-blue);
+      margin-bottom: 15px;
+    }
+  }
 
   .hero-title {
-    font-size: 61px;
+    font-size: clamp(47px, calc(43.316px + 1.228vw), 61px);
     font-weight: 700;
-    line-height: 120%;
     color: black;
     margin: 0;
   }
@@ -324,216 +234,20 @@
   .hero-divider {
     width: 0px;
     height: 59px;
-    border: 3px solid #29abe2;
+    border: 3px solid var(--light-blue);
   }
 
   .hero-subtitle {
-    font-size: 27px;
-    font-weight: 400;
-    line-height: 120%;
+    font-size: clamp(20px, calc(18.158px + 0.614vw), 27px);
     color: var(--dark-blue);
     margin: 0;
   }
 }
 
-/* Modals */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background: transparent;
-  border-radius: 30px;
-  box-shadow: 0px 0px 16px 4px rgba(0, 0, 0, 0.1);
-
-  animation: slideInFromRight 0.5s ease-out forwards;
-}
-
-@keyframes slideInFromRight {
-  from {
-    transform: translateX(100dvw);
-    opacitiy: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-/* NUR auf Mobilgerät sichtbar */
-.mobile-back-btn {
+.mobile-back-btn,
+.mobile-fab-wrapper {
   display: none;
 }
 
-/* ==========================================
-    MOBILE RESPONSIVE (max-width: 768px)
-   ========================================== */
-@media(max-width: 768px) {
-  .contacts-container {
-    position: relative;
-    overflow: hidden;
-  }
-
-  /* Sidebar als untere Navigation (Bottom-Bar) */
-  .sidebar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100vw;
-    height: 80px;
-    flex-direction: row;
-    padding: 0;
-    z-index: 100;
-    justify-content: space-around;
-    align-items: center;
-
-    .logo-area { display: none; }
-    .sidebar-footer { display: none; }
-
-    .nav-menu {
-      flex-direction: row;
-      margin-top: 0;
-      width: 100%;
-      height: 100%;
-      justify-content: space-around;
-      align-items: center;
-
-      .nav-item {
-        padding: 0;
-        height: 100%;
-        flex: 1;
-        justify-content: center;
-        font-size: 0; // Text ausblenden
-        gap: 0;
-
-        &.active {
-          background-color: rgba(0, 0, 0, 0.2);
-        }
-      }
-    }
-  }
-
-  /* Hauptbereich anpassen */
-  .main-content {
-    height: calc(100vh - 64px);
-  }
-
-  .top-header {
-    background-image: url(../../../../../public/assets/Join-logo.png);
-    background-size: 32px 39px;
-    background-repeat: no-repeat;
-    background-position: 16px;
-    padding: 20px 16px;
-    justify-content: flex-end;
-
-    .user-profile .user-avatar-sm {
-      width: 40px;
-      height: 40px;
-      border: 2px solid var(--dark-blue);
-    }
-
-    .user-profile .help-icon {
-      display: none;
-    }
-  }
-
-  .header-title {
-    display: none;
-  }
-
-  /* Kontaktliste - volle Breite*/
-  .contacts-list-container {
-    width: 100vw;
-    border-right: none;
-    padding: 16px 0;
-  }
-
-  .add-contact-btn {
-    position: fixed;
-    right: 16px;
-    bottom: 112px;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    font-size: 0; // Text ausblenden
-    padding: 0;
-    margin: 0;
-
-    .user-add-icon svg {
-      width: 32px;
-      height: 32px;
-      padding-right: 10px;
-    }
-  }
-
-  /* Detailansicht -> slide nach rechts */
-  .contacts-detail-container {
-    position: absolute;
-    top: 80;
-    left: 0;
-    width: 100vw;
-    height: 100%;
-    background-color: #f6f7f8;
-    z-index: 50;
-    transform: translateX(100%);
-    transition: transform 0.3s ease-in-out;
-    overflow-y: auto;
-
-    /* Wenn Kontakt ausgewählt - slide nach links*/
-    &.mobile-open {
-      transform: translateX(0);
-    }
-  }
-
-  /* Mobile-Zurück-Button */
-  .mobile-back-btn {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 8px;
-    background: none;
-    border: none;
-    font-size: 18px;
-    font-weight: 500;
-    color: var(--dark-blue);
-    padding: 16px 20px 0 20px;
-    cursor: pointer;
-
-    svg {
-      fill: var(--dark-blue);
-    }
-
-    &:hover {
-      color: var(--light-blue);
-      svg { fill: var(--light-blue); }
-    }
-  }
-
-  .detail-hero {
-    padding: 12px 20px 0 20px;
-    flex-wrap: wrap;
-    gap: 10px;
-
-    .hero-title {
-      font-size: 36px;
-    }
-
-    .hero-divider {
-      display: none;
-    }
-
-    .hero-subtitle {
-      font-size: 18px;
-      width: 100%;
-    }
-  }
-}
+@include responsive.phone;
+@include responsive.tablet;
