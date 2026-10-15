@@ -8,7 +8,7 @@
 }
 
   html,
-  body {
+  body, main {
     background-color: var(--bg) !important;
     color: var(--text) !important;
   }
@@ -19,7 +19,6 @@
     background-color: var(--bg) !important;
   }
 
-  /* Header-Icons im Dark Mode auf helle Variablen umschalten */
   .top-header {
     .help-icon {
       border-color: var(--text-muted) !important;
