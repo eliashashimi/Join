@@ -48,7 +48,6 @@
   </div>
 </div>
 
-<!-- Detailansicht: Auf Desktop immer im Flex-Layout, mobil gesteuert über mobile-open -->
 <div class="contacts-detail-container" [class.mobile-open]="isMobileDetailOpen()">
   <div class="detail-hero">
     <h1 class="hero-title">Contacts</h1>
@@ -70,12 +69,10 @@
   </div>
 
   @if (selectedContact(); as contact) {
-    <app-contact-detail
-      [class.slide-in-right]="isDetailAnimating()"
-      [contact]="contact"
-      (editClicked)="showEditContactModal.set(true)"
-    >
-    </app-contact-detail>
+    @for (item of [contact]; track item.id) {
+      <app-contact-detail [contact]="item" (editClicked)="showEditContactModal.set(true)">
+      </app-contact-detail>
+    }
 
     <div class="mobile-fab-wrapper">
       <button class="mobile-fab-btn" (click)="toggleMobileMenu()">
@@ -132,7 +129,6 @@
   }
 </div>
 
-<!-- Modals -->
 @if (showEditContactModal() && selectedContact(); as contact) {
   <div class="modal-overlay" (click)="showEditContactModal.set(false)">
     <div class="modal-content" (click)="$event.stopPropagation()">
