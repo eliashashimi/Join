@@ -70,7 +70,7 @@
       left: 0;
       width: 100vw;
       height: 100%;
-      background-color: var(--bg);
+      background-color: #ffffff;
       z-index: 50;
       transform: translateX(100%);
       transition: transform 0.3s ease-in-out;
@@ -84,11 +84,13 @@
 
     .mobile-back-btn {
       display: flex;
-      gap: 8px;
       background: none;
       border: none;
       cursor: pointer;
-      transform: translateY(-80px);
+      padding: 0;
+      position: absolute; // Klebt den Pfeil exakt nach oben rechts
+      right: 20px;
+      top: 32px;
     }
 
     .mobile-fab-wrapper {
@@ -156,14 +158,16 @@
     }
 
     .detail-hero {
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 20px 48px 20px;
-      flex-wrap: wrap;
-      gap: 8px;
+      display: flex;
+      flex-direction: column; // Elemente sauber untereinander
+      align-items: flex-start;
+      position: relative;     // Erforderlich für die absolute Positionierung des Pfeils
+      padding: 24px 60px 24px 20px; // Rechts Platz (60px) für den Pfeil reservieren
+      gap: 4px;
 
       .hero-title {
         font-size: 47px;
+        margin: 0;
       }
       .hero-divider {
         display: none;
@@ -171,11 +175,13 @@
       .hero-subtitle {
         font-size: 20px;
         width: 100%;
+        margin: 0;
       }
       hr {
+        display: block;
         width: 90px;
         border: 1.5px solid var(--light-blue);
-        margin-bottom: 15px;
+        margin: 8px 0 15px 0;
       }
     }
   }
