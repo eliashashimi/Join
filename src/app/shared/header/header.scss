@@ -25,13 +25,14 @@
     .help-icon {
       width: 20px;
       height: 20px;
-      border: 1px solid var(--text-muted);
+      // Fester, kräftiger Rahmen im Light Mode, im Dark Mode per Variable oder explizit anpassen
+      border: 1px solid var(--dark-blue); 
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      color: var(--text); 
+      color: var(--dark-blue); 
       font-weight: bold;
       transition: transform 0.1s;
 
@@ -49,8 +50,9 @@
       width: 56px;
       height: 56px;
       background-color: var(--surface);
-      border: 3px solid var(--text);
-      color: var(--text); 
+      // Hier das dunkle Blau als Standard für den Rahmen im Light Mode nutzen
+      border: 3px solid var(--dark-blue);
+      color: var(--dark-blue); 
       border-radius: 50%;
       display: flex;
       align-items: center;

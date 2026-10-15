@@ -19,6 +19,19 @@
     background-color: var(--bg) !important;
   }
 
+  /* Header-Icons im Dark Mode auf helle Variablen umschalten */
+  .top-header {
+    .help-icon {
+      border-color: var(--text-muted) !important;
+      color: var(--text) !important;
+    }
+
+    .user-avatar-sm {
+      border-color: var(--text) !important;
+      color: var(--text) !important;
+    }
+  }
+
 
 :root[data-theme='dark'] {
   --bg: #1b1f27;
