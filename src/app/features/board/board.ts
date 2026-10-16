@@ -2,9 +2,10 @@ import { Component, inject, OnInit } from '@angular/core';
 import { TaskService } from '../../service/task-service';
 import { ContactService } from '../../service/contact-service';
 import { TaskInterface } from '../../interface/task-interface';
+import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
-  imports: [],
+  imports: [NgTemplateOutlet],
   selector: 'app-board',
   styleUrl: './board.scss',
   templateUrl: './board.html',

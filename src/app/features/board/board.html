@@ -1,29 +1,128 @@
+<!-- Suche (User Story 3) -->
 <input
+    class="search"
+    type="text"
     placeholder="Find Task"
     [value]="taskService.searchText()"
     (input)="taskService.searchText.set($any($event.target).value)"
 />
 
-<section class="column">
-    <h3>To do</h3>
+@if (taskService.searchText().trim() && !taskService.filteredTasks().length) {
+    <p class="no-results">Keine Ergebnisse gefunden</p>
+}
 
-    @for (task of todo(); track task.id) {
-        <article class="card">
-        <span class="badge">{{
-            task.category === 'user_story' ? 'User Story' : 'Technical Task'
-        }}</span>
-        <h4>{{ task.title }}</h4>
-        <p>{{ task.description }}</p>
+<!-- Eine Karte, die alle vier Spalten benutzen -->
+<ng-template #taskCard let-task>
+    <article class="card">
+        <span
+            class="badge"
+            [class.user-story]="task.category === 'user_story'"
+            [class.technical-task]="task.category === 'technical_task'"
+            >
+            {{ task.category === 'user_story' ? 'User Story' : 'Technical Task' }}
+        </span>
+
+        <h3 class="card-title">{{ task.title }}</h3>
+        <p class="card-description">{{ task.description }}</p>
 
         @if (task.subtasks.length) {
-            <span>{{ doneCount(task) }}/{{ task.subtasks.length }} Subtasks</span>
+            @let doneSubtasks = doneCount(task);
+            <div
+                class="progress"
+                [title]="doneSubtasks + ' von ' + task.subtasks.length + ' Subtasks erledigt'"
+            >
+                <div class="progress-bar">
+                <div
+                    class="progress-fill"
+                    [style.width.%]="(doneSubtasks / task.subtasks.length) * 100"
+                ></div>
+                </div>
+                <span class="progress-label">{{ doneSubtasks }}/{{ task.subtasks.length }} Subtasks</span>
+            </div>
         }
 
-        @for (contact of assigneesOf(task); track contact.id) {
-            <span class="avatar" [style.background]="contact.color">{{ contact.initials }}</span>
+        <div class="card-footer">
+            <div class="avatars">
+                @for (contact of assigneesOf(task); track contact.id) {
+                    <span class="avatar" [style.background-color]="contact.color">
+                        {{contact.initials}}
+                    </span>
+                }
+            </div>
+            <img class="priority" [src]="'img/prio-' + task.priority + '.svg'" [alt]="task.priority" />
+        </div>
+    </article>
+</ng-template>
+
+<div class="board">
+    <!-- To do -->
+    <section class="column">
+        <header class="column-header">
+        <h2>To do</h2>
+        <button type="button" class="add-button" aria-label="Add task to To do">+</button>
+        </header>
+        <div class="cards">
+        @for (task of todo(); track task.id) {
+            <ng-container
+            [ngTemplateOutlet]="taskCard"
+            [ngTemplateOutletContext]="{ $implicit: task }"
+            ></ng-container>
+        } @empty {
+            <div class="empty">No tasks To do</div>
         }
-        </article>
-    } @empty {
-        <div class="empty">No tasks To do</div>
-    }
-</section>
+        </div>
+    </section>
+
+    <!-- In progress -->
+    <section class="column">
+        <header class="column-header">
+            <h2>In progress</h2>
+            <button type="button" class="add-button" aria-label="Add task to In progress">+</button>
+        </header>
+        <div class="cards">
+        @for (task of inProgress(); track task.id) {
+            <ng-container
+            [ngTemplateOutlet]="taskCard"
+            [ngTemplateOutletContext]="{ $implicit: task }"
+            ></ng-container>
+        } @empty {
+            <div class="empty">No tasks In progress</div>
+        }
+        </div>
+    </section>
+
+    <!-- Await feedback -->
+    <section class="column">
+        <header class="column-header">
+        <h2>Await feedback</h2>
+        <button type="button" class="add-button" aria-label="Add task to Await feedback">+</button>
+        </header>
+        <div class="cards">
+        @for (task of awaitFeedback(); track task.id) {
+            <ng-container
+                [ngTemplateOutlet]="taskCard"
+                [ngTemplateOutletContext]="{ $implicit: task }">
+            </ng-container>
+        } @empty {
+            <div class="empty">No tasks Await feedback</div>
+        }
+        </div>
+    </section>
+
+    <!-- Done: ohne "+", laut Checkliste gibt es dort kein Hinzufügen -->
+    <section class="column">
+        <header class="column-header">
+            <h2>Done</h2>
+        </header>
+        <div class="cards">
+        @for (task of done(); track task.id) {
+            <ng-container
+                [ngTemplateOutlet]="taskCard"
+                [ngTemplateOutletContext]="{ $implicit: task }">
+            </ng-container>
+        } @empty {
+            <div class="empty">No tasks Done</div>
+        }
+        </div>
+    </section>
+</div>
