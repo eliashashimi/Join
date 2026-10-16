@@ -1,0 +1,61 @@
+<div class="assigned-to">
+  <div class="field" [class.open]="isOpen()">
+    <input
+      type="text"
+      class="field-input"
+      placeholder="Select contacts to assign"
+      autocomplete="off"
+      aria-label="Kontakte suchen"
+      [value]="searchText()"
+      (focus)="open()"
+      (input)="onSearch($event)"
+    />
+    <button
+      type="button"
+      class="arrow-btn"
+      aria-label="Kontaktliste öffnen oder schließen"
+      [attr.aria-expanded]="isOpen()"
+      (click)="toggleOpen()"
+    ></button>
+
+    @if (isOpen()) {
+      <ul class="contact-list">
+        @if (hasLoadError()) {
+          <li class="list-info">Contacts could not be loaded.</li>
+        }
+        @for (contact of filteredContacts(); track contact.id) {
+          <li>
+            <button
+              type="button"
+              class="contact-item"
+              [class.selected]="isSelected(contact.id)"
+              [attr.aria-pressed]="isSelected(contact.id)"
+              (click)="toggleContact(contact.id)"
+            >
+              <span class="avatar" [style.background-color]="contact.color">{{ contact.initials }}</span>
+              <span class="name">{{ contact.name }}</span>
+              <span class="checkbox" [class.checked]="isSelected(contact.id)"></span>
+            </button>
+          </li>
+        } @empty {
+          @if (!hasLoadError()) {
+            <li class="list-info">No contacts found</li>
+          }
+        }
+      </ul>
+    }
+  </div>
+
+  @if (selectedContacts().length) {
+    <div class="chips">
+      @for (contact of visibleChips(); track contact.id) {
+        <span class="avatar" [style.background-color]="contact.color" [title]="contact.name">
+          {{ contact.initials }}
+        </span>
+      }
+      @if (hiddenCount() > 0) {
+        <span class="avatar more">+{{ hiddenCount() }}</span>
+      }
+    </div>
+  }
+</div>
