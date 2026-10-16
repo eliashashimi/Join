@@ -3,7 +3,7 @@
   flex-direction: column;
   gap: clamp(16px, 4vw, 48px);
   padding: clamp(16px, 3vw, 24px) clamp(16px, 5vw, 40px);
-  color: var(--text);
+  color: var(--text, #2a3647);
   height: 100%;
   box-sizing: border-box;
   overflow-y: auto;
@@ -24,7 +24,7 @@
       color: #ffffff;
       font-size: clamp(1.75rem, 4vw, 2.9375rem);
       font-weight: 500;
-      border: 3px solid var(--surface);
+      border: 3px solid var(--surface, #ffffff);
       box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
       flex-shrink: 0;
     }
@@ -42,7 +42,7 @@
         font-size: clamp(36px, calc(33.105px + 0.965vw), 47px);
         font-weight: 500;
         margin: 0;
-        color: var(--text);
+        color: var(--text, #2a3647);
         line-height: 1.2;
         word-break: break-word;
         width: 100%;
@@ -82,7 +82,7 @@
             transform 0.1s;
 
           &:hover {
-            background-color: var(--hover);
+            background-color: var(--hover, rgba(42, 54, 71, 0.05));
           }
         }
 
@@ -125,7 +125,7 @@
       font-weight: 400;
       line-height: 120%;
       margin: 0;
-      color: var(--text);
+      color: var(--text, #2a3647);
     }
 
     .info-group {
@@ -137,7 +137,7 @@
         font-size: 1rem;
         font-weight: 700;
         line-height: 120%;
-        color: var(--text);
+        color: var(--text, #2a3647);
       }
 
       .info-value {
@@ -153,7 +153,7 @@
         }
 
         &.phone-link {
-          color: var(--text);
+          color: var(--text, #2a3647);
         }
       }
     }
