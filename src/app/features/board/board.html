@@ -1,15 +1,40 @@
 <!-- Suche (User Story 3) -->
-<input
-    class="search"
-    type="text"
-    placeholder="Find Task"
-    [value]="taskService.searchText()"
-    (input)="taskService.searchText.set($any($event.target).value)"
-/>
+<section class="board-head">
+    <h2>Board</h2>
+    <div class="searchbar-wrapper">
+        <div class="search-bar">
+            <input
+                type="search"
+                placeholder="Find Task" aria-label="Find Task"
+                [value]="taskService.searchText()"
+                (input)="taskService.searchText.set($any($event.target).value)"
+            />
+            <button class="search-button" type="button" aria-label="Suchen">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 32 32"
+                    fill="none">
+                <path
+                    d="M14 4a10 10 0 1 0 0 20 10 10 0 0 0 0-20ZM21.5 21.5 28 28"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                />
+                </svg>
+            </button>
+        </div>
+        <button class="add-task-btn"><span class="btn-text">Add task</span>
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g transform="translate(6.5, 6.5)">
+                    <path d="M9.5 0V19M0 9.5H19" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+                </g>
+            </svg>
+        </button>
+    </div>
 
-@if (taskService.searchText().trim() && !taskService.filteredTasks().length) {
-    <p class="no-results">Keine Ergebnisse gefunden</p>
-}
+    @if (taskService.searchText().trim() && !taskService.filteredTasks().length) {
+        <p class="no-results">Keine Ergebnisse gefunden</p>
+    }
+</section>
 
 <!-- Eine Karte, die alle vier Spalten benutzen -->
 <ng-template #taskCard let-task>
