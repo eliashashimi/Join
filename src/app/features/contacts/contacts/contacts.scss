@@ -16,7 +16,7 @@
   display: flex;
   height: 100vh;
   width: 100vw;
-  background-color: var(--surface);
+  background-color: var(--surface, #ffffff);
   overflow: hidden;
 }
 
@@ -24,7 +24,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: var(--bg);
+  background-color: var(--bg, #f6f7f8);
   overflow: hidden;
 }
 
@@ -38,8 +38,8 @@
 
 .contacts-list-container {
   width: 424px;
-  background: var(--surface);
-  border-right: 1px solid var(--border);
+  background: var(--surface, #ffffff);
+  border-right: 1px solid var(--border, #e2e2e2);
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -93,13 +93,13 @@
 
 .contact-group-header {
   font-size: 20px;
-  color: var(--text);
+  color: var(--text, #2a3647);
   padding: 17px 20px;
 }
 
 .group-divider {
   border: none;
-  border-top: 1px solid 1px solid var(--border);
+  border-top: 1px solid var(--border, #d1d1d1);
   margin: 0 0 8px 0;
 }
 
@@ -117,7 +117,7 @@
     transform 0.1s ease;
 
   &:hover:not(.selected) {
-    background-color: var(--hover)
+    background-color: var(--hover, #f0f0f0);
   }
 
   &.selected {
@@ -142,7 +142,7 @@
   justify-content: center;
   font-weight: bold;
   font-size: 14px;
-  border: 2px solid var(--surface);
+  border: 2px solid var(--surface, #ffffff);
   flex-shrink: 0;
 }
 
@@ -158,7 +158,7 @@
   font-size: 20px;
   font-weight: 400;
   line-height: 120%;
-  color:var(--text);
+  color: var(--text, #2a3647);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -197,8 +197,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  /* Füge hier den festen Hintergrund für den Light Mode hinzu: */
-  background-color: #ffffff; 
+  background-color: var(--bg, #f6f7f8);
   overflow-x: hidden;
   overflow-y: auto;
   position: relative;
@@ -212,6 +211,9 @@
   gap: 20px;
   padding: 109px clamp(0px, calc(-8.421px + 2.807vw), 32px) 32px
     clamp(0px, calc(-10.526px + 3.509vw), 40px);
+  hr {
+    display: none;
+  }
   @media screen and (min-width: 1025px) and (max-width: 1269px) {
     flex-direction: column;
     align-items: flex-start;
@@ -219,6 +221,7 @@
       display: none;
     }
     hr {
+      display: block;
       width: 90px;
       border: 1.5px solid var(--light-blue);
       margin-bottom: 15px;
@@ -228,7 +231,7 @@
   .hero-title {
     font-size: clamp(47px, calc(43.316px + 1.228vw), 61px);
     font-weight: 700;
-    color: var(--text);
+    color: var(--text, #2a3647);
     margin: 0;
   }
 
@@ -240,7 +243,7 @@
 
   .hero-subtitle {
     font-size: clamp(20px, calc(18.158px + 0.614vw), 27px);
-    color: var(--text);
+    color: var(--text, #2a3647);
     margin: 0;
   }
 }

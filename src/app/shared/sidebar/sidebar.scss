@@ -36,7 +36,9 @@
   cursor: pointer;
   transition: background 0.1s;
 
-  &:hover { background-color: var(--menu-hover); }
+  &:hover {
+    background-color: var(--menu-hover);
+  }
   &.active {
     background-color: var(--active-menu);
     color: white;
@@ -62,7 +64,8 @@
     padding: 8px;
     cursor: pointer;
 
-    &:hover, &.active-footer-link {
+    &:hover,
+    &.active-footer-link {
       color: var(--light-blue);
     }
   }
@@ -81,7 +84,10 @@
     justify-content: space-around;
     align-items: center;
 
-    .logo-area, .sidebar-footer { display: none; }
+    .logo-area,
+    .sidebar-footer {
+      display: none;
+    }
 
     .nav-menu {
       flex-direction: row;
@@ -101,7 +107,9 @@
         border-radius: 16px;
         gap: 0;
 
-        &.active { background-color: rgba(0, 0, 0, 0.2); }
+        &.active {
+          background-color: rgba(0, 0, 0, 0.2);
+        }
       }
     }
   }
