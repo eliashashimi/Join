@@ -1,4 +1,3 @@
-<!-- Suche (User Story 3) -->
 <section class="board-head">
   <h2>Board</h2>
   <div class="searchbar-wrapper">
@@ -73,115 +72,96 @@
   }
 </section>
 
-<!-- Eine Karte, die alle vier Spalten benutzen -->
-<ng-template #taskCard let-task>
-  <article class="card">
-    <span
-      class="badge"
-      [class.user-story]="task.category === 'user_story'"
-      [class.technical-task]="task.category === 'technical_task'"
-    >
-      {{ task.category === 'user_story' ? 'User Story' : 'Technical Task' }}
-    </span>
-
-    <h3 class="card-title">{{ task.title }}</h3>
-    <p class="card-description">{{ task.description }}</p>
-
-    @if (task.subtasks.length) {
-      @let doneSubtasks = doneCount(task);
-      <div
-        class="progress"
-        [title]="doneSubtasks + ' von ' + task.subtasks.length + ' Subtasks erledigt'"
-      >
-        <div class="progress-bar">
-          <div
-            class="progress-fill"
-            [style.width.%]="(doneSubtasks / task.subtasks.length) * 100"
-          ></div>
-        </div>
-        <span class="progress-label">{{ doneSubtasks }}/{{ task.subtasks.length }} Subtasks</span>
-      </div>
-    }
-
-    <div class="card-footer">
-      <div class="avatars">
-        @for (contact of assigneesOf(task); track contact.id) {
-          <span class="avatar" [style.background-color]="contact.color">
-            {{ contact.initials }}
-          </span>
-        }
-      </div>
-      <img
-        class="priority"
-        [src]="'./assets/images/prio-' + task.priority + '.svg'"
-        [alt]="task.priority"
-      />
-    </div>
-  </article>
-</ng-template>
-
-<div class="board">
-  <!-- To do -->
+<div class="board" cdkDropListGroup>
   <section class="column">
     <header class="column-header">
       <h2>To do</h2>
       <button type="button" class="add-button" aria-label="Add task to To do">+</button>
     </header>
-    <div class="cards">
+    <div
+      class="cards"
+      cdkDropList
+      [cdkDropListData]="todo()"
+      (cdkDropListDropped)="onTaskDrop($event, 'todo')"
+    >
       @for (task of todo(); track task.id) {
-        <ng-container
-          [ngTemplateOutlet]="taskCard"
-          [ngTemplateOutletContext]="{ $implicit: task }"
-        ></ng-container>
+        <app-drag-drop-tasks
+          [task]="task"
+          cdkDrag
+          [cdkDragData]="task"
+          (openDetails)="openTaskDetails($event)"
+        ></app-drag-drop-tasks>
       } @empty {
         <div class="empty">No tasks To do</div>
       }
     </div>
   </section>
 
-  <!-- In progress -->
   <section class="column">
     <header class="column-header">
       <h2>In progress</h2>
       <button type="button" class="add-button" aria-label="Add task to In progress">+</button>
     </header>
-    <div class="cards">
+    <div
+      class="cards"
+      cdkDropList
+      [cdkDropListData]="inProgress()"
+      (cdkDropListDropped)="onTaskDrop($event, 'in_progress')"
+    >
       @for (task of inProgress(); track task.id) {
-        <ng-container
-          [ngTemplateOutlet]="taskCard"
-          [ngTemplateOutletContext]="{ $implicit: task }"
-        ></ng-container>
+        <app-drag-drop-tasks
+          [task]="task"
+          cdkDrag
+          [cdkDragData]="task"
+          (openDetails)="openTaskDetails($event)"
+        ></app-drag-drop-tasks>
       } @empty {
         <div class="empty">No tasks In progress</div>
       }
     </div>
   </section>
 
-  <!-- Await feedback -->
   <section class="column">
     <header class="column-header">
       <h2>Await feedback</h2>
       <button type="button" class="add-button" aria-label="Add task to Await feedback">+</button>
     </header>
-    <div class="cards">
+    <div
+      class="cards"
+      cdkDropList
+      [cdkDropListData]="awaitFeedback()"
+      (cdkDropListDropped)="onTaskDrop($event, 'await_feedback')"
+    >
       @for (task of awaitFeedback(); track task.id) {
-        <ng-container [ngTemplateOutlet]="taskCard" [ngTemplateOutletContext]="{ $implicit: task }">
-        </ng-container>
+        <app-drag-drop-tasks
+          [task]="task"
+          cdkDrag
+          [cdkDragData]="task"
+          (openDetails)="openTaskDetails($event)"
+        ></app-drag-drop-tasks>
       } @empty {
         <div class="empty">No tasks Await feedback</div>
       }
     </div>
   </section>
 
-  <!-- Done: ohne "+", laut Checkliste gibt es dort kein Hinzufügen -->
   <section class="column">
     <header class="column-header">
       <h2>Done</h2>
     </header>
-    <div class="cards">
+    <div
+      class="cards"
+      cdkDropList
+      [cdkDropListData]="done()"
+      (cdkDropListDropped)="onTaskDrop($event, 'done')"
+    >
       @for (task of done(); track task.id) {
-        <ng-container [ngTemplateOutlet]="taskCard" [ngTemplateOutletContext]="{ $implicit: task }">
-        </ng-container>
+        <app-drag-drop-tasks
+          [task]="task"
+          cdkDrag
+          [cdkDragData]="task"
+          (openDetails)="openTaskDetails($event)"
+        ></app-drag-drop-tasks>
       } @empty {
         <div class="empty">No tasks Done</div>
       }
