@@ -59,7 +59,9 @@
         <div class="task-form__column task-form__column--right">
           <div class="field">
             <span class="field__label">Priority</span>
-            <div class="field__slot field__slot--priority"></div>
+            <div class="field__slot field__slot--priority">
+              <app-priority-select [(priority)]="priority" />
+            </div>
           </div>
 
           <div class="field">
