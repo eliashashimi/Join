@@ -1,0 +1,106 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.category {
+  position: relative;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  background-color: #ffffff;
+  border: 1px solid var(--input-border, #959595);
+  border-radius: 10px;
+  color: #2a3647;
+  font-size: 16px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.1s ease;
+
+  &:hover,
+  &:focus-visible {
+    border-color: #29abe2;
+    outline: none;
+  }
+}
+
+.placeholder {
+  color: #a8a8a8;
+}
+
+.value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.arrow {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  margin-left: 12px;
+  border-right: 2px solid #2a3647;
+  border-bottom: 2px solid #2a3647;
+  transform: translateY(-3px) rotate(45deg);
+  transition: transform 0.1s ease;
+}
+
+.open .arrow {
+  transform: translateY(3px) rotate(-135deg);
+}
+
+.open .field {
+  border-color: #29abe2;
+}
+
+.option-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 10;
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 0 14px rgba(0, 0, 0, 0.15);
+}
+
+.option {
+  width: 100%;
+  padding: 10px 12px;
+  background: none;
+  border: unset;
+  border-radius: 10px;
+  color: #2a3647;
+  font-size: 16px;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.1s ease;
+
+  &:hover {
+    background-color: #eeeeee;
+  }
+
+  &.selected {
+    background-color: #2a3647;
+    color: #ffffff;
+  }
+}
+
+.invalid .field {
+  border-color: #ff8190;
+}
+
+.error-text {
+  margin: 4px 0 0;
+  color: #ff8190;
+  font-size: 12px;
+}
