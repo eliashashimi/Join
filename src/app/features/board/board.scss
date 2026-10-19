@@ -1,8 +1,13 @@
+@use '../../../styles.scss';
 @use '../../../../public/assets/styles' as *;
 
 @media (min-width: 700px) {
   :host {
     padding-inline: 64px; // Figma Desktop
+  }
+  :host {
+    padding-inline: 64px; // Figma Desktop
+    width: 100%;
   }
 }
 
@@ -19,7 +24,7 @@
     font-size: 61px;
     font-weight: 700;
     line-height: 120%;
-    color: #000000;
+    color: var(--color-black);
   }
 
   .searchbar-wrapper {
@@ -33,25 +38,25 @@
       box-sizing: border-box;
       width: 312px;
       height: 48px;
-      border: 1px solid $color-muted;
+      border: 1px solid var(--color-muted);
       border-radius: 10px;
-      background: #fff;
+      background: var(--searchbar-bg);
       padding: 8px 16px;
       overflow: hidden;
-      font: 400 20px/1.2 $font-main;
-      color: #686868;
+      font: 400 20px/1.2 var(--dark-blue);
+      color: var(--dark-grey);
       transition: border-color $transition;
 
       &::placeholder {
-        color: $color-placeholder;
+        color: var(--placeholder);
       }
 
       &:hover {
-        border-color: $color-blue;
+        border-color: var(--light-blue);
       }
 
       &:focus {
-        border-color: $color-focus;
+        border-color: var(--light-blue);
       }
     }
 
@@ -66,11 +71,11 @@
       font-size: 20px;
       font-weight: 400;
       line-height: 120%;
-      color: #686868;
+      color: var(--dark-grey);
     }
 
     .search-bar input::placeholder {
-      color: #333;
+      color: var(--dark-grey2);
       opacity: 1;
     }
 
@@ -107,7 +112,7 @@
       font-size: 21px;
       font-weight: 700;
       line-height: 120%;
-      color: #ffffff;
+      color: var(--dark-btn-text);
 
       svg {
         font-weight: 700;
@@ -121,8 +126,8 @@
     }
 
     .no-results {
-      font: 400 20px/1.2 $font-label;
-      color: $color-column-title;
+      font: 400 20px/1.2;
+      color: var(--column-title);
     }
   }
 }
@@ -130,8 +135,9 @@
 // -- Spalten (mobil: untereinander)
 .board {
   display: flex;
-  flex-direction: column;
-  gap: 24px;
+  width: 100%;
+  max-width: 1208px;
+  gap: 26px;
 }
 
 .column {
@@ -149,8 +155,8 @@
 
   h2 {
     margin: 0;
-    font: 700 27px/1.2 $font-main;
-    color: $color-column-title;
+
+    color: var(--column-title);
   }
 }
 
@@ -163,7 +169,7 @@
   border: 2px solid currentColor;
   border-radius: 10px;
   background: none;
-  color: $color-main;
+  color: var(--dark-blue);
   font-size: 0;
   cursor: pointer;
   transition: color $transition;
@@ -189,15 +195,15 @@
   }
 
   &:hover {
-    color: $color-accent;
+    color: var(--light-blue);
   }
 
   &:active {
-    color: $color-pressed;
+    color: var(--active-menu);
   }
 
   &:focus-visible {
-    outline: 2px solid $color-accent;
+    outline: 2px solid var(--light-blue);
     outline-offset: 2px;
   }
 }
@@ -205,6 +211,8 @@
 // -- Kartenliste (mobil: Karten nebeneinander)
 .cards {
   display: flex;
+  flex-direction: column;
+  width: 252px;
   gap: 16px;
   margin: -$shadow-room;
   padding: $shadow-room;
@@ -220,13 +228,146 @@
   box-sizing: border-box;
   width: 100%;
   min-height: 48px;
-  border: 1px dashed $color-muted;
+  border: 1px dashed var(--color-muted);
   border-radius: 10px;
-  background: $color-empty-bg;
+  background: var(--empty-bg);
   box-shadow: $shadow-empty;
   font: 400 16px/1.2 $font-label;
-  color: $color-muted;
+  color: var(--color-muted);
   text-align: center;
+}
+
+// -- Karte --
+.card {
+  display: flex;
+  flex: 0 0 $card-width;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box;
+  padding: 16px;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: $shadow-card;
+  cursor: pointer;
+  transition: box-shadow $transition;
+
+  &:has(.progress) {
+    gap: 24px;
+  }
+
+  &:hover {
+    box-shadow: $shadow-card-hover;
+  }
+}
+
+.badge {
+  align-self: flex-start;
+  padding: 4px 16px;
+  border-radius: 8px;
+  font: 400 16px/1.2 $font-label;
+  color: var(--badge-text);
+  white-space: nowrap;
+
+  &.user-story {
+    background: var(--user-story);
+  }
+
+  &.technical-task {
+    background: var(--technical-task);
+  }
+}
+
+.card-title {
+  margin: 0;
+  font: 700 16px/1.2 $font-main;
+  color: var(--dark-blue);
+  overflow-wrap: anywhere;
+}
+
+.card-description {
+  margin: calc(8px - var(--card-gap, 20px)) 0 0;
+  overflow: hidden;
+  font: 400 16px/1.2 $font-main;
+  color: var(--color-muted);
+  overflow-wrap: anywhere;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+
+  &:empty {
+    display: none;
+  }
+}
+
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.progress-bar {
+  flex: 0 0 50%;
+  height: 8px;
+  border-radius: 8px;
+  background: var(--progress-bg);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 16px;
+  background: var(--progress-bar);
+  transition: width $transition;
+}
+
+.progress-label {
+  min-width: 0;
+  overflow: hidden;
+  font: 400 13px/1.2 $font-main;
+  color: var(--color-black);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.avatars {
+  display: flex;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  box-sizing: border-box;
+  width: $avatar-size;
+  height: $avatar-size;
+  border: 1px solid var(--color-white);
+  border-radius: 50%;
+  overflow: hidden;
+  font: 400 12px/1 $font-main;
+  color: var(--color-white);
+
+  & + & {
+    margin-left: -8px;
+  }
+}
+
+.priority {
+  display: block;
+  flex: none;
+  width: $avatar-size;
+  height: $avatar-size;
+  object-fit: none;
 }
 
 @container (min-width: 640px) {
