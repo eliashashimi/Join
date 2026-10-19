@@ -28,7 +28,6 @@ $font-label: 'Open Sans', sans-serif;
 :host {
   display: block;
   container-type: inline-size; // Das Layout richtet sich nach der Breite des Boards, nicht des Fensters
-  padding-inline: 16px; // Figma Mobile; wenn dein Layout schon Abstand setzt: entfernen
   font-family: $font-main;
   color: $color-main;
 }

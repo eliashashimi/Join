@@ -1,37 +1,4 @@
-// -- Farben -------------------------------------------------------------------
-$color-main: #2a3647; // Text, Rahmen des "+"-Buttons
-$color-column-title: #42526e;
-$color-muted: #a8a8a8; // Beschreibung, Rahmen, "No tasks"-Text
-$color-placeholder: #d1d1d1;
-$color-blue: #4589ff; // Fortschrittsbalken, Suchfeld bei Hover
-$color-focus: #005dff; // Suchfeld bei Fokus
-$color-accent: #29abe2; // Hover des "+"-Buttons (Join-Blau)
-$color-pressed: #091931;
-$color-user-story: #0038ff;
-$color-technical-task: #1fd7c1;
-$color-progress-bg: #f4f4f4;
-$color-empty-bg: #e7e7e7;
-
-// -- Schatten, Maße, Animation --------------------------------------------------
-$shadow-card: 0 0 10px 3px rgba(0, 0, 0, 0.08);
-$shadow-card-hover: 0 0 10px 3px rgba(0, 0, 0, 0.16);
-$shadow-empty: 0 0 4px rgba(0, 0, 0, 0.16);
-$card-width: 252px;
-$avatar-size: 32px;
-$shadow-room: 12px; // Platz um die Karten, damit overflow den Schatten nicht abschneidet
-$transition: 100ms ease-in-out; // Checkliste: zwischen 75ms und 125ms
-
-$font-main: 'Inter', sans-serif;
-$font-label: 'Open Sans', sans-serif;
-
-// -- Seite --------------------------------------------------------------------
-:host {
-    display: block;
-    container-type: inline-size; // Das Layout richtet sich nach der Breite des Boards, nicht des Fensters
-    padding-inline: 16px; // Figma Mobile; wenn dein Layout schon Abstand setzt: entfernen
-    font-family: $font-main;
-    color: $color-main;
-}
+@use '../../../../public/assets/styles' as *;
 
 @media (min-width: 700px) {
     :host {
@@ -161,7 +128,7 @@ $font-label: 'Open Sans', sans-serif;
 }
 
 
-// -- Spalten (mobil: untereinander) -----------------------------------------------
+// -- Spalten (mobil: untereinander)
 .board {
     display: flex;
     flex-direction: column;
@@ -172,7 +139,7 @@ $font-label: 'Open Sans', sans-serif;
     display: flex;
     flex-direction: column;
     gap: 16px;
-    min-width: 0; // lange Inhalte dürfen die Spalte nicht aufweiten
+    min-width: 0;
 }
 
 .column-header {
@@ -188,7 +155,6 @@ $font-label: 'Open Sans', sans-serif;
     }
 }
 
-// "+"-Button: Das Zeichen im HTML bleibt für Screenreader, gezeichnet wird es hier
     .add-button {
     position: relative;
     flex: none;
@@ -237,7 +203,7 @@ $font-label: 'Open Sans', sans-serif;
     }
 }
 
-// -- Kartenliste (mobil: Karten nebeneinander, seitlich wischbar wie im Figma) ------------
+// -- Kartenliste (mobil: Karten nebeneinander)
 .cards {
     display: flex;
     gap: 16px;
@@ -264,12 +230,12 @@ $font-label: 'Open Sans', sans-serif;
     text-align: center;
 }
 
-// -- Karte --------------------------------------------------------------------
+// -- Karte --
 .card {
     display: flex;
     flex: 0 0 $card-width;
     flex-direction: column;
-    gap: var(--card-gap, 20px); // Figma: 20px, mit Fortschrittsbalken 24px
+    gap: var(--card-gap, 20px);
     box-sizing: border-box;
     padding: 16px;
     border-radius: 24px;
@@ -312,22 +278,19 @@ $font-label: 'Open Sans', sans-serif;
 }
 
 .card-description {
-  // Titel und Beschreibung liegen im Figma nur 8px auseinander, der Rest der Karte 20/24px
     margin: calc(8px - var(--card-gap, 20px)) 0 0;
     overflow: hidden;
     font: 400 16px/1.2 $font-main;
     color: $color-muted;
     overflow-wrap: anywhere;
 
-    // Vorschau auf zwei Zeilen kürzen
     display: -webkit-box;
-    /* autoprefixer: ignore next */
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     line-clamp: 2;
 
     &:empty {
-        display: none; // Beschreibung ist optional
+        display: none;
     }
 }
 
@@ -338,7 +301,7 @@ $font-label: 'Open Sans', sans-serif;
 }
 
 .progress-bar {
-    flex: 0 0 50%; // Figma: 110px von 220px
+    flex: 0 0 50%;
     height: 8px;
     border-radius: 8px;
     background: $color-progress-bg;
@@ -371,7 +334,7 @@ $font-label: 'Open Sans', sans-serif;
 .avatars {
     display: flex;
     min-width: 0;
-    overflow: hidden; // mehr Kontakte als Platz: abschneiden, statt aus der Karte zu laufen
+    overflow: hidden;
 }
 
 .avatar {
@@ -384,11 +347,11 @@ $font-label: 'Open Sans', sans-serif;
     border: 1px solid #fff;
     border-radius: 50%;
     overflow: hidden;
-    font: 400 12px/1 $font-main; // Figma: 16px, das wirkt im 32px-Kreis sehr eng
+    font: 400 12px/1 $font-main;
     color: #fff;
 
     & + & {
-        margin-left: -8px; // Kreise überlappen wie im Figma
+        margin-left: -8px;
     }
 }
 
@@ -397,10 +360,9 @@ $font-label: 'Open Sans', sans-serif;
     flex: none;
     width: $avatar-size;
     height: $avatar-size;
-    object-fit: none; // Icon in Originalgröße mittig im 32px-Feld
+    object-fit: none;
 }
 
-// -- Ab 640px Boardbreite: Spalten nebeneinander (2 x 2) ------------------------------
 @container (min-width: 640px) {
     .search {
         width: 312px;
@@ -430,7 +392,6 @@ $font-label: 'Open Sans', sans-serif;
         border-radius: 8px;
     }
 
-    // Karten untereinander; lange Spalten scrollen, statt die Seite endlos zu verlängern
     .cards {
         flex-direction: column;
         overflow: hidden auto;
@@ -442,7 +403,6 @@ $font-label: 'Open Sans', sans-serif;
     }
 }
 
-// -- Ab 1040px Boardbreite: alle vier Spalten nebeneinander ---------------------------
 @container (min-width: 1040px) {
     .board {
         grid-template-columns: repeat(4, minmax(0, $card-width));

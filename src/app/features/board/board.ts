@@ -12,7 +12,7 @@ import {
 import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
-  imports: [CdkDrag, CdkDropList, NgTemplateOutlet],
+  imports: [NgTemplateOutlet],
   selector: 'app-board',
   styleUrl: './board.scss',
   templateUrl: './board.html',
