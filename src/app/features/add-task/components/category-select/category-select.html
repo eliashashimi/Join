@@ -16,7 +16,7 @@
 
   @if (isOpen()) {
     <ul class="option-list" role="listbox">
-      @for (item of categories; track item.value) {
+      @for (item of categories(); track item.value) {
         <li>
           <button
             type="button"

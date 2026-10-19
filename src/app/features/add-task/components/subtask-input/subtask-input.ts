@@ -1,3 +1,4 @@
+import { Component, model, signal } from '@angular/core';
 /**
  * Eingabefeld "Add new subtask" mit Liste der Subtasks.
  *
@@ -88,7 +89,14 @@ export class SubtaskInput {
 
   /** Löscht einen Subtask. */
   removeSubtask(index: number): void {
-    this.subtasks.update((list) => list.filter((_, i) => i !== index));
-    if (this.editIndex() === index) this.editIndex.set(null);
+  this.subtasks.update((list) => list.filter((_, i) => i !== index));
+  const editing = this.editIndex();
+  if (editing === null) return;
+  if (editing === index) {
+    this.editIndex.set(null);
+    this.hasEditError.set(false);
+  } else if (editing > index) {
+    this.editIndex.set(editing - 1);
   }
+}
 }
