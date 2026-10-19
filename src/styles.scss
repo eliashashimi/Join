@@ -1,13 +1,29 @@
-@use '../public/assets/styles';
+@use '../public/assets/styles' as *;
 @use './app/dark-mode/dark-mode';
+
 :root {
   --dark-blue: #2a3647; // Dunkles Blau (für Header, dunkle Hintergründe, Schriften)
   --active-menu: #091931; // Dunkles Blau für aktives Menü (Summery, ..., Contacts )
   --menu-hover: #2a3d59; // Aside-Menu Hovereffekt
   --header-initial-hover: #0c2e621f; // Hovereffekt der Initialien im Header
+  --dark-btn-text: #ffffff; // Textfarbe der dunklen Buttons
+  --badge-text: #ffffff;
   --menu-text: #e7e7e7; // Menu-Text
-  --light-blue: #29abe2; // Add-Button Hover
+  --color-white: #ffffff;
+  --color-black: #000000; // H2-Überschrift
+  --light-blue: #29abe2; // Add-Button-Hover
   --light-blue-2: #124658; // Button Hover dunkelblau
+  --user-story: #0038ff;
+  --technical-task: #1fd7c1;
+  --progress-bar: #4589ff;
+  --progress-bg: #f4f4f4;
+  --empty-bg: #e7e7e7;
+  --searchbar-bg: #ffffff;
+  --column-title: #42526e;
+  --dark-grey: #686868; // Rahmenfarbe, Textfarbe Cards
+  --dark-grey2: #333333;
+  --color-muted: #a8a8a8; // No tasks, Beschreibung
+  --placeholder: #d1d1d1;
 }
 
 /* Optional: Automatischer Dark Mode über CSS-Features */
@@ -21,7 +37,6 @@
 /* CSS Reset & Standard-Werte für das JOIN-Projekt */
 * {
   box-sizing: border-box;
-  font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
 }
@@ -32,6 +47,11 @@ body {
   height: 100%;
   background-color: #f6f7f8;
   color: var(--dark-blue);
+  font-family: $font-main;
+}
+
+label {
+  font-family: $font-label;
 }
 
 .content-wrapper {
