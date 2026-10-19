@@ -1,4 +1,9 @@
-import { Component, input, model, signal } from '@angular/core';
+import { Component, ElementRef, inject, input, model, signal } from '@angular/core';
+
+const CATEGORIES = [
+  { value: 'Technical Task', label: 'Technical Task' },
+  { value: 'User Story', label: 'User Story' },
+];
 
 @Component({
   selector: 'app-category-select',
@@ -6,9 +11,12 @@ import { Component, input, model, signal } from '@angular/core';
   imports: [],
   templateUrl: './category-select.html',
   styleUrl: './category-select.scss',
+  host: { '(document:click)': 'closeOnOutsideClick($event)' },
 })
 export class CategorySelect {
-  categories = input<{ value: string; label: string }[]>([]);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  categories = input<{ value: string; label: string }[]>(CATEGORIES);
 
   category = model<string>('');
 
@@ -27,5 +35,10 @@ export class CategorySelect {
   select(value: string): void {
     this.category.set(value);
     this.isOpen.set(false);
+  }
+
+  closeOnOutsideClick(event: MouseEvent): void {
+    if (!this.isOpen()) return;
+    if (!event.composedPath().includes(this.host.nativeElement)) this.isOpen.set(false);
   }
 }

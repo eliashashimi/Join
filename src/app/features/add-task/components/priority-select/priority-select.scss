@@ -1,0 +1,90 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.priority {
+  display: flex;
+  gap: 16px;
+}
+
+.priority-btn {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
+  height: 56px;
+  padding: 0 8px;
+  background-color: var(--surface, #ffffff);
+  border: 1px solid var(--border, #d1d1d1);
+  border-radius: 10px;
+  color: var(--text, #2a3647);
+  font-size: 20px;
+  cursor: pointer;
+  transition:
+    background-color 0.1s ease,
+    box-shadow 0.1s ease;
+
+  &:hover {
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--light-blue-2, #124658);
+    outline-offset: 2px;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.urgent svg {
+  color: #ff3d00;
+}
+
+.medium svg {
+  color: #ffa800;
+}
+
+.low svg {
+  color: #7ae229;
+}
+
+.priority-btn.selected {
+  color: #ffffff;
+  font-weight: 700;
+
+  svg {
+    color: #ffffff;
+  }
+}
+
+.urgent.selected {
+  background-color: #ff3d00;
+  border-color: #ff3d00;
+}
+
+.medium.selected {
+  background-color: #ffa800;
+  border-color: #ffa800;
+}
+
+.low.selected {
+  background-color: #7ae229;
+  border-color: #7ae229;
+}
+
+@media (max-width: 768px) {
+  .priority-btn {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 400px) {
+  .priority {
+    gap: 8px;
+  }
+}
