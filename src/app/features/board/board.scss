@@ -283,7 +283,7 @@
 }
 
 .card-description {
-    margin: calc(8px - var(--card-gap, 20px)) 0 0;
+    margin: calc(8px - 20px) 0 0 0;
     overflow: hidden;
     font: 400 16px/1.2 $font-main;
     color: var(--color-muted);
