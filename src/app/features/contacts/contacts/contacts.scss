@@ -177,7 +177,6 @@
   display: block;
 }
 
-// Detailansicht gleitet am Desktop von rechts herein
 @media (min-width: 1025px) and (prefers-reduced-motion: no-preference) {
   app-contact-detail {
     animation: detailSlideIn 0.25s ease-out;

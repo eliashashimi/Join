@@ -14,9 +14,6 @@ export const routes: Routes = [
     { path: 'legal-notice', component: LegalNotice },
     { path: 'board', component: Board },
     { path: 'add-task', component: AddTask },
-    // Platzhalter-Routen für Summary, Add Task und Board (behelfsweise auf Contacts gerichtet, bis die Komponenten existieren)
     { path: 'summary', redirectTo: 'contacts', pathMatch: 'full' },
-    // { path: 'board', redirectTo: 'contacts', pathMatch: 'full' },
-    // Wildcard-Route gegen weiße Seiten bei ungültigen URLs
     { path: '**', redirectTo: 'contacts' }
 ];

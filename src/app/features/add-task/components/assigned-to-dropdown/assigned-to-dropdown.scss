@@ -1,5 +1,3 @@
-/* Das Dropdown ist wie die Eingabefelder im Add/Edit-Contact immer weiß mit dunkler Schrift. */
-
 :host {
   display: block;
   width: 100%;
@@ -15,16 +13,20 @@
   width: 100%;
   height: 48px;
   padding: 0 48px 0 16px;
-  border: 1px solid var(--input-border, #959595);
+  border: 1px solid var(--border, #d1d1d1);
   border-radius: 10px;
-  background-color: #ffffff;
-  color: #2a3647;
-  font-size: 16px;
+  background-color: var(--surface, #ffffff);
+  color: var(--text, #2a3647);
+  font-size: 20px;
   outline: none;
   transition: border-color 0.1s ease;
 
+  &::placeholder {
+    color: #d1d1d1;
+  }
+
   &:focus {
-    border-color: #29abe2;
+    border-color: var(--light-blue-2, #124658);
   }
 }
 
@@ -45,8 +47,8 @@
     content: '';
     width: 8px;
     height: 8px;
-    border-right: 2px solid #2a3647;
-    border-bottom: 2px solid #2a3647;
+    border-right: 2px solid var(--text, #2a3647);
+    border-bottom: 2px solid var(--text, #2a3647);
     transform: translateY(-3px) rotate(45deg);
     transition: transform 0.1s ease;
   }
@@ -67,7 +69,7 @@
   padding: 8px;
   overflow-y: auto;
   list-style: none;
-  background-color: #ffffff;
+  background-color: var(--surface, #ffffff);
   border-radius: 10px;
   box-shadow: 0 0 14px rgba(0, 0, 0, 0.15);
 }
@@ -81,18 +83,18 @@
   background: none;
   border: unset;
   border-radius: 10px;
-  color: #2a3647;
+  color: var(--text, #2a3647);
   font-size: 16px;
   text-align: left;
   cursor: pointer;
   transition: background-color 0.1s ease;
 
   &:hover {
-    background-color: #eeeeee;
+    background-color: var(--hover, #eeeeee);
   }
 
   &.selected {
-    background-color: #2a3647;
+    background-color: var(--dark-blue, #2a3647);
     color: #ffffff;
 
     &:hover {
@@ -108,7 +110,7 @@
   justify-content: center;
   width: 40px;
   height: 40px;
-  border: 2px solid #ffffff;
+  border: 2px solid var(--surface, #ffffff);
   border-radius: 50%;
   color: #ffffff;
   font-size: 12px;
@@ -128,7 +130,7 @@
   flex-shrink: 0;
   width: 18px;
   height: 18px;
-  border: 2px solid #2a3647;
+  border: 2px solid var(--text, #2a3647);
   border-radius: 3px;
   box-sizing: border-box;
 }
@@ -166,5 +168,11 @@
 }
 
 .avatar.more {
-  background-color: #2a3647;
+  background-color: var(--dark-blue, #2a3647);
+}
+
+@media (max-width: 768px) {
+  .field-input {
+    font-size: 16px;
+  }
 }

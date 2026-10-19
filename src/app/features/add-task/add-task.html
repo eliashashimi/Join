@@ -64,17 +64,23 @@
 
           <div class="field">
             <span class="field__label">Assigned to</span>
-            <div class="field__slot"></div>
+            <div class="field__slot">
+              <app-assigned-to-dropdown [(selectedIds)]="assigneeIds" />
+            </div>
           </div>
 
           <div class="field">
             <span class="field__label">Category<span class="field__required">*</span></span>
-            <div class="field__slot"></div>
+            <div class="field__slot">
+              <app-category-select [(category)]="category" [invalid]="submitted() && !category()" />
+            </div>
           </div>
 
           <div class="field">
             <span class="field__label">Subtasks</span>
-            <div class="field__slot"></div>
+            <div class="field__slot">
+              <app-subtask-input [(subtasks)]="subtasks" />
+            </div>
           </div>
         </div>
       </div>

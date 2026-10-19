@@ -1,8 +1,6 @@
-// Dark Mode Easter Egg: Klick auf das blaue Viereck im Join-Logo.
-// Kein Button im Template nötig, kein sichtbarer Klick-Effekt.
-const LOGO_SELECTOR = 'img[src*="join-logo"]'; // an Template anpassen
-const HOTSPOT = { left: 14, top: 22, width: 24, height: 22 }; // in % vom Logo
-const DEBUG = false; // true = roter Rahmen zum Einstellen
+const LOGO_SELECTOR = 'img[src*="join-logo"]';
+const HOTSPOT = { left: 14, top: 22, width: 24, height: 22 };
+const DEBUG = false;
 const STORAGE_KEY = 'join-theme';
 const root = document.documentElement;
 
@@ -49,7 +47,6 @@ export function initDarkMode(): void {
   try {
     if (localStorage.getItem(STORAGE_KEY) === 'dark') applyTheme('dark');
   } catch {
-    /* egal */
   }
 
   document.addEventListener(
