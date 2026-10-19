@@ -1,4 +1,5 @@
-  @use './app/dark-mode/dark-mode';
+@use '../public/assets/styles';
+@use './app/dark-mode/dark-mode';
 :root {
   --dark-blue: #2a3647; // Dunkles Blau (für Header, dunkle Hintergründe, Schriften)
   --active-menu: #091931; // Dunkles Blau für aktives Menü (Summery, ..., Contacts )
