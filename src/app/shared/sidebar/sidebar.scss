@@ -1,13 +1,18 @@
-@use '../../../styles';
+@use '../../../styles.scss';
+
+:host {
+  width: 232px;
+  height: auto;
+}
 
 .sidebar {
   width: 232px;
+  height: 100%;
   background-color: var(--dark-blue);
   color: var(--menu-text);
   display: flex;
   flex-direction: column;
-  padding: 40px 0;
-  height: 100%;
+  padding: 64px 0;
   overflow-y: auto;
 }
 
@@ -15,21 +20,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 232px;
+  width: 100%;
 }
 
 .nav-menu {
   display: flex;
   flex-direction: column;
+  width: 100%;
   margin-top: 114px;
   flex: 1 0 auto;
+  gap: 15px;
 }
 
 .nav-item {
   display: flex;
   align-items: center;
+  width: 100%;
   gap: 16px;
-  padding: 12px 48px;
+  padding: 8px 56px;
   color: var(--menu-text);
   text-decoration: none;
   font-size: 16px;
@@ -43,6 +51,11 @@
     background-color: var(--active-menu);
     color: white;
     font-weight: 500;
+  }
+
+  svg {
+    width: 25px;
+    height: auto;
   }
 }
 
