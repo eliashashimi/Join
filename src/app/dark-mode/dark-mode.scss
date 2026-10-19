@@ -1,4 +1,3 @@
-/* ===== Farbvariablen ===== */
 :root {
   --bg: #f6f7f8;
   --surface: #ffffff;
@@ -19,14 +18,12 @@
   --input-border: #5a6478;
   color-scheme: dark;
 
-  /* Globaler dunkler Hintergrund und Textfarbe */
   & body,
   & main {
     background-color: var(--bg) !important;
     color: var(--text) !important;
   }
 
-  /* Container-Hintergründe */
   .help-scroll-area,
   .legal-scroll-area,
   .privacy-scroll-area,
@@ -35,7 +32,6 @@
     background-color: var(--bg) !important;
   }
 
-  /* Header-Icons */
   .top-header {
     .help-icon {
       border-color: var(--text-muted) !important;
@@ -48,19 +44,16 @@
     }
   }
 
-  /* Aktions-Icons (Edit/Delete) hell machen */
   .contact-actions img {
     filter: brightness(0) invert(1);
   }
 
-  /* Zurück-Pfeil */
   .mobile-back-btn svg,
   .mobile-back-btn svg path {
     stroke: var(--text) !important;
   }
 }
 
-/* Unabhängig vom Theme */
 img[src*='join-logo'] {
   -webkit-tap-highlight-color: transparent;
   user-select: none;

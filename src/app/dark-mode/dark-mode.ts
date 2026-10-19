@@ -10,7 +10,6 @@ function applyTheme(theme: 'light' | 'dark'): void {
   try {
     localStorage.setItem(STORAGE_KEY, theme);
   } catch {
-    /* egal */
   }
 }
 
