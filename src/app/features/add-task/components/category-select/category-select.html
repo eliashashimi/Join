@@ -1,1 +1,39 @@
-<p>category-select works!</p>
+<div class="category" [class.open]="isOpen()" [class.invalid]="invalid()">
+  <button
+    type="button"
+    class="field"
+    aria-haspopup="listbox"
+    [attr.aria-expanded]="isOpen()"
+    (click)="toggleOpen()"
+  >
+    @if (selectedLabel) {
+      <span class="value">{{ selectedLabel }}</span>
+    } @else {
+      <span class="placeholder">Select task category</span>
+    }
+    <span class="arrow"></span>
+  </button>
+
+  @if (isOpen()) {
+    <ul class="option-list" role="listbox">
+      @for (item of categories(); track item.value) {
+        <li>
+          <button
+            type="button"
+            class="option"
+            role="option"
+            [class.selected]="item.value === category()"
+            [attr.aria-selected]="item.value === category()"
+            (click)="select(item.value)"
+          >
+            {{ item.label }}
+          </button>
+        </li>
+      }
+    </ul>
+  }
+
+  @if (invalid()) {
+    <p class="error-text">This field is required</p>
+  }
+</div>
