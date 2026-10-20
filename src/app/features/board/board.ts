@@ -10,12 +10,10 @@ import {
   transferArrayItem,
   CdkDropListGroup,
 } from '@angular/cdk/drag-drop';
-import { NgTemplateOutlet } from '@angular/common';
 import { DragDropTasks } from '../drag-drop-tasks/drag-drop-tasks';
-import { DeleteConfirm } from '../../shared/delete-confirm/delete-confirm';
 
 @Component({
-  imports: [NgTemplateOutlet, DragDropTasks, DeleteConfirm, CdkDropList, CdkDropListGroup, CdkDrag],
+  imports: [DragDropTasks, CdkDropList, CdkDropListGroup, CdkDrag],
   selector: 'app-board',
   styleUrl: './board.scss',
   templateUrl: './board.html',
