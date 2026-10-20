@@ -38,8 +38,8 @@ export class EditContact {
 
   constructor() {
     effect(() => {
-      const id = this.contactId();
-      if (id) this.loadContactData(id);
+      const contact = this.contactService.contacts().find((c) => c.id === this.contactId());
+      if (contact) this.applyContactData(contact);
     });
   }
 
@@ -68,19 +68,6 @@ export class EditContact {
       this.closeModal.emit();
       this.isClosing.set(false);
     }, 250);
-  }
-
-  /**
-   * Lädt den Kontakt und füllt das Formular.
-   * @param id ID des Kontakts
-   */
-  private async loadContactData(id: string): Promise<void> {
-    try {
-      const contact = await this.contactService.getContactById(id);
-      if (contact) this.applyContactData(contact);
-    } catch {
-      this.submitError.set('Contact could not be loaded.');
-    }
   }
 
   /**
