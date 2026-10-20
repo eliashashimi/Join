@@ -9,8 +9,6 @@
     <button class="user-avatar-sm" (click)="toggleUserMenu()">SM</button>
 
     @if (showUserMenu()) {
-      <div class="user-menu-backdrop" (click)="showUserMenu.set(false)"></div>
-
       <nav class="user-menu">
         <a routerLink="/help" class="user-menu-item mobile-only" (click)="showUserMenu.set(false)"
           >Help</a
