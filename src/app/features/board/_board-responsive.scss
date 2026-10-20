@@ -1,0 +1,58 @@
+@use '../../../../public/assets/styles' as *;
+
+@mixin board-responsive {
+  @container (min-width: 640px) {
+    .search {
+      width: 312px;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, $card-width));
+    }
+
+    .column {
+      gap: 12px;
+    }
+
+    .column-header {
+      min-height: 24px;
+      padding-right: 8px;
+
+      h2 {
+        font-size: 20px;
+      }
+    }
+
+    .add-button {
+      width: 24px;
+      height: 24px;
+      border-radius: 8px;
+    }
+
+    .cards {
+      flex-direction: column;
+      overflow: hidden auto;
+      max-height: max(320px, calc(100vh - 336px));
+    }
+
+    .card {
+      flex: none;
+    }
+  }
+
+  @container (min-width: 1040px) {
+    .board {
+      grid-template-columns: repeat(4, minmax(0, $card-width));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .search,
+    .add-button,
+    .card,
+    .progress-fill {
+      transition: none;
+    }
+  }
+}

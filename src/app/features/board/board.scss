@@ -1,5 +1,6 @@
 @use '../../../styles.scss';
 @use '../../../../public/assets/styles' as *;
+@use 'board-responsive' as *;
 
 @media (min-width: 700px) {
   :host {
@@ -51,10 +52,7 @@
         color: var(--placeholder);
       }
 
-      &:hover {
-        border-color: var(--light-blue);
-      }
-
+      &:hover,
       &:focus {
         border-color: var(--light-blue);
       }
@@ -72,11 +70,11 @@
       font-weight: 400;
       line-height: 120%;
       color: var(--dark-grey);
-    }
 
-    .search-bar input::placeholder {
-      color: var(--dark-grey2);
-      opacity: 1;
+      &::placeholder {
+        color: var(--dark-grey2);
+        opacity: 1;
+      }
     }
 
     .search-button {
@@ -91,11 +89,11 @@
       background: transparent;
       color: var(--dark-blue);
       cursor: pointer;
-    }
 
-    .search-button svg {
-      width: 32px;
-      height: 32px;
+      svg {
+        width: 32px;
+        height: 32px;
+      }
     }
 
     .add-task-btn {
@@ -132,7 +130,6 @@
   }
 }
 
-// -- Spalten (mobil: untereinander)
 .board {
   display: flex;
   width: 100%;
@@ -155,7 +152,6 @@
 
   h2 {
     margin: 0;
-
     color: var(--column-title);
   }
 }
@@ -208,7 +204,6 @@
   }
 }
 
-// -- Kartenliste (mobil: Karten nebeneinander)
 .cards {
   display: flex;
   flex-direction: column;
@@ -237,7 +232,6 @@
   text-align: center;
 }
 
-// -- Karte --
 .card {
     display: flex;
     flex: 0 0 $card-width;
@@ -290,7 +284,6 @@
     font: 400 16px/1.2 $font-main;
     color: var(--color-muted);
     overflow-wrap: anywhere;
-
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
@@ -370,57 +363,4 @@
     object-fit: none;
 }
 
-@container (min-width: 640px) {
-  .search {
-    width: 312px;
-  }
-
-  .board {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, $card-width));
-  }
-
-  .column {
-    gap: 12px;
-  }
-
-  .column-header {
-    min-height: 24px;
-    padding-right: 8px;
-
-    h2 {
-      font-size: 20px;
-    }
-  }
-
-  .add-button {
-    width: 24px;
-    height: 24px;
-    border-radius: 8px;
-  }
-
-  .cards {
-    flex-direction: column;
-    overflow: hidden auto;
-    max-height: max(320px, calc(100vh - 336px));
-  }
-
-  .card {
-    flex: none;
-  }
-}
-
-@container (min-width: 1040px) {
-  .board {
-    grid-template-columns: repeat(4, minmax(0, $card-width));
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .search,
-  .add-button,
-  .card,
-  .progress-fill {
-    transition: none;
-  }
-}
+@include board-responsive;
