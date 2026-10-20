@@ -29,21 +29,6 @@ export class ContactService {
   }
 
   /**
-   * READ: Lädt einen einzelnen Kontakt.
-   * @param id ID des Kontakts
-   * @returns den Kontakt oder `null`, wenn es die ID nicht gibt
-   */
-  async getContactById(id: string): Promise<ContactInterface | null> {
-    const { data } = await this.db
-      .from(TABLE)
-      .select('*')
-      .eq('id', id)
-      .maybeSingle()
-      .throwOnError();
-    return data ? toContact(data) : null;
-  }
-
-  /**
    * CREATE: Speichert einen neuen Kontakt.
    * @param contact Daten aus dem Formular
    * @returns den gespeicherten Kontakt inklusive ID
