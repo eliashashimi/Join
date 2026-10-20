@@ -1,14 +1,14 @@
 @use '../../../../public/assets/styles' as *;
 
 @mixin board-responsive {
-  @container (min-width: 640px) {
+  @container (min-width: 800px) {
     .search {
       width: 312px;
     }
 
     .board {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, $card-width));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 
     .column {
@@ -32,8 +32,14 @@
 
     .cards {
       flex-direction: column;
-      overflow: hidden auto;
+      overflow-x: hidden;
+      overflow-y: auto;
       max-height: max(320px, calc(100vh - 336px));
+
+      app-drag-drop-tasks {
+        flex: none;
+        width: 100%;
+      }
     }
 
     .card {
@@ -41,15 +47,10 @@
     }
   }
 
-  @container (min-width: 1040px) {
-    .board {
-      grid-template-columns: repeat(4, minmax(0, $card-width));
-    }
-  }
-
   @media (prefers-reduced-motion: reduce) {
     .search,
     .add-button,
+    .cards,
     .card,
     .progress-fill {
       transition: none;

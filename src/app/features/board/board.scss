@@ -3,6 +3,8 @@
 @use 'board-responsive' as *;
 @use 'board-modal' as *;
 
+
+
 @media (min-width: 700px) {
   :host {
     padding-inline: 64px;
@@ -10,23 +12,26 @@
 }
 
 :host {
-    display: block;
+  display: block;
+  container-type: inline-size;
 }
 
 .board-head {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: sticky;
+  flex-wrap: wrap;
+  gap: 24px;
   padding: 80px 0 48px;
-  width: 1056px;
+  width: 100%;
+  max-width: 1056px;
   height: auto;
 
   h2 {
     font-size: 61px;
     font-weight: 700;
     line-height: 120%;
-    color: var(--color-black);
+    color: var(--text);
   }
 
   .searchbar-wrapper {
@@ -133,15 +138,17 @@
 
 .board {
   display: flex;
+  flex-direction: column;
   width: 100%;
   max-width: 1208px;
-  gap: 26px;
+  gap: 32px;
 }
 
 .column {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  width: 100%;
   min-width: 0;
 }
 
@@ -153,7 +160,7 @@
 
   h2 {
     margin: 0;
-    color: var(--column-title);
+    color: var(--text);
   }
 }
 
@@ -166,7 +173,7 @@
   border: 2px solid currentColor;
   border-radius: 10px;
   background: none;
-  color: var(--dark-blue);
+  color: var(--text);
   font-size: 0;
   cursor: pointer;
   transition: color $transition;
@@ -207,13 +214,17 @@
 
 .cards {
   display: flex;
-  flex-direction: column;
-  width: 252px;
+  flex-direction: row;
   gap: 16px;
   margin: -$shadow-room;
   padding: $shadow-room;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: thin;
+
+  app-drag-drop-tasks {
+    flex: 0 0 $card-width;
+  }
 }
 
 .empty {
