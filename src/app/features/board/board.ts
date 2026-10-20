@@ -6,7 +6,6 @@ import {
   CdkDrag,
   CdkDropList,
   CdkDragDrop,
-  CDK_DROP_LIST,
   moveItemInArray,
   transferArrayItem,
   CdkDropListGroup,

@@ -7,6 +7,10 @@
   }
 }
 
+:host {
+    display: block;
+}
+
 .board-head {
   display: flex;
   justify-content: space-between;
