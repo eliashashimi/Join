@@ -87,10 +87,10 @@
     }
 
     .mobile-fab-wrapper {
-      display: block;
+      display: flex;
       position: fixed;
       right: 24px;
-      bottom: 96px;
+      bottom: 195px;
       z-index: 100;
 
       .mobile-fab-btn {
