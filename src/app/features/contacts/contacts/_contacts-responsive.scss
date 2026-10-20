@@ -168,7 +168,9 @@
         width: 100%;
       }
       hr {
+        display: block;
         width: 90px;
+        height: 0px;
         border: 1.5px solid var(--light-blue);
         margin-bottom: 15px;
       }
