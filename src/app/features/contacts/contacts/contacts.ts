@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal, computed, inject } from '@angular/core';
+import { Component, OnInit, signal, computed, inject, HostListener } from '@angular/core';
 import { ContactInterface, GroupedContacts } from '../../../interface/contact-interface';
 import { ContactDetailComponent } from '../contact-detail/contact-detail';
 import { AddContact } from '../contact-form/add-contact/add-contact';
@@ -36,6 +36,16 @@ export class ContactsComponent implements OnInit {
       await this.contactService.getContacts();
     } catch {
       this.loadError.set(true);
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (this.showMobileMenu()) {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.mobile-fab-wrapper')) {
+        this.showMobileMenu.set(false);
+      }
     }
   }
 
