@@ -2,7 +2,6 @@ export type TaskStatus = 'todo' | 'in_progress' | 'await_feedback' | 'done';
 export type TaskPriority = 'urgent' | 'medium' | 'low';
 export type TaskCategory = 'user_story' | 'technical_task';
 
-/** Zeilen, wie sie in der Datenbank stehen. */
 export interface SubtaskRow {
     id: string;
     task_id: string;
@@ -26,7 +25,6 @@ export type TaskRowWithRelations = TaskRow & {
     task_assignees: { contact_id: string }[];
 };
 
-/** Task, wie ihn die App benutzt. */
 export interface SubtaskInterface {
     id: string;
     title: string;
@@ -47,7 +45,6 @@ export interface TaskInterface {
     updatedAt: string;
 }
 
-/** Daten aus dem Add-Task-Formular. */
 export interface TaskData {
     title: string;
     description?: string;
@@ -56,5 +53,5 @@ export interface TaskData {
     priority: TaskPriority;
     status: TaskStatus;
     assigneeIds: string[];
-    subtasks: string[]; // nur die Titel
+    subtasks: string[];
 }
