@@ -87,10 +87,10 @@
     }
 
     .mobile-fab-wrapper {
-      display: block;
+      display: flex;
       position: fixed;
       right: 24px;
-      bottom: 96px;
+      bottom: 195px;
       z-index: 100;
 
       .mobile-fab-btn {
@@ -168,7 +168,9 @@
         width: 100%;
       }
       hr {
+        display: block;
         width: 90px;
+        height: 0px;
         border: 1.5px solid var(--light-blue);
         margin-bottom: 15px;
       }
