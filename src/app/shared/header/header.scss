@@ -1,4 +1,5 @@
 @use '../../../styles';
+@use '../../../../public/assets/styles' as *;
 :host {
   width: 100%;
 }
@@ -61,6 +62,7 @@
       justify-content: center;
       font-weight: 700;
       font-size: 16px;
+      font-family: $font-main;
       cursor: pointer;
 
       &:hover { background-color: var(--header-initial-hover); }
