@@ -1,33 +1,12 @@
-// -- Farben -------------------------------------------------------------------
-$color-main: #2a3647; // Text, Rahmen des "+"-Buttons
-$color-column-title: #42526e;
-$color-muted: #a8a8a8; // Beschreibung, Rahmen, "No tasks"-Text
-$color-placeholder: #d1d1d1;
-$color-blue: #4589ff; // Fortschrittsbalken, Suchfeld bei Hover
-$color-focus: #005dff; // Suchfeld bei Fokus
-$color-accent: #29abe2; // Hover des "+"-Buttons (Join-Blau)
-$color-pressed: #091931;
-$color-user-story: #0038ff;
-$color-technical-task: #1fd7c1;
-$color-progress-bg: #f4f4f4;
-$color-empty-bg: #e7e7e7;
 
-// -- Schatten, Maße, Animation --------------------------------------------------
+// -- Schatten, Maße, Animation --
 $shadow-card: 0 0 10px 3px rgba(0, 0, 0, 0.08);
 $shadow-card-hover: 0 0 10px 3px rgba(0, 0, 0, 0.16);
 $shadow-empty: 0 0 4px rgba(0, 0, 0, 0.16);
 $card-width: 252px;
 $avatar-size: 32px;
-$shadow-room: 12px; // Platz um die Karten, damit overflow den Schatten nicht abschneidet
-$transition: 100ms ease-in-out; // Checkliste: zwischen 75ms und 125ms
+$shadow-room: 12px;
+$transition: 100ms ease-in-out;
 
 $font-main: 'Inter', sans-serif;
 $font-label: 'Open Sans', sans-serif;
-
-// -- Seite --------------------------------------------------------------------
-:host {
-  display: block;
-  container-type: inline-size; // Das Layout richtet sich nach der Breite des Boards, nicht des Fensters
-  font-family: $font-main;
-  color: $color-main;
-}

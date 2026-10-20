@@ -8,11 +8,15 @@ import {
   CdkDragDrop,
   CDK_DROP_LIST,
   moveItemInArray,
+  transferArrayItem,
+  CdkDropListGroup,
 } from '@angular/cdk/drag-drop';
 import { NgTemplateOutlet } from '@angular/common';
+import { DragDropTasks } from '../drag-drop-tasks/drag-drop-tasks';
+import { DeleteConfirm } from '../../shared/delete-confirm/delete-confirm';
 
 @Component({
-  imports: [NgTemplateOutlet],
+  imports: [NgTemplateOutlet, DragDropTasks, DeleteConfirm, CdkDropList, CdkDropListGroup, CdkDrag],
   selector: 'app-board',
   styleUrl: './board.scss',
   templateUrl: './board.html',
@@ -20,6 +24,7 @@ import { NgTemplateOutlet } from '@angular/common';
 export class Board implements OnInit {
   taskService = inject(TaskService);
   contactService = inject(ContactService);
+  openedTask: TaskInterface | null = null;
 
   todo = this.taskService.tasksByStatus('todo');
   inProgress = this.taskService.tasksByStatus('in_progress');
@@ -31,15 +36,40 @@ export class Board implements OnInit {
     await this.taskService.getTasks();
   }
 
-  assigneesOf(task: TaskInterface) {
-    return this.contactService.contacts().filter((c) => task.assigneeIds.includes(c.id));
+  openTaskDetails(task: TaskInterface) {
+    this.openedTask = task;
+  }
+
+  closeTaskDetails() {
+    this.openedTask = null;
+  }
+
+  deleteTask() {
+    if (this.openedTask) {
+      this.taskService.deleteTask(this.openedTask.id);
+      this.closeTaskDetails();
+    }
   }
 
   doneCount(task: TaskInterface) {
     return task.subtasks.filter((s) => s.done).length;
   }
 
-  drop(event: CdkDragDrop<string[]>) {
-    // moveItemInArray(this.todo, event.previousIndex, event.currentIndex);
+  onTaskDrop(
+    event: CdkDragDrop<TaskInterface[]>,
+    newStatus: 'todo' | 'in_progress' | 'await_feedback' | 'done',
+  ) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      const task = event.item.data as TaskInterface;
+
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex,
+      );
+    }
   }
 }
