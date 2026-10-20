@@ -7,11 +7,11 @@
 }
 
 .main-wrapper {
+  width: 100%;
   flex: 1;
   display: flex;
-  align-items: center;
   flex-direction: column;
-  overflow: hidden;
+
   background-color: #f6f7f8;
 }
 
@@ -19,6 +19,5 @@
   flex: 1;
   width: 100%;
   max-width: calc(1440px - 232px);
-  overflow: hidden;
   position: relative;
 }
