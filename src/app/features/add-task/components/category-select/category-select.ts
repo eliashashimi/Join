@@ -1,8 +1,8 @@
 import { Component, ElementRef, inject, input, model, signal } from '@angular/core';
 
 const CATEGORIES = [
-  { value: 'Technical Task', label: 'Technical Task' },
-  { value: 'User Story', label: 'User Story' },
+  { value: 'technical_task', label: 'Technical Task' },
+  { value: 'user_story', label: 'User Story' },
 ];
 
 @Component({
