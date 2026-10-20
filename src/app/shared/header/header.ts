@@ -8,6 +8,7 @@ import { filter, map, startWith } from 'rxjs';
   imports: [RouterLink],
   templateUrl: './header.html',
   styleUrl: './header.scss',
+  host: { '(document:click)': 'closeUserMenuOnOutsideClick($event)' },
 })
 export class HeaderComponent {
   private router = inject(Router);
@@ -25,15 +26,16 @@ export class HeaderComponent {
 
   private hiddenHelpRoutes = ['/help', '/legal-notice', '/privacy-policy'];
 
-  /**
-   * Zeigt das Hilfe-Symbol nur auf Seiten, die nicht in `hiddenHelpRoutes` stehen.
-   * @returns `true`, wenn das Symbol sichtbar sein soll
-   */
   isHelpVisible = computed(
     () => !this.hiddenHelpRoutes.some((route) => this.currentUrl().startsWith(route)),
   );
 
   toggleUserMenu(): void {
     this.showUserMenu.update((v) => !v);
+  }
+
+  closeUserMenuOnOutsideClick(event: MouseEvent): void {
+    const target = event.target as Element;
+    if (!target.closest('.user-menu, .user-avatar-sm')) this.showUserMenu.set(false);
   }
 }
