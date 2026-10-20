@@ -1,13 +1,9 @@
-/** Vor- und Nachname: Buchstaben aller Sprachen, Bindestrich, Apostroph und Punkt erlaubt. */
 export const NAME_REGEX = /^\p{L}[\p{L}'’.-]*(\s+\p{L}[\p{L}'’.-]*)+$/u;
 
-/** E-Mail mit beliebig vielen Subdomains und TLDs ab 2 Buchstaben, Groß-/Kleinschreibung egal. */
 export const EMAIL_REGEX = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/;
 
-/** Telefonnummer: nur Ziffern, optional ein führendes Plus. */
 export const PHONE_REGEX = /^\+?[0-9]{6,15}$/;
 
-/** Avatar-Farben. Neue Kontakte bekommen zufällig eine davon. */
 export const CONTACT_COLORS = [
   '#FF7A00',
   '#FF5EB3',

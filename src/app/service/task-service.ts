@@ -17,10 +17,9 @@ export class TaskService {
     private readonly taskList = signal<TaskInterface[]>([]);
 
     readonly tasks = this.taskList.asReadonly();
-    /** Suchtext aus dem "Find Task"-Feld. */
     readonly searchText = signal('');
+    readonly showCreatedMessage = signal(false);
 
-    /** Tasks nach Suchtext gefiltert. */
     readonly filteredTasks = computed(() => {
         const q = this.searchText().trim().toLowerCase();
         return q
@@ -30,7 +29,6 @@ export class TaskService {
             : this.taskList();
     });
 
-  /** Tasks einer Spalte, z.B. tasksByStatus('todo'). */
     tasksByStatus(status: TaskStatus) {
     return computed(() => this.filteredTasks().filter((t) => t.status === status));
     }
@@ -72,16 +70,15 @@ export class TaskService {
             .insert(task.subtasks.map((title) => ({ task_id: taskId, title: title.trim() })))
             .throwOnError();
         } catch (error) {
-            // Kein halber Task: bei Fehler wieder aufräumen (cascade löscht den Rest)
             await this.db.from(TABLE).delete().eq('id', taskId);
             throw error;
         }
 
         await this.getTasks();
+        this.showCreatedToast();
         return this.taskList().find((t) => t.id === taskId)!;
     }
 
-    /** Drag & Drop: Task in andere Spalte verschieben. */
     async moveTask(id: string, status: TaskStatus, position: number): Promise<void> {
         await this.db.from(TABLE).update({ status, position }).eq('id', id).throwOnError();
         this.taskList.update((list) => list.map((t) => (t.id === id ? { ...t, status, position } : t)));
@@ -104,6 +101,10 @@ export class TaskService {
     async deleteTask(id: string): Promise<void> {
         await this.db.from(TABLE).delete().eq('id', id).throwOnError();
         this.taskList.update((list) => list.filter((t) => t.id !== id));
+    }
+    private showCreatedToast(): void {
+        this.showCreatedMessage.set(true);
+        setTimeout(() => this.showCreatedMessage.set(false), 3000);
     }
     }
 

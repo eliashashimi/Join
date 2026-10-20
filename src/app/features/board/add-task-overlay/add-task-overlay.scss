@@ -1,0 +1,94 @@
+$animation: 0.3s ease;
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transition: opacity $animation;
+}
+
+.panel {
+  position: relative;
+  width: 100%;
+  max-width: 1116px;
+  max-height: 100%;
+  padding: 48px;
+  overflow-y: auto;
+  background-color: var(--surface, #ffffff);
+  border-radius: 30px;
+  box-shadow: 0 0 14px rgba(0, 0, 0, 0.15);
+  transform: translateX(120%);
+  transition: transform $animation;
+}
+
+.overlay.visible {
+  .backdrop {
+    opacity: 1;
+  }
+
+  .panel {
+    transform: translateX(0);
+  }
+}
+
+.title {
+  margin: 0 0 32px;
+  color: var(--text, #2a3647);
+  font-size: 61px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.close-btn {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: none;
+  border: unset;
+  border-radius: 50%;
+  color: var(--text, #2a3647);
+  cursor: pointer;
+  transition: background-color 0.1s ease;
+
+  &:hover {
+    background-color: var(--hover, #eeeeee);
+  }
+}
+
+@media (max-width: 768px) {
+  .overlay {
+    padding: 8px;
+  }
+
+  .panel {
+    height: 100%;
+    padding: 24px 16px;
+    border-radius: 20px;
+  }
+
+  .title {
+    font-size: 47px;
+  }
+
+  .close-btn {
+    top: 12px;
+    right: 12px;
+  }
+}
