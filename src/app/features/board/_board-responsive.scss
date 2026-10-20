@@ -1,3 +1,5 @@
+@use '../../../../public/assets/styles' as *;
+
 @mixin board-responsive {
   @container (min-width: 640px) {
     .search {
