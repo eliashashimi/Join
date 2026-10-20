@@ -14,16 +14,10 @@ export class ContactDetailComponent {
 
   private srv = inject(ContactService);
 
-  /**
-   * Sendet das Edit-Event ab.
-   */
   onEdit(): void {
     this.editClicked.emit();
   }
 
-  /**
-   * Öffnet den Lösch-Dialog.
-   */
   onDelete(): void {
     if (!this.contact?.id) return;
     this.srv.showDeleteModal.set(true);

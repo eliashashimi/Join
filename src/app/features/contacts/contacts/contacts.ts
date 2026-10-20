@@ -66,25 +66,21 @@ export class ContactsComponent implements OnInit {
     this.selectedContactId.set(contactId);
   }
 
-  /** Schaltet das mobile Menü um. */
   toggleMobileMenu(): void {
     this.showMobileMenu.update((val) => !val);
   }
 
-  /** Öffnet das Bearbeitungsmodal für Kontakte. */
   openEditModal(): void {
     this.showEditContactModal.set(true);
     this.showMobileMenu.set(false);
   }
 
-  /** Schließt das mobile Menü und öffnet den Lösch-Dialog. */
   onDeleteContact(): void {
     if (!this.selectedContact()?.id) return;
     this.showMobileMenu.set(false);
     this.contactService.showDeleteModal.set(true);
   }
 
-  /** Schließt den Dialog und löscht den ausgewählten Kontakt. */
   async confirmDelete(): Promise<void> {
     const id = this.selectedContactId();
     this.contactService.showDeleteModal.set(false);
