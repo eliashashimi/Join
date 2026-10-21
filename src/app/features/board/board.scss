@@ -3,11 +3,9 @@
 @use 'board-responsive' as *;
 @use 'board-modal' as *;
 
-
-
-@media (min-width: 700px) {
+@media (min-width: 300px) {
   :host {
-    padding-inline: 64px;
+    padding: 0 clamp(16px, calc(-4.571px + 5.714vw), 64px);
   }
 }
 

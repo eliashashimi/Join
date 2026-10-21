@@ -85,6 +85,9 @@
 }
 
 @media (max-width: 768px) {
+  :host {
+    width: 0;
+  }
   .sidebar {
     position: fixed;
     bottom: 0;
