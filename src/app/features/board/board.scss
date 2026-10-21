@@ -76,7 +76,7 @@
       color: var(--dark-grey);
 
       &::placeholder {
-        color: var(--dark-grey2);
+        color: var(--placeholder);
         opacity: 1;
       }
     }
@@ -89,7 +89,7 @@
       height: 32px;
       flex-shrink: 0;
       border: none;
-      border-left: 1px solid #888;
+      border-left: 1px solid var(--placeholder);
       background: transparent;
       color: var(--dark-blue);
       cursor: pointer;

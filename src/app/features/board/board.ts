@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { TaskService } from '../../service/task-service';
 import { ContactService } from '../../service/contact-service';
 import { TaskInterface } from '../../interface/task-interface';
+import { TaskOverlay } from './task-overlay/task-overlay';
 import {
   CdkDrag,
   CdkDropList,
@@ -13,7 +14,7 @@ import {
 import { DragDropTasks } from '../drag-drop-tasks/drag-drop-tasks';
 
 @Component({
-  imports: [DragDropTasks, CdkDropList, CdkDropListGroup, CdkDrag],
+  imports: [DragDropTasks, CdkDropList, CdkDropListGroup, CdkDrag, TaskOverlay],
   selector: 'app-board',
   styleUrl: './board.scss',
   templateUrl: './board.html',
@@ -52,15 +53,14 @@ export class Board implements OnInit {
     return task.subtasks.filter((s) => s.done).length;
   }
 
-  onTaskDrop(
+  async onTaskDrop(
     event: CdkDragDrop<TaskInterface[]>,
     newStatus: 'todo' | 'in_progress' | 'await_feedback' | 'done',
   ) {
+    const task = event.item.data as TaskInterface;
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      const task = event.item.data as TaskInterface;
-
       transferArrayItem(
         event.previousContainer.data,
         event.container.data,
@@ -68,5 +68,6 @@ export class Board implements OnInit {
         event.currentIndex,
       );
     }
+    await this.taskService.moveTask(task.id, newStatus, event.currentIndex);
   }
 }
