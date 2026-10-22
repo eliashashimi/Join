@@ -36,6 +36,23 @@
     display: flex;
     align-items: center;
     gap: 32px;
+    height: 100%;
+
+    .search-info {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+
+
+      p {
+        position: absolute;
+        top: 100%;
+        left: 15px;
+        margin-top: 8px;
+        font-size: 16px;
+        color: var(--valid-error);
+      }
+    }
 
     .search-bar {
       display: flex;
