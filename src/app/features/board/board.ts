@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { TaskService } from '../../service/task-service';
 import { ContactService } from '../../service/contact-service';
-import { TaskInterface } from '../../interface/task-interface';
-import { TaskOverlay } from './task-overlay/task-overlay';
+import { TaskInterface, TaskStatus } from '../../interface/task-interface';
+import { TaskOverlayService } from '../../service/task-overlay-service';
 import {
   CDK_DRAG_CONFIG,
   CdkDrag,
@@ -30,6 +30,7 @@ const DRAG_CONFIG: DragDropConfig = {
 export class Board implements OnInit {
   taskService = inject(TaskService);
   contactService = inject(ContactService);
+  taskOverlay = inject(TaskOverlayService);
   openedTask: TaskInterface | null = null;
 
   todo = this.taskService.tasksByStatus('todo');
@@ -48,6 +49,14 @@ export class Board implements OnInit {
 
   closeTaskDetails() {
     this.openedTask = null;
+  }
+
+  /**
+   * Öffnet das Add-Task-Overlay für den gewählten Status.
+   * @param status Status, den der neue Task bekommt
+   */
+  openAddTask(status: TaskStatus = 'todo'): void {
+    this.taskOverlay.open(status);
   }
 
   deleteTask() {
