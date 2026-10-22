@@ -20,6 +20,7 @@ export class DragDropTasks {
   doneCount(task: TaskInterface): number {
     return task.subtasks?.filter((s) => s.done).length || 0;
   }
+  readonly maxAvatars = 3;
 
   assigneesOf(task: TaskInterface) {
     return this.contactService.contacts().filter((c) => task.assigneeIds.includes(c.id));

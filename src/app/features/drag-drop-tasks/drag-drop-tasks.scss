@@ -13,6 +13,8 @@
   box-shadow: $shadow-card;
   cursor: pointer;
   transition: box-shadow $transition;
+  -webkit-touch-callout: none;
+    user-select: none;
 
   &:has(.progress) {
     gap: 24px;
@@ -42,9 +44,21 @@
 
 .card-title {
   margin: 0;
+  overflow: hidden;
   font: 700 16px/1.2 $font-main;
   color: var(--dark-blue);
   overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.avatar.avatar--more {
+  background: var(--surface, #ffffff);
+  border: 2px solid var(--text, var(--dark-blue));
+  color: var(--text, var(--dark-blue));
+  font: 700 14px/1 $font-main;
 }
 
 .card-description {

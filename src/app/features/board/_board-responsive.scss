@@ -1,6 +1,44 @@
 @use '../../../../public/assets/styles' as *;
 
 @mixin board-responsive {
+    @container (max-width: 799px) {
+    .board-head {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      padding: 32px 0 24px;
+
+      h2 {
+        font-size: 47px;
+      }
+
+      .no-results {
+        grid-column: 1 / -1;
+      }
+
+      .searchbar-wrapper {
+        display: contents;
+
+        .search-bar {
+          grid-column: 1 / -1;
+          grid-row: 2;
+          width: 100%;
+        }
+
+        .add-task-btn {
+          grid-column: 2;
+          grid-row: 1;
+          width: 48px;
+          padding: 0;
+
+          .btn-text {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+  
   @container (min-width: 800px) {
     .search {
       width: 312px;

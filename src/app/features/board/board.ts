@@ -4,17 +4,25 @@ import { ContactService } from '../../service/contact-service';
 import { TaskInterface } from '../../interface/task-interface';
 import { TaskOverlay } from './task-overlay/task-overlay';
 import {
+  CDK_DRAG_CONFIG,
   CdkDrag,
-  CdkDropList,
   CdkDragDrop,
+  CdkDropList,
+  CdkDropListGroup,
+  DragDropConfig,
   moveItemInArray,
   transferArrayItem,
-  CdkDropListGroup,
 } from '@angular/cdk/drag-drop';
 import { DragDropTasks } from '../drag-drop-tasks/drag-drop-tasks';
 
+const DRAG_CONFIG: DragDropConfig = {
+  dragStartDelay: { touch: 300, mouse: 0 },
+  listOrientation: 'mixed',
+};
+
 @Component({
   imports: [DragDropTasks, CdkDropList, CdkDropListGroup, CdkDrag, TaskOverlay],
+  providers: [{ provide: CDK_DRAG_CONFIG, useValue: DRAG_CONFIG }],
   selector: 'app-board',
   styleUrl: './board.scss',
   templateUrl: './board.html',

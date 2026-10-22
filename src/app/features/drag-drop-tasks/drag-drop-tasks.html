@@ -26,12 +26,16 @@
     </div>
   }
 
+  @let assignees = assigneesOf(task);
   <div class="card-footer">
     <div class="avatars">
-      @for (contact of assigneesOf(task); track contact.id) {
+      @for (contact of assignees.slice(0, maxAvatars); track contact.id) {
         <span class="avatar" [style.background-color]="contact.color">
           {{ contact.initials }}
         </span>
+      }
+      @if (assignees.length > maxAvatars) {
+        <span class="avatar avatar--more">+{{ assignees.length - maxAvatars }}</span>
       }
     </div>
     <img
