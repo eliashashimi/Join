@@ -44,6 +44,9 @@
             placeholder="dd/mm/yyyy"
             autocomplete="off"
             formControlName="dueDate"
+            (input)="onDateInput($event)"
+            maxlength="10"
+            inputmode="numeric"
           />
           <svg class="field__icon" viewBox="0 0 24 24" aria-hidden="true">
             <path

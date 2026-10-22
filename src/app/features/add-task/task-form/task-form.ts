@@ -7,6 +7,7 @@ import { CategorySelect } from '../components/category-select/category-select';
 import { Priority, PrioritySelect } from '../components/priority-select/priority-select';
 import { SubtaskInput } from '../components/subtask-input/subtask-input';
 import { dueDateValidator, toIsoDate } from './task-form-utils';
+import { formatDateInput } from './task-form-utils';
 
 @Component({
   selector: 'app-task-form',
@@ -48,6 +49,17 @@ export class TaskForm {
     if (errors?.['pastDate']) return 'The date must not be in the past';
     return 'This field is required';
   }
+
+  /**
+ * Setzt beim Tippen im Datumsfeld die Schrägstriche.
+ * @param event das Input-Event des Datumsfelds
+ */
+  onDateInput(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  const formatted = formatDateInput(input.value);
+  input.value = formatted;
+  this.taskForm.get('dueDate')?.setValue(formatted);
+}
 
   async createTask(): Promise<void> {
     this.submitted.set(true);
