@@ -42,7 +42,7 @@
         <p class="no-results">Keine Ergebnisse gefunden</p>
       }
     </div>
-    <button class="add-task-btn">
+    <button class="add-task-btn" type="button" aria-label="Add task" (click)="openAddTask()">
       <span class="btn-text">Add task</span>
       <svg
         width="32"
@@ -77,7 +77,14 @@
   <section class="column">
     <header class="column-header">
       <h2>To do</h2>
-      <button type="button" class="add-button" aria-label="Add task to To do">+</button>
+      <button
+        type="button"
+        class="add-button"
+        aria-label="Add task to To do"
+        (click)="openAddTask('todo')"
+      >
+        +
+      </button>
     </header>
     <div
       class="cards"
@@ -101,7 +108,14 @@
   <section class="column">
     <header class="column-header">
       <h2>In progress</h2>
-      <button type="button" class="add-button" aria-label="Add task to In progress">+</button>
+      <button
+        type="button"
+        class="add-button"
+        aria-label="Add task to In progress"
+        (click)="openAddTask('in_progress')"
+      >
+        +
+      </button>
     </header>
     <div
       class="cards"
@@ -125,7 +139,14 @@
   <section class="column">
     <header class="column-header">
       <h2>Await feedback</h2>
-      <button type="button" class="add-button" aria-label="Add task to Await feedback">+</button>
+      <button
+        type="button"
+        class="add-button"
+        aria-label="Add task to Await feedback"
+        (click)="openAddTask('await_feedback')"
+      >
+        +
+      </button>
     </header>
     <div
       class="cards"
