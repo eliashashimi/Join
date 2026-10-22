@@ -1,17 +1,19 @@
-/* ===== Farbvariablen ===== */
 :root {
   --bg: #f6f7f8;
   --surface: #ffffff;
+  --card-bg: #ffffff;
   --text: #2a3647;
   --text-muted: #a8a8a8;
   --border: #d1d1d1;
   --hover: #f0f0f0;
   --input-border: #959595;
+  
 }
 
 :root[data-theme='dark'] {
   --bg: #1b1f27;
   --surface: #252b36;
+  --card-bg: #7A93AC;
   --text: #e8eaed;
   --text-muted: #9aa3b2;
   --border: #3a4252;
@@ -19,14 +21,12 @@
   --input-border: #5a6478;
   color-scheme: dark;
 
-  /* Globaler dunkler Hintergrund und Textfarbe */
   & body,
   & main {
     background-color: var(--bg) !important;
     color: var(--text) !important;
   }
 
-  /* Container-Hintergründe */
   .help-scroll-area,
   .legal-scroll-area,
   .privacy-scroll-area,
@@ -35,7 +35,6 @@
     background-color: var(--bg) !important;
   }
 
-  /* Header-Icons */
   .top-header {
     .help-icon {
       border-color: var(--text-muted) !important;
@@ -48,19 +47,16 @@
     }
   }
 
-  /* Aktions-Icons (Edit/Delete) hell machen */
   .contact-actions img {
     filter: brightness(0) invert(1);
   }
 
-  /* Zurück-Pfeil */
   .mobile-back-btn svg,
   .mobile-back-btn svg path {
     stroke: var(--text) !important;
   }
 }
 
-/* Unabhängig vom Theme */
 img[src*='join-logo'] {
   -webkit-tap-highlight-color: transparent;
   user-select: none;

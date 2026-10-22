@@ -2,17 +2,27 @@ import { Component, inject, OnInit } from '@angular/core';
 import { TaskService } from '../../service/task-service';
 import { ContactService } from '../../service/contact-service';
 import { TaskInterface } from '../../interface/task-interface';
+import { TaskOverlay } from './task-overlay/task-overlay';
 import {
+  CDK_DRAG_CONFIG,
   CdkDrag,
-  CdkDropList,
   CdkDragDrop,
-  CDK_DROP_LIST,
+  CdkDropList,
+  CdkDropListGroup,
+  DragDropConfig,
   moveItemInArray,
+  transferArrayItem,
 } from '@angular/cdk/drag-drop';
-import { NgTemplateOutlet } from '@angular/common';
+import { DragDropTasks } from '../drag-drop-tasks/drag-drop-tasks';
+
+const DRAG_CONFIG: DragDropConfig = {
+  dragStartDelay: { touch: 300, mouse: 0 },
+  listOrientation: 'mixed',
+};
 
 @Component({
-  imports: [CdkDrag, CdkDropList, NgTemplateOutlet],
+  imports: [DragDropTasks, CdkDropList, CdkDropListGroup, CdkDrag],
+  providers: [{ provide: CDK_DRAG_CONFIG, useValue: DRAG_CONFIG }],
   selector: 'app-board',
   styleUrl: './board.scss',
   templateUrl: './board.html',
@@ -20,6 +30,7 @@ import { NgTemplateOutlet } from '@angular/common';
 export class Board implements OnInit {
   taskService = inject(TaskService);
   contactService = inject(ContactService);
+  openedTask: TaskInterface | null = null;
 
   todo = this.taskService.tasksByStatus('todo');
   inProgress = this.taskService.tasksByStatus('in_progress');
@@ -31,15 +42,40 @@ export class Board implements OnInit {
     await this.taskService.getTasks();
   }
 
-  assigneesOf(task: TaskInterface) {
-    return this.contactService.contacts().filter((c) => task.assigneeIds.includes(c.id));
+  openTaskDetails(task: TaskInterface) {
+    this.openedTask = task;
+  }
+
+  closeTaskDetails() {
+    this.openedTask = null;
+  }
+
+  deleteTask() {
+    if (this.openedTask) {
+      this.taskService.deleteTask(this.openedTask.id);
+      this.closeTaskDetails();
+    }
   }
 
   doneCount(task: TaskInterface) {
     return task.subtasks.filter((s) => s.done).length;
   }
 
-  drop(event: CdkDragDrop<string[]>) {
-    // moveItemInArray(this.todo, event.previousIndex, event.currentIndex);
+  async onTaskDrop(
+    event: CdkDragDrop<TaskInterface[]>,
+    newStatus: 'todo' | 'in_progress' | 'await_feedback' | 'done',
+  ) {
+    const task = event.item.data as TaskInterface;
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex,
+      );
+    }
+    await this.taskService.moveTask(task.id, newStatus, event.currentIndex);
   }
 }

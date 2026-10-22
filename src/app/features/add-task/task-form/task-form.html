@@ -1,0 +1,126 @@
+<form
+  class="task-form"
+  [class.task-form--overlay]="isOverlay()"
+  [formGroup]="taskForm"
+  novalidate
+  (ngSubmit)="createTask()"
+>
+  <div class="task-form__columns">
+    <div class="task-form__column task-form__column--left">
+      <div class="field" [class.field--invalid]="isInvalid('title')">
+        <label class="field__label" for="task-title">
+          Title<span class="field__required">*</span>
+        </label>
+        <input
+          id="task-title"
+          class="field__input"
+          type="text"
+          placeholder="Enter a title"
+          autocomplete="off"
+          formControlName="title"
+        />
+        <span class="field__error">This field is required</span>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="task-description">Description</label>
+        <textarea
+          id="task-description"
+          class="field__input field__input--textarea"
+          placeholder="Enter a Description"
+          formControlName="description"
+        ></textarea>
+      </div>
+
+      <div class="field" [class.field--invalid]="isInvalid('dueDate')">
+        <label class="field__label" for="task-due-date">
+          Due date<span class="field__required">*</span>
+        </label>
+        <div class="field__control">
+          <input
+            id="task-due-date"
+            class="field__input field__input--date"
+            type="text"
+            placeholder="dd/mm/yyyy"
+            autocomplete="off"
+            formControlName="dueDate"
+            (input)="onDateInput($event)"
+            maxlength="10"
+            inputmode="numeric"
+          />
+          <svg class="field__icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              fill="currentColor"
+              d="M14.5 18C13.8 18 13.21 17.76 12.73 17.28C12.24 16.79 12 16.2 12 15.5C12 14.8 12.24 14.21 12.73 13.73C13.21 13.24 13.8 13 14.5 13C15.2 13 15.79 13.24 16.28 13.73C16.76 14.21 17 14.8 17 15.5C17 16.2 16.76 16.79 16.28 17.28C15.79 17.76 15.2 18 14.5 18ZM5 22C4.45 22 3.98 21.8 3.59 21.41C3.2 21.02 3 20.55 3 20L3 6C3 5.45 3.2 4.98 3.59 4.59C3.98 4.2 4.45 4 5 4L6 4L6 3C6 2.72 6.1 2.48 6.29 2.29C6.48 2.1 6.72 2 7 2C7.28 2 7.52 2.1 7.71 2.29C7.9 2.48 8 2.72 8 3L8 4L16 4L16 3C16 2.72 16.1 2.48 16.29 2.29C16.48 2.1 16.72 2 17 2C17.28 2 17.52 2.1 17.71 2.29C17.9 2.48 18 2.72 18 3L18 4L19 4C19.55 4 20.02 4.2 20.41 4.59C20.8 4.98 21 5.45 21 6L21 20C21 20.55 20.8 21.02 20.41 21.41C20.02 21.8 19.55 22 19 22L5 22ZM5 20L19 20L19 10L5 10L5 20ZM5 8L19 8L19 6L5 6L5 8Z"
+            />
+          </svg>
+        </div>
+        <span class="field__error">{{ dueDateMessage() }}</span>
+      </div>
+    </div>
+
+    <div class="task-form__divider"></div>
+
+    <div class="task-form__column task-form__column--right">
+      <div class="field">
+        <span class="field__label">Priority</span>
+        <div class="field__slot field__slot--priority">
+          <app-priority-select [(priority)]="priority" />
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="field__label">Assigned to</span>
+        <div class="field__slot">
+          <app-assigned-to-dropdown [(selectedIds)]="assigneeIds" />
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="field__label">Category<span class="field__required">*</span></span>
+        <div class="field__slot">
+          <app-category-select [(category)]="category" [invalid]="submitted() && !category()" />
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="field__label">Subtasks</span>
+        <div class="field__slot">
+          <app-subtask-input [(subtasks)]="subtasks" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="task-form__footer">
+    <p class="task-form__hint"><span class="field__required">*</span>This field is required</p>
+
+    @if (hasSaveError()) {
+      <p class="task-form__save-error">The task could not be saved. Please try again.</p>
+    }
+
+    <div class="task-form__actions">
+      <button type="button" class="btn btn--secondary" (click)="onSecondaryClick()">
+        {{ isOverlay() ? 'Cancel' : 'Clear' }}
+        <svg width="24" height="24" viewBox="-5.5 -5.5 24 24" fill="none" aria-hidden="true">
+          <path
+            d="M6.243 6.243L11.486 11.486M1 11.486L6.243 6.243L1 11.486ZM11.486 1L6.242 6.243L11.486 1ZM6.242 6.243L1 1L6.242 6.243Z"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+      <button type="submit" class="btn btn--primary" [disabled]="isSaving()">
+        Create Task
+        <svg width="24" height="24" viewBox="-4 -6 24 24" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M5.288 8.775L13.763 0.3C13.963 0.1 14.2005 0 14.4755 0C14.7505 0 14.988 0.1 15.188 0.3C15.388 0.5 15.488 0.7375 15.488 1.0125C15.488 1.2875 15.388 1.525 15.188 1.725L5.988 10.925C5.788 11.125 5.55467 11.225 5.288 11.225C5.02133 11.225 4.788 11.125 4.588 10.925L0.288 6.625C0.088 6.425 -0.00783333 6.1875 0.0005 5.9125C0.00883333 5.6375 0.113 5.4 0.313 5.2C0.513 5 0.7505 4.9 1.0255 4.9C1.3005 4.9 1.538 5 1.738 5.2L5.288 8.775Z"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+</form>

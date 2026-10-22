@@ -13,21 +13,25 @@
   width: 100%;
   height: 48px;
   padding: 0 96px 0 16px;
-  background-color: #ffffff;
-  border: 1px solid var(--input-border, #959595);
+  background-color: var(--surface, #ffffff);
+  border: 1px solid var(--border, #d1d1d1);
   border-radius: 10px;
-  color: #2a3647;
-  font-size: 16px;
+  color: var(--text, #2a3647);
+  font-size: 20px;
   outline: none;
   transition: border-color 0.1s ease;
 
+  &::placeholder {
+    color: #d1d1d1;
+  }
+
   &:focus {
-    border-color: #29abe2;
+    border-color: var(--light-blue-2, #124658);
   }
 }
 
 .add-field.invalid .field-input {
-  border-color: #ff8190;
+  border-color: #e60026;
 }
 
 .field-actions {
@@ -48,24 +52,24 @@
   background: none;
   border: unset;
   border-radius: 50%;
-  color: #2a3647;
+  color: var(--text, #2a3647);
   cursor: pointer;
   transition: background-color 0.1s ease;
 
   &:hover {
-    background-color: #d1d1d1;
+    background-color: var(--border, #d1d1d1);
   }
 }
 
 .divider {
   width: 1px;
   height: 20px;
-  background-color: #d1d1d1;
+  background-color: var(--border, #d1d1d1);
 }
 
 .error-text {
   margin: 4px 0 0;
-  color: #ff8190;
+  color: #e60026;
   font-size: 12px;
 }
 
@@ -122,10 +126,10 @@
   min-width: 0;
   height: 32px;
   padding: 0 8px;
-  background-color: #ffffff;
+  background-color: var(--surface, #ffffff);
   border: 1px solid #29abe2;
   border-radius: 8px;
-  color: #2a3647;
+  color: var(--text, #2a3647);
   font-size: 16px;
   outline: none;
 }
@@ -142,9 +146,14 @@
   background-color: transparent;
 }
 
-/* Auf Touch-Geräten gibt es kein Hover, dort sind die Icons immer sichtbar. */
 @media (hover: none) {
   .item-actions {
     visibility: visible;
+  }
+}
+
+@media (max-width: 768px) {
+  .field-input {
+    font-size: 16px;
   }
 }

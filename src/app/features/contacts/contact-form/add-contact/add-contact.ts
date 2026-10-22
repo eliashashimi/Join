@@ -22,7 +22,6 @@ export class AddContact {
   private fb = inject(FormBuilder);
   private contactService = inject(ContactService);
 
-  /** Avatar-Farbe: einmal beim Öffnen gewählt und beim Speichern übernommen. */
   readonly color = randomColor();
 
   formSubmitted = signal(false);
@@ -39,22 +38,18 @@ export class AddContact {
     phone: ['', [Validators.required, Validators.pattern(PHONE_REGEX)]],
   });
 
-  /** Formularfeld für den Namen. */
   get name() {
     return this.userform.get('name');
   }
 
-  /** Formularfeld für die E-Mail-Adresse. */
   get email() {
     return this.userform.get('email');
   }
 
-  /** Formularfeld für die Telefonnummer. */
   get phone() {
     return this.userform.get('phone');
   }
 
-  /** Schließt das Modal nach der Slide-out-Animation. */
   close(): void {
     if (this.isClosing()) return;
     this.isClosing.set(true);
@@ -86,7 +81,6 @@ export class AddContact {
     };
   }
 
-  /** Setzt das Formular zurück und schließt das Modal. */
   private resetAndCloseForm(): void {
     this.userform.reset();
     this.formSubmitted.set(false);
@@ -115,7 +109,6 @@ export class AddContact {
     this.isSubmitting.set(false);
   }
 
-  /** Speichert den Kontakt in der Datenbank. */
   private async createContact(): Promise<void> {
     try {
       const created = await this.contactService.addContact(this.getFormData());
@@ -125,7 +118,6 @@ export class AddContact {
     }
   }
 
-  /** Prüft das Formular und legt bei gültigen Eingaben den Kontakt an. */
   async onSubmit(): Promise<void> {
     this.formSubmitted.set(true);
     this.emailExistingError.set(false);

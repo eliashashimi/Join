@@ -1,6 +1,4 @@
-// Responsive Styles der Kontaktseite.
-// Die Mixins werden am Ende von contacts.scss eingebunden, damit sie die
-// Basis-Styles überschreiben (bei gleicher Spezifität gewinnt die spätere Regel).
+@use '../../../../../public/assets/styles' as *;
 
 @keyframes fadeInPopup {
   from {
@@ -13,7 +11,6 @@
   }
 }
 
-// Handy: bis 768 px
 @mixin phone {
   @media (max-width: 768px) {
     .contacts-container {
@@ -92,10 +89,10 @@
     }
 
     .mobile-fab-wrapper {
-      display: block;
+      display: flex;
       position: fixed;
       right: 24px;
-      bottom: 96px;
+      bottom: 195px;
       z-index: 100;
 
       .mobile-fab-btn {
@@ -139,6 +136,7 @@
           gap: 12px;
           padding: 12px 20px;
           font-size: 16px;
+          font-family: $font-main;
           color: var(--text, #2a3647);
           cursor: pointer;
           text-align: left;
@@ -173,7 +171,9 @@
         width: 100%;
       }
       hr {
+        display: block;
         width: 90px;
+        height: 0px;
         border: 1.5px solid var(--light-blue);
         margin-bottom: 15px;
       }
@@ -181,7 +181,6 @@
   }
 }
 
-// Tablet: 769 bis 1024 px
 @mixin tablet {
   @media (min-width: 769px) and (max-width: 1024px) {
     .contacts-list-container {

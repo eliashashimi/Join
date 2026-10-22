@@ -36,36 +36,30 @@ export class EditContact {
     phone: ['', [Validators.required, Validators.pattern(PHONE_REGEX)]],
   });
 
-  /** Lädt die Kontaktdaten neu, sobald sich die ID ändert. */
   constructor() {
     effect(() => {
-      const id = this.contactId();
-      if (id) this.loadContactData(id);
+      const contact = this.contactService.contacts().find((c) => c.id === this.contactId());
+      if (contact) this.applyContactData(contact);
     });
   }
 
-  /** Formularfeld für den Namen. */
   get name() {
     return this.userform.get('name');
   }
 
-  /** Formularfeld für die E-Mail-Adresse. */
   get email() {
     return this.userform.get('email');
   }
 
-  /** Formularfeld für die Telefonnummer. */
   get phone() {
     return this.userform.get('phone');
   }
 
-  /** Öffnet den Lösch-Dialog und schließt das Edit-Modal. */
   onDeleteClick(): void {
     this.contactService.showDeleteModal.set(true);
     this.close();
   }
 
-  /** Schließt das Modal nach der Slide-out-Animation. */
   close(): void {
     if (this.isClosing()) return;
     this.isClosing.set(true);
@@ -74,19 +68,6 @@ export class EditContact {
       this.closeModal.emit();
       this.isClosing.set(false);
     }, 250);
-  }
-
-  /**
-   * Lädt den Kontakt und füllt das Formular.
-   * @param id ID des Kontakts
-   */
-  private async loadContactData(id: string): Promise<void> {
-    try {
-      const contact = await this.contactService.getContactById(id);
-      if (contact) this.applyContactData(contact);
-    } catch {
-      this.submitError.set('Contact could not be loaded.');
-    }
   }
 
   /**
@@ -122,7 +103,6 @@ export class EditContact {
     };
   }
 
-  /** Setzt das Formular zurück und schließt das Modal. */
   private resetAndCloseForm(): void {
     this.userform.reset();
     this.formSubmitted.set(false);
@@ -140,7 +120,6 @@ export class EditContact {
     this.isSubmitting.set(false);
   }
 
-  /** Speichert die Änderungen in der Datenbank. */
   private async saveContact(): Promise<void> {
     try {
       await this.contactService.updateContact(this.contactId(), this.getFormData());
@@ -150,7 +129,6 @@ export class EditContact {
     }
   }
 
-  /** Prüft das Formular und speichert bei gültigen Eingaben. */
   async onSubmit(): Promise<void> {
     this.formSubmitted.set(true);
     this.emailExistingError.set(false);

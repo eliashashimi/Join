@@ -1,1 +1,47 @@
-<p>drag-drop-tasks works!</p>
+<article class="card" (click)="onCardClick()">
+  <span
+    class="badge"
+    [class.user-story]="task.category === 'user_story'"
+    [class.technical-task]="task.category === 'technical_task'"
+  >
+    {{ task.category === 'user_story' ? 'User Story' : 'Technical Task' }}
+  </span>
+
+  <h3 class="card-title">{{ task.title }}</h3>
+  <p class="card-description">{{ task.description }}</p>
+
+  @if (task.subtasks.length) {
+    @let doneSubtasks = doneCount(task);
+    <div
+      class="progress"
+      [title]="doneSubtasks + ' von ' + task.subtasks.length + ' Subtasks erledigt'"
+    >
+      <div class="progress-bar">
+        <div
+          class="progress-fill"
+          [style.width.%]="(doneSubtasks / task.subtasks.length) * 100"
+        ></div>
+      </div>
+      <span class="progress-label">{{ doneSubtasks }}/{{ task.subtasks.length }} Subtasks</span>
+    </div>
+  }
+
+  @let assignees = assigneesOf(task);
+  <div class="card-footer">
+    <div class="avatars">
+      @for (contact of assignees.slice(0, maxAvatars); track contact.id) {
+        <span class="avatar" [style.background-color]="contact.color">
+          {{ contact.initials }}
+        </span>
+      }
+      @if (assignees.length > maxAvatars) {
+        <span class="avatar avatar--more">+{{ assignees.length - maxAvatars }}</span>
+      }
+    </div>
+    <img
+      class="priority"
+      [src]="'./assets/images/prio-' + task.priority + '.svg'"
+      [alt]="task.priority"
+    />
+  </div>
+</article>

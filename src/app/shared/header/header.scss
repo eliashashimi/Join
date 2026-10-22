@@ -1,4 +1,9 @@
 @use '../../../styles';
+@use '../../../../public/assets/styles' as *;
+:host {
+  width: 100%;
+}
+
 .top-header {
   display: flex;
   justify-content: space-between;
@@ -57,17 +62,12 @@
       justify-content: center;
       font-weight: 700;
       font-size: 16px;
+      font-family: $font-main;
       cursor: pointer;
 
       &:hover { background-color: var(--header-initial-hover); }
     }
   }
-}
-
-.user-menu-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
 }
 
 .user-menu {

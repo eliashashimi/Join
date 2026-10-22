@@ -10,7 +10,6 @@ import { Location } from '@angular/common';
 export class HelpPageComponent {
   private location = inject(Location);
 
-  /** Geht zur vorherigen Seite zurück. */
   onBack(): void {
     this.location.back();
   }
