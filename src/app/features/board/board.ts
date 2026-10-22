@@ -21,7 +21,7 @@ const DRAG_CONFIG: DragDropConfig = {
 };
 
 @Component({
-  imports: [DragDropTasks, CdkDropList, CdkDropListGroup, CdkDrag, TaskOverlay],
+  imports: [DragDropTasks, CdkDropList, CdkDropListGroup, CdkDrag],
   providers: [{ provide: CDK_DRAG_CONFIG, useValue: DRAG_CONFIG }],
   selector: 'app-board',
   styleUrl: './board.scss',
