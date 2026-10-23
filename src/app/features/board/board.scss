@@ -39,10 +39,13 @@
     height: 100%;
 
     .search-info {
-      position: relative;
-      display: flex;
-      flex-direction: column;
+  grid-column: 1 / -1;
+  grid-row: 2;
+  min-width: 0;
+}
 
+.search-bar {
+  width: 100%;
 
       p {
         position: absolute;
