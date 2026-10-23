@@ -14,6 +14,7 @@ import {
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
 import { DragDropTasks } from '../drag-drop-tasks/drag-drop-tasks';
+import { TaskOverlay } from './task-overlay/task-overlay';
 
 const DRAG_CONFIG: DragDropConfig = {
   dragStartDelay: { touch: 300, mouse: 0 },
@@ -21,7 +22,7 @@ const DRAG_CONFIG: DragDropConfig = {
 };
 
 @Component({
-  imports: [DragDropTasks, CdkDropList, CdkDropListGroup, CdkDrag],
+  imports: [DragDropTasks, CdkDropList, CdkDropListGroup, CdkDrag, TaskOverlay],
   providers: [{ provide: CDK_DRAG_CONFIG, useValue: DRAG_CONFIG }],
   selector: 'app-board',
   styleUrl: './board.scss',

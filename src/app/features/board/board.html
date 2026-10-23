@@ -190,3 +190,7 @@
     </div>
   </section>
 </div>
+
+@if (openedTask) {
+  <app-task-overlay [task]="openedTask" (closeOverlay)="closeTaskDetails()"> </app-task-overlay>
+}
