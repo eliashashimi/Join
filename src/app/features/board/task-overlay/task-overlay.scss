@@ -1,4 +1,5 @@
 @use '../../../../../public/assets/styles';
+@use '../../add-task/task-form/task-form.scss' as *;
 
 .modal-overlay {
   @include styles.flex-center;
