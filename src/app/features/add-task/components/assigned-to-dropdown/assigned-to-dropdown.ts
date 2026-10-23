@@ -30,6 +30,9 @@ export class AssignedToDropdown implements OnInit {
   readonly visibleChips = computed(() => this.selectedContacts().slice(0, MAX_CHIPS));
   readonly hiddenCount = computed(() => Math.max(0, this.selectedContacts().length - MAX_CHIPS));
 
+  /**
+   * Lädt die Kontakte, falls sie noch fehlen, und merkt sich einen Ladefehler.
+   */
   async ngOnInit(): Promise<void> {
     if (this.contactService.contacts().length) return;
     try {
@@ -39,37 +42,63 @@ export class AssignedToDropdown implements OnInit {
     }
   }
 
+  /**
+   * Öffnet die Kontaktliste.
+   */
   open(): void {
     this.isOpen.set(true);
   }
 
+  /**
+   * Schließt die Kontaktliste und leert das Suchfeld.
+   */
   close(): void {
     this.isOpen.set(false);
     this.searchText.set('');
   }
 
+  /**
+   * Öffnet die Kontaktliste oder schließt sie, wenn sie schon offen ist.
+   */
   toggleOpen(): void {
     if (this.isOpen()) this.close();
     else this.open();
   }
 
+  /**
+   * Schließt die Liste bei einem Klick außerhalb der Komponente.
+   * @param event das Klick-Event auf dem Dokument
+   */
   closeOnOutsideClick(event: MouseEvent): void {
     if (!this.isOpen()) return;
     const target = event.target as Node;
     if (!this.host.nativeElement.contains(target)) this.close();
   }
 
+  /**
+   * Übernimmt den Suchtext und öffnet die Liste.
+   * @param event das Input-Event des Suchfelds
+   */
   onSearch(event: Event): void {
     this.searchText.set((event.target as HTMLInputElement).value);
     this.open();
   }
 
+  /**
+   * Wählt einen Kontakt aus oder wieder ab.
+   * @param id die ID des Kontakts
+   */
   toggleContact(id: string): void {
     this.selectedIds.update((ids) =>
       ids.includes(id) ? ids.filter((selectedId) => selectedId !== id) : [...ids, id],
     );
   }
 
+  /**
+   * Prüft, ob ein Kontakt ausgewählt ist.
+   * @param id die ID des Kontakts
+   * @returns true, wenn der Kontakt ausgewählt ist
+   */
   isSelected(id: string): boolean {
     return this.selectedIds().includes(id);
   }

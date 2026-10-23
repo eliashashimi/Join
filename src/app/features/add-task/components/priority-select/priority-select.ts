@@ -17,6 +17,10 @@ export class PrioritySelect {
   readonly priority = model<Priority>('medium');
   readonly priorities = PRIORITIES;
 
+  /**
+   * Setzt die gewählte Priorität.
+   * @param value die Priorität, die aktiv werden soll
+   */
   select(value: Priority): void {
     this.priority.set(value);
   }
