@@ -4,6 +4,7 @@
   [formGroup]="taskForm"
   novalidate
   (ngSubmit)="createTask()"
+  (keydown.enter)="blockSlotEnter($event)"
 >
   <div class="task-form__columns">
     <div class="task-form__column task-form__column--left">

@@ -6,8 +6,7 @@ import { AssignedToDropdown } from '../components/assigned-to-dropdown/assigned-
 import { CategorySelect } from '../components/category-select/category-select';
 import { Priority, PrioritySelect } from '../components/priority-select/priority-select';
 import { SubtaskInput } from '../components/subtask-input/subtask-input';
-import { dueDateValidator, toIsoDate } from './task-form-utils';
-import { formatDateInput } from './task-form-utils';
+import { dueDateValidator, formatDateInput, toIsoDate } from './task-form-utils';
 
 @Component({
   selector: 'app-task-form',
@@ -38,11 +37,20 @@ export class TaskForm {
   readonly isSaving = signal(false);
   readonly hasSaveError = signal(false);
 
+  /**
+   * Prüft, ob ein Pflichtfeld als fehlerhaft angezeigt werden soll.
+   * @param name Name des Formularfelds
+   * @returns true, wenn das Feld ungültig und berührt oder abgesendet ist
+   */
   isInvalid(name: 'title' | 'dueDate'): boolean {
     const control = this.taskForm.controls[name];
     return control.invalid && (control.touched || this.submitted());
   }
 
+  /**
+   * Liefert die Fehlermeldung zum Fälligkeitsdatum.
+   * @returns der Hinweistext passend zum aktuellen Fehler
+   */
   dueDateMessage(): string {
     const errors = this.taskForm.controls.dueDate.errors;
     if (errors?.['invalidDate']) return 'Please use the format dd/mm/yyyy';
@@ -51,37 +59,63 @@ export class TaskForm {
   }
 
   /**
- * Setzt beim Tippen im Datumsfeld die Schrägstriche.
- * @param event das Input-Event des Datumsfelds
- */
+   * Setzt beim Tippen im Datumsfeld die Schrägstriche.
+   * @param event das Input-Event des Datumsfelds
+   */
   onDateInput(event: Event): void {
-  const input = event.target as HTMLInputElement;
-  const formatted = formatDateInput(input.value);
-  input.value = formatted;
-  this.taskForm.get('dueDate')?.setValue(formatted);
-}
+    const input = event.target as HTMLInputElement;
+    const formatted = formatDateInput(input.value);
+    input.value = formatted;
+    this.taskForm.controls.dueDate.setValue(formatted);
+  }
 
+  /**
+   * Verhindert, dass Enter in den Feldern der rechten Spalte das Formular absendet.
+   * @param event das Tastatur-Event vom Formular
+   */
+  blockSlotEnter(event: Event): void {
+    const target = event.target;
+    if (target instanceof HTMLInputElement && target.closest('.field__slot')) {
+      event.preventDefault();
+    }
+  }
+
+  /**
+   * Validiert das Formular und legt den Task an.
+   */
   async createTask(): Promise<void> {
     this.submitted.set(true);
     if (!this.isValid() || this.isSaving()) return;
     this.isSaving.set(true);
     this.hasSaveError.set(false);
+    await this.saveTask();
+    this.isSaving.set(false);
+  }
+
+  /**
+   * Speichert den Task, leert das Formular und meldet Erfolg oder Fehler.
+   */
+  private async saveTask(): Promise<void> {
     try {
       await this.taskService.addTask(this.buildTaskData());
       this.clearForm();
       this.created.emit();
     } catch {
       this.hasSaveError.set(true);
-    } finally {
-      this.isSaving.set(false);
     }
   }
 
+  /**
+   * Bricht im Overlay ab oder leert das Formular auf der Seite.
+   */
   onSecondaryClick(): void {
     if (this.isOverlay()) this.cancelled.emit();
     else this.clearForm();
   }
 
+  /**
+   * Setzt alle Felder und Auswahlen auf den Anfangszustand zurück.
+   */
   clearForm(): void {
     this.taskForm.reset();
     this.priority.set('medium');
@@ -92,11 +126,19 @@ export class TaskForm {
     this.hasSaveError.set(false);
   }
 
+  /**
+   * Markiert alle Felder als berührt und prüft das gesamte Formular.
+   * @returns true, wenn alle Pflichtangaben gültig sind
+   */
   private isValid(): boolean {
     this.taskForm.markAllAsTouched();
     return this.taskForm.valid && !!this.category();
   }
 
+  /**
+   * Baut aus den Formularwerten die Daten für die Datenbank.
+   * @returns die Task-Daten mit Datum im Format yyyy-mm-dd
+   */
   private buildTaskData(): TaskData {
     const { title, description, dueDate } = this.taskForm.getRawValue();
     return {
