@@ -141,6 +141,49 @@ export class TaskService {
     this.showCreatedMessage.set(true);
     setTimeout(() => this.showCreatedMessage.set(false), 3000);
   }
+
+  async updateTask(task: TaskInterface): Promise<void> {
+    await this.saveMainTaskData(task);
+    await this.saveTaskAssignees(task);
+    await this.saveTaskSubtasks(task);
+
+    await this.getTasks();
+  }
+
+  private async saveMainTaskData(task: TaskInterface): Promise<void> {
+    await this.db
+      .from(TABLE)
+      .update({
+        title: task.title.trim(),
+        description: task.description?.trim() || null,
+        due_date: task.dueDate || null,
+        category: task.category,
+        priority: task.priority,
+        status: task.status,
+      })
+      .eq('id', task.id)
+      .throwOnError();
+  }
+
+  private async saveTaskAssignees(task: TaskInterface): Promise<void> {
+    await this.db.from('task_assignees').delete().eq('task_id', task.id).throwOnError();
+    if (task.assigneeIds.length) {
+      const rows = task.assigneeIds.map((contact_id) => ({ task_id: task.id, contact_id }));
+      await this.db.from('task_assignees').insert(rows).throwOnError();
+    }
+  }
+
+  private async saveTaskSubtasks(task: TaskInterface): Promise<void> {
+    await this.db.from('subtasks').delete().eq('task_id', task.id).throwOnError();
+    if (task.subtasks.length) {
+      const rows = task.subtasks.map((s) => ({
+        task_id: task.id,
+        title: s.title.trim(),
+        done: s.done,
+      }));
+      await this.db.from('subtasks').insert(rows).throwOnError();
+    }
+  }
 }
 
 function toTask(row: TaskRowWithRelations): TaskInterface {
