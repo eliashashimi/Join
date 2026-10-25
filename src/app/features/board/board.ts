@@ -7,6 +7,7 @@ import {
   CDK_DRAG_CONFIG,
   CdkDrag,
   CdkDragDrop,
+  CdkDragMove,
   CdkDropList,
   CdkDropListGroup,
   DragDropConfig,
@@ -20,6 +21,8 @@ const DRAG_CONFIG: DragDropConfig = {
   dragStartDelay: { touch: 300, mouse: 0 },
   listOrientation: 'mixed',
 };
+
+const TILT_DEGREES = 5;
 
 @Component({
   imports: [DragDropTasks, CdkDropList, CdkDropListGroup, CdkDrag, TaskOverlay],
@@ -40,6 +43,7 @@ export class Board implements OnInit {
   done = this.taskService.tasksByStatus('done');
 
   async ngOnInit() {
+    this.taskService.searchText.set('');
     await this.contactService.getContacts();
     await this.taskService.getTasks();
   }
@@ -52,10 +56,6 @@ export class Board implements OnInit {
     this.openedTask = null;
   }
 
-  /**
-   * Öffnet das Add-Task-Overlay für den gewählten Status.
-   * @param status Status, den der neue Task bekommt
-   */
   openAddTask(status: TaskStatus = 'todo'): void {
     this.taskOverlay.open(status);
   }
@@ -87,5 +87,17 @@ export class Board implements OnInit {
       );
     }
     await this.taskService.moveTask(task.id, newStatus, event.currentIndex);
+  }
+  onDragMoved(event: CdkDragMove<TaskInterface>): void {
+    if (event.delta.x === 0) return;
+    this.setTilt(event.delta.x > 0 ? TILT_DEGREES : -TILT_DEGREES);
+  }
+
+  onDragEnded(): void {
+    document.documentElement.style.removeProperty('--drag-tilt');
+  }
+
+  private setTilt(degrees: number): void {
+    document.documentElement.style.setProperty('--drag-tilt', `${degrees}deg`);
   }
 }
