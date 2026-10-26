@@ -5,15 +5,17 @@ import { TaskService } from '../../../service/task-service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AssignedToDropdown } from '../../add-task/components/assigned-to-dropdown/assigned-to-dropdown';
-import { CategorySelect } from '../../add-task/components/category-select/category-select';
 import { PrioritySelect } from '../../add-task/components/priority-select/priority-select';
 import { SubtaskInput } from '../../add-task/components/subtask-input/subtask-input';
+import { dueDateValidator, formatDateInput, toIsoDate } from '../../add-task/task-form/task-form-utils';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+
 
 @Component({
   imports: [
+    ReactiveFormsModule,
     CommonModule,
     FormsModule,
-    CategorySelect,
     PrioritySelect,
     AssignedToDropdown,
     SubtaskInput,
@@ -28,6 +30,32 @@ export class TaskOverlay {
   @Output() taskDeleted = new EventEmitter<void>();
   contactService = inject(ContactService);
   taskService = inject(TaskService);
+  readonly submitted = signal(false);
+  private readonly fb = inject(FormBuilder);
+  readonly taskForm = this.fb.nonNullable.group({
+    title: ['', Validators.required],
+    description: [''],
+    dueDate: ['', [Validators.required, dueDateValidator]],
+  });
+
+  isInvalid(name: 'title' | 'dueDate'): boolean {
+    const control = this.taskForm.controls[name];
+    return control.invalid && (control.touched || this.submitted());
+  }
+
+  dueDateMessage(): string {
+    const errors = this.taskForm.controls.dueDate.errors;
+    if (errors?.['invalidDate']) return 'Please use the format dd/mm/yyyy';
+    if (errors?.['pastDate']) return 'The date must not be in the past';
+    return 'This field is required';
+  }
+
+  onDateInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const formatted = formatDateInput(input.value);
+    input.value = formatted;
+    this.taskForm.controls.dueDate.setValue(formatted);
+  }
 
   isEditing = false;
   editableSubtasks = signal<string[]>([]);

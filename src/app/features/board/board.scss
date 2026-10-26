@@ -1,7 +1,6 @@
 @use '../../../styles.scss';
 @use '../../../../public/assets/styles' as *;
 @use 'board-responsive' as *;
-@use 'board-modal' as *;
 
 @media (min-width: 300px) {
   :host {

@@ -19,19 +19,31 @@
   gap: 24px;
   width: 90%;
   max-width: 525px;
-  max-height: 100svh;
+  max-height: 90svh;
   color: #2a3647;
   background-color: white;
   padding: 48px 40px;
   border-radius: 30px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   pointer-events: auto;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #a8a8a8;
+    border-radius: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
 
   .modal-header .badge {
     align-self: flex-start;
     padding: 4px 16px;
     border-radius: 8px;
-    font: 400 23px/1.2 $font-label;
+    font: 400 clamp(16px, calc(14.158px + 0.614vw), 23px)/1.2 $font-label;
     color: var(--badge-text);
     white-space: nowrap;
 
@@ -54,32 +66,42 @@
 .close-btn {
   background: none;
   border: none;
-  font-size: 32px;
+  font-size: clamp(16px, calc(11.789px + 1.404vw), 32px);
   cursor: pointer;
   color: #2a3647;
   line-height: 1;
 }
 
 .modal-title {
-  font-size: 61px;
-  font-weight: 700;
+  font: 700 clamp(28px, calc(19.316px + 2.895vw), 61px)/1.2 $font-main;
   margin: 0;
   width: 100%;
-  line-height: 1.2;
-  @include line-clamp(3);
+  min-height: 75px;
+  max-height: 220px;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #a8a8a8;
+    border-radius: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
 }
 
 .modal-description {
-  font: 400 20px/1.2 $font-main;
+  font: 400 clamp(16px, calc(14.947px + 0.351vw), 20px)/1.2 $font-main;
   margin: 0;
-  @include line-clamp(3);
 }
 
 .info {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  font-size: 20px;
+  font-size: clamp(16px, calc(14.947px + 0.351vw), 20px);
 
   .info-row {
     display: flex;
@@ -88,11 +110,11 @@
 
     .label {
       width: 100px;
-      font: 400 20px/1.2 $font-main;
+      font: 400 clamp(16px, calc(14.947px + 0.351vw), 20px)/1.2 $font-main;
     }
 
     .value {
-      font: 400 20px/1.2 $font-main;
+      font: 400 clamp(16px, calc(14.947px + 0.351vw), 20px)/1.2 $font-main;
     }
 
     .priority-wrapper {
@@ -103,13 +125,30 @@
   }
 }
 
+.overlay {
+  margin-bottom: 32px;
+}
+
+.field__icon {
+  align-self: center;
+}
+
+.overlay-icon {
+  top: 24px;
+}
+
+.field-input:focus {
+  outline: none;
+  border-color: var(--search-focus, #124658);
+}
+
 .assigned-section {
   display: flex;
   flex-direction: column;
   flex: 1;
   h3 {
     margin-bottom: 8px;
-    font: 400 20px/1.2 $font-main;
+    font: 400 clamp(16px, calc(14.947px + 0.351vw), 20px)/1.2 $font-main;
 
   }
 }
@@ -146,8 +185,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-weight: 400;
-      font-size: 12px;
+      font: 400 12px/1.2 $font-main;
       border: 2px solid white;
     }
 
@@ -159,7 +197,7 @@
 
 .subtasks-section {
   h3 {
-    font: 400 20px/1.2 $font-main;
+    font: 400 clamp(16px, calc(14.947px + 0.351vw), 20px)/1.2 $font-main;
     margin: 0 0 10px 0;
   }
 }
@@ -195,7 +233,7 @@
     }
 
     input[type='checkbox'] {
-      appearance: none; // Entfernt das Browser-Standard-Aussehen
+      appearance: none;
       -webkit-appearance: none;
       width: 16px;
       height: 16px;
@@ -229,7 +267,6 @@
 
     .subtask-text {
       font: 400 16px/1.2 $font-main;
-      @include line-clamp(2);
     }
   }
 }
