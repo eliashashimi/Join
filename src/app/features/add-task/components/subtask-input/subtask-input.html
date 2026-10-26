@@ -5,6 +5,7 @@
       type="text"
       class="field-input"
       placeholder="Add new subtask"
+      maxlength="100"
       autocomplete="off"
       aria-label="Enter new subtask"
       [value]="draft()"
@@ -44,6 +45,7 @@
           <input
             type="text"
             class="edit-input"
+            maxlength="100"
             aria-label="Edit subtask"
             [value]="editText()"
             (input)="onEditInput($event)"
