@@ -49,6 +49,7 @@
             @for (subtask of task.subtasks; track $index) {
               <label class="subtask-row">
                 <input type="checkbox" [checked]="subtask.done" (change)="toggleSubtask($index)" />
+                <span class="checkmark"></span>
                 <span class="subtask-text">{{ subtask.title }}</span>
               </label>
             }
