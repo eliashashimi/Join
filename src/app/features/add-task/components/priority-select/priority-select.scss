@@ -87,4 +87,14 @@
   .priority {
     gap: 8px;
   }
+
+  .priority-btn {
+    gap: 4px;
+    padding: 0 4px;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
 }
