@@ -31,7 +31,7 @@ export class TaskOverlay {
   readonly submitted = signal(false);
   private readonly fb = inject(FormBuilder);
   readonly taskForm = this.fb.nonNullable.group({
-    title: ['', Validators.required],
+    title: ['', [Validators.required, Validators.pattern(/\S/)]],
     description: [''],
     dueDate: ['', [Validators.required, dueDateValidator]],
   });
@@ -88,6 +88,8 @@ export class TaskOverlay {
   }
 
   async saveChanges() {
+    this.submitted.set(true);
+    if (this.taskForm.invalid) return;
     const { title, description, dueDate } = this.taskForm.getRawValue();
     Object.assign(this.task, { title, description, dueDate: toIsoDate(dueDate) });
     this.task.subtasks = this.buildSubtasks();

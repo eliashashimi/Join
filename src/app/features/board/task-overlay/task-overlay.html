@@ -128,14 +128,16 @@
       </header>
 
       <div class="edit-form-wrapper" [formGroup]="taskForm">
-        <div class="field">
-          <label class="field__label">Title</label>
-          <input type="text" formControlName="title" class="field__input overlay" />
+        <div class="field" [class.field--invalid]="isInvalid('title')">
+          <label class="field__label">Title<span class="field__required">*</span></label>
+          <input type="text" formControlName="title" maxlength="100" class="field__input overlay" />
+          <span class="field__error">This field is required</span>
         </div>
         <div class="field">
           <label class="field__label">Description</label>
           <textarea
             formControlName="description"
+            maxlength="1000"
             class="field__input field__input--textarea overlay"
           ></textarea>
         </div>
