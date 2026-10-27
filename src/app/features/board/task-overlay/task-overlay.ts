@@ -68,13 +68,12 @@ export class TaskOverlay {
     return this.contactService.contacts().filter((c) => task.assigneeIds.includes(c.id));
   }
 
-  async toggleSubtask(index: number) {
-    if (this.task.subtasks && this.task.subtasks[index]) {
-      const subtask = this.task.subtasks[index];
-      const newDoneState = !subtask.done;
-      await this.taskService.toggleSubtask(this.task.id, subtask.id, newDoneState);
-    }
-  }
+  async toggleSubtask(index: number, done: boolean) {
+  const subtask = this.task.subtasks?.[index];
+  if (!subtask) return;
+  await this.taskService.toggleSubtask(this.task.id, subtask.id, done);
+  this.task = this.taskService.tasks().find((t) => t.id === this.task.id) ?? this.task;
+}
 
   onDelete() {
     this.confirmingDelete.set(true);
