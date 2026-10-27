@@ -1,8 +1,7 @@
-<article class="modal-overlay" (click)="closeOverlay.emit()">
+<article class="modal-overlay" (click)="onOverlayClick($event)">
   <div
     class="modal-container"
     [class.modal-container--edit]="isEditing()"
-    (click)="$event.stopPropagation()"
   >
     @if (!isEditing()) {
       <header class="modal-header">
@@ -221,7 +220,7 @@
         </div>
 
         <div class="field">
-          <span class="field__label">Prioity</span>
+          <span class="field__label">Priority</span>
           <div class="field__slot">
             <app-priority-select [(priority)]="draft.priority"></app-priority-select>
           </div>

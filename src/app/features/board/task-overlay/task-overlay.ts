@@ -112,6 +112,15 @@ export class TaskOverlay {
   }
 
   /**
+   * Schließt das Overlay nur, wenn direkt auf den grauen Hintergrund (modal-overlay) geklickt wird.
+   */
+  onOverlayClick(event: MouseEvent): void {
+    if ((event.target as HTMLElement).classList.contains('modal-overlay')) {
+      this.closeOverlay.emit();
+    }
+  }
+
+  /**
    * Hakt einen Subtask ab oder wieder ab und lädt den Task neu aus dem Service.
    * @param index Die Position des Subtasks im Task.
    * @param done Der neue Zustand der Checkbox.
