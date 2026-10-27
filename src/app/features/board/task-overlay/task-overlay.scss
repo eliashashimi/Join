@@ -97,6 +97,7 @@
 .modal-description {
   font: 400 clamp(16px, calc(14.947px + 0.351vw), 20px)/1.2 $font-main;
   margin: 0;
+  overflow-wrap: anywhere;
 }
 
 .info {

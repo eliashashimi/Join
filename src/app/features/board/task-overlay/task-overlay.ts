@@ -100,17 +100,25 @@ export class TaskOverlay {
     this.isEditing.set(true);
   }
 
-  async saveChanges() {
-    this.submitted.set(true);
-    if (this.taskForm.invalid) return;
-    const updated = this.buildUpdatedTask();
-    try {
-      await this.taskService.updateTask(updated);
-      this.task = this.taskService.tasks().find((t) => t.id === updated.id) ?? updated;
-      this.isEditing.set(false);
-    } catch {
-    }
+ readonly saving = signal(false);
+
+async saveChanges() {
+  this.submitted.set(true);
+  if (this.taskForm.invalid || this.saving()) return;
+  this.saving.set(true);
+  try {
+    await this.persistChanges(this.buildUpdatedTask());
+  } catch {
+  } finally {
+    this.saving.set(false);
   }
+}
+
+private async persistChanges(updated: TaskInterface): Promise<void> {
+  await this.taskService.updateTask(updated);
+  this.task = this.taskService.tasks().find((t) => t.id === updated.id) ?? updated;
+  this.isEditing.set(false);
+}
 
   private fillForm(): void {
     this.taskForm.reset({

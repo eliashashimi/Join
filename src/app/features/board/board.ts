@@ -88,6 +88,7 @@ export class Board implements OnInit {
     }
     await this.taskService.moveTask(task.id, newStatus, event.currentIndex);
   }
+  
   onDragMoved(event: CdkDragMove<TaskInterface>): void {
     if (event.delta.x === 0) return;
     this.setTilt(event.delta.x > 0 ? TILT_DEGREES : -TILT_DEGREES);

@@ -159,6 +159,7 @@
 }
 
 .ok-submit-btn {
+  border: unset;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -175,6 +176,11 @@
     border-color 0.1s ease-out,
     color 0.1s ease-out,
     box-shadow 0.1s ease-out;
+
+    &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 
   &:hover:not(:disabled) {
     background-color: var(--light-blue-2);

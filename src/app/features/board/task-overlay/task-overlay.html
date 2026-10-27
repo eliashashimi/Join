@@ -241,7 +241,7 @@
       </div>
 
       <footer class="modal-footer">
-        <button type="button" class="ok-submit-btn" (click)="saveChanges()">
+        <button type="button" class="ok-submit-btn" [disabled]="saving()" (click)="saveChanges()">
           Ok
           <svg width="24" height="24" viewBox="-4 -6 24 24" aria-hidden="true">
             <path
