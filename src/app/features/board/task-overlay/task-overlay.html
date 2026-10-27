@@ -1,6 +1,6 @@
 <article class="modal-overlay" (click)="closeOverlay.emit()">
   <div class="modal-container" (click)="$event.stopPropagation()">
-    @if (!isEditing) {
+    @if (!isEditing()) {
       <header class="modal-header">
         <span
           class="badge"

@@ -55,7 +55,7 @@ export class TaskOverlay {
     this.taskForm.controls.dueDate.setValue(formatted);
   }
 
-  isEditing = false;
+  isEditing = signal(false);
   draft!: TaskInterface;
   editableSubtasks = signal<string[]>([]);
 
@@ -81,15 +81,16 @@ export class TaskOverlay {
     this.draft = structuredClone(this.task);
     this.editableSubtasks.set(this.draft.subtasks.map((s) => s.title));
     this.fillForm();
-    this.isEditing = true;
+    this.isEditing.set(true);
   }
 
   async saveChanges() {
     this.submitted.set(true);
     if (this.taskForm.invalid) return;
-    await this.taskService.updateTask(this.buildUpdatedTask());
-    this.isEditing = false;
-    this.closeOverlay.emit();
+    const updated = this.buildUpdatedTask();
+    await this.taskService.updateTask(updated);
+    this.task = this.taskService.tasks().find((t) => t.id === updated.id) ?? updated;
+    this.isEditing.set(false);
   }
 
   private fillForm(): void {
