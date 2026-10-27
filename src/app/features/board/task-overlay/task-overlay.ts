@@ -56,8 +56,13 @@ export class TaskOverlay {
   }
 
   isEditing = signal(false);
+  readonly confirmingDelete = signal(false);
   draft!: TaskInterface;
   editableSubtasks = signal<string[]>([]);
+
+  dueDateText(): string {
+    return toFormDate(this.task.dueDate);
+  }
 
   assigneesOf(task: TaskInterface) {
     return this.contactService.contacts().filter((c) => task.assigneeIds.includes(c.id));
@@ -72,9 +77,21 @@ export class TaskOverlay {
   }
 
   onDelete() {
-    this.taskService.deleteTask(this.task.id);
-    this.taskDeleted.emit();
-    this.closeOverlay.emit();
+    this.confirmingDelete.set(true);
+  }
+
+  cancelDelete() {
+    this.confirmingDelete.set(false);
+  }
+
+  async confirmDelete() {
+    try {
+      await this.taskService.deleteTask(this.task.id);
+      this.taskDeleted.emit();
+      this.closeOverlay.emit();
+    } catch {
+      this.confirmingDelete.set(false);
+    }
   }
 
   onEdit() {
@@ -88,9 +105,12 @@ export class TaskOverlay {
     this.submitted.set(true);
     if (this.taskForm.invalid) return;
     const updated = this.buildUpdatedTask();
-    await this.taskService.updateTask(updated);
-    this.task = this.taskService.tasks().find((t) => t.id === updated.id) ?? updated;
-    this.isEditing.set(false);
+    try {
+      await this.taskService.updateTask(updated);
+      this.task = this.taskService.tasks().find((t) => t.id === updated.id) ?? updated;
+      this.isEditing.set(false);
+    } catch {
+    }
   }
 
   private fillForm(): void {

@@ -176,7 +176,7 @@
     color 0.1s ease-out,
     box-shadow 0.1s ease-out;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: var(--light-blue-2);
   }
 }
@@ -186,13 +186,13 @@
   background-color: transparent;
   color: var(--text, #2a3647);
 
-  &:hover {
+  &:hover:not(:disabled) {
     border-color: var(--light-blue, #29abe2);
     color: var(--light-blue, #29abe2);
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   }
 
-  &:active {
+  &:active:not(:disabled) {
     border-color: var(--active-menu, #091931);
     color: var(--active-menu, #091931);
   }
@@ -205,12 +205,12 @@
   font-size: 21px;
   font-weight: 700;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: var(--light-blue, #29abe2);
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   }
 
-  &:active {
+  &:active:not(:disabled) {
     background-color: var(--active-menu, #091931);
   }
 }

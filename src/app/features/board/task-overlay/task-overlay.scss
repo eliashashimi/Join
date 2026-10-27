@@ -78,7 +78,9 @@
   width: 100%;
   min-height: 75px;
   max-height: 220px;
+  flex-shrink: 0;
   overflow-y: auto;
+  overflow-wrap: anywhere;
 
   &::-webkit-scrollbar {
     width: 6px;
@@ -260,7 +262,7 @@
           border-width: 0 2px 2px 0;
           transform: rotate(45deg);
           display: block;
-          margin-bottom: 4px; // Feintuning für die Zentrierung des Häkchens
+          margin-bottom: 4px;
         }
       }
     }
@@ -299,5 +301,26 @@
     width: 1px;
     height: 24px;
     background-color: #d1d1d1;
+  }
+
+  .confirm-text {
+    margin-right: 8px;
+    font: 400 16px/1.2 $font-main;
+  }
+
+  .confirm-delete-btn {
+    color: #e60026;
+    font-weight: 700;
+  }
+}
+
+@media (max-width: 768px) {
+  .modal-container {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    padding: 24px 16px;
+    border-radius: 0;
   }
 }
