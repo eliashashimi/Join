@@ -55,6 +55,13 @@ label {
   font-family: $font-label;
 }
 
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
 .content-wrapper {
   width: 100%;
   max-width: 1440px;
