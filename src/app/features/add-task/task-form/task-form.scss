@@ -141,6 +141,23 @@
   margin-left: auto;
 }
 
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 56px;
+  padding: 0 16px;
+  border-radius: 10px;
+  font: 400 20px/1.2 $font-main;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.1s ease-out,
+    border-color 0.1s ease-out,
+    color 0.1s ease-out,
+    box-shadow 0.1s ease-out;
+}
+
 .ok-submit-btn {
   display: flex;
   align-items: center;
