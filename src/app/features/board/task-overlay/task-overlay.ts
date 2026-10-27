@@ -56,6 +56,7 @@ export class TaskOverlay {
   }
 
   isEditing = false;
+  draft!: TaskInterface;
   editableSubtasks = signal<string[]>([]);
 
   assigneesOf(task: TaskInterface) {
@@ -77,12 +78,8 @@ export class TaskOverlay {
   }
 
   onEdit() {
-    if (this.task.subtasks) {
-      const titles = this.task.subtasks.map((s) => (typeof s === 'string' ? s : s.title));
-      this.editableSubtasks.set(titles);
-    } else {
-      this.editableSubtasks.set([]);
-    }
+    this.draft = structuredClone(this.task);
+    this.editableSubtasks.set(this.draft.subtasks.map((s) => s.title));
     this.fillForm();
     this.isEditing = true;
   }
@@ -90,10 +87,7 @@ export class TaskOverlay {
   async saveChanges() {
     this.submitted.set(true);
     if (this.taskForm.invalid) return;
-    const { title, description, dueDate } = this.taskForm.getRawValue();
-    Object.assign(this.task, { title, description, dueDate: toIsoDate(dueDate) });
-    this.task.subtasks = this.buildSubtasks();
-    await this.taskService.updateTask(this.task);
+    await this.taskService.updateTask(this.buildUpdatedTask());
     this.isEditing = false;
     this.closeOverlay.emit();
   }
@@ -105,6 +99,12 @@ export class TaskOverlay {
       dueDate: toFormDate(this.task.dueDate),
     });
     this.submitted.set(false);
+  }
+
+  private buildUpdatedTask(): TaskInterface {
+    const { title, description, dueDate } = this.taskForm.getRawValue();
+    const subtasks = this.buildSubtasks();
+    return { ...this.draft, title, description, dueDate: toIsoDate(dueDate), subtasks };
   }
 
   private buildSubtasks() {

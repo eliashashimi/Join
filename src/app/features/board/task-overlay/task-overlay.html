@@ -171,14 +171,14 @@
         <div class="field overlay">
           <span class="field__label">Prio</span>
           <div class="field__slot">
-            <app-priority-select [(priority)]="task.priority"></app-priority-select>
+            <app-priority-select [(priority)]="draft.priority"></app-priority-select>
           </div>
         </div>
 
         <div class="field ">
           <span class="field__label">Assigned to</span>
           <div class="field__slot">
-            <app-assigned-to-dropdown [(selectedIds)]="task.assigneeIds"></app-assigned-to-dropdown>
+            <app-assigned-to-dropdown [(selectedIds)]="draft.assigneeIds"></app-assigned-to-dropdown>
           </div>
         </div>
 
