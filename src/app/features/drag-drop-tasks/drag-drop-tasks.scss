@@ -150,75 +150,6 @@
   object-fit: none;
 }
 
-.move-btn {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: unset;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--dark-blue);
-  cursor: pointer;
-  transition: background-color $transition;
-
-  &:hover {
-    background: var(--empty-bg);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--light-blue);
-    outline-offset: 2px;
-  }
-}
-
-@container (max-width: 799px) {
-  .move-btn {
-    display: flex;
-  }
-}
-
-.move-menu {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 190px;
-  padding: 12px;
-  border-radius: 16px;
-  background: var(--color-white, #fff);
-  box-shadow: $shadow-card;
-}
-
-.move-menu-title {
-  margin: 0 0 4px;
-  font: 700 16px/1.2 $font-main;
-  color: var(--dark-blue);
-}
-
-.move-menu-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px;
-  border: unset;
-  border-radius: 8px;
-  background: transparent;
-  font: 400 16px/1.2 $font-main;
-  color: var(--dark-blue);
-  text-align: left;
-  cursor: pointer;
-  transition: background-color $transition;
-
-  &:hover {
-    background: var(--empty-bg);
-  }
-}
-
 :host(.cdk-drag-preview) .card {
   transform: rotate(var(--drag-tilt, 5deg));
   cursor: grabbing;
@@ -243,8 +174,6 @@
 @media (prefers-reduced-motion: reduce) {
   .card,
   :host(.cdk-drag-preview) .card,
-  .move-btn,
-  .move-menu-item,
   .progress-fill {
     transition: none;
   }
