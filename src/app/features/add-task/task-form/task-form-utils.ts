@@ -53,3 +53,8 @@ export function formatDateInput(raw: string): string {
   const parts = [digits.slice(0, 2), digits.slice(2, 4), digits.slice(4)];
   return parts.filter(Boolean).join('/');
 }
+
+export function toFormDate(value: string): string {
+  const [year, month, day] = value.split('-');
+  return year && month && day ? `${day}/${month}/${year}` : '';
+}

@@ -127,15 +127,15 @@
         </button>
       </header>
 
-      <div class="edit-form-wrapper">
+      <div class="edit-form-wrapper" [formGroup]="taskForm">
         <div class="field">
           <label class="field__label">Title</label>
-          <input type="text" [(ngModel)]="task.title" class="field__input overlay" />
+          <input type="text" formControlName="title" class="field__input overlay" />
         </div>
         <div class="field">
           <label class="field__label">Description</label>
           <textarea
-            [(ngModel)]="task.description"
+            formControlName="description"
             class="field__input field__input--textarea overlay"
           ></textarea>
         </div>

@@ -3,11 +3,10 @@ import { TaskInterface } from '../../../interface/task-interface';
 import { ContactService } from '../../../service/contact-service';
 import { TaskService } from '../../../service/task-service';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { AssignedToDropdown } from '../../add-task/components/assigned-to-dropdown/assigned-to-dropdown';
 import { PrioritySelect } from '../../add-task/components/priority-select/priority-select';
 import { SubtaskInput } from '../../add-task/components/subtask-input/subtask-input';
-import { dueDateValidator, formatDateInput, toIsoDate } from '../../add-task/task-form/task-form-utils';
+import { dueDateValidator, formatDateInput, toFormDate, toIsoDate } from '../../add-task/task-form/task-form-utils';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 
@@ -15,7 +14,6 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
   imports: [
     ReactiveFormsModule,
     CommonModule,
-    FormsModule,
     PrioritySelect,
     AssignedToDropdown,
     SubtaskInput,
@@ -85,21 +83,32 @@ export class TaskOverlay {
     } else {
       this.editableSubtasks.set([]);
     }
+    this.fillForm();
     this.isEditing = true;
   }
 
   async saveChanges() {
-    const stringList = this.editableSubtasks();
-    this.task.subtasks = stringList.map((title) => {
-      const existing = this.task.subtasks?.find((s) => s.title === title);
-      return {
-        id: existing?.id || '',
-        title: title.trim(),
-        done: existing?.done || false,
-      };
-    });
+    const { title, description, dueDate } = this.taskForm.getRawValue();
+    Object.assign(this.task, { title, description, dueDate: toIsoDate(dueDate) });
+    this.task.subtasks = this.buildSubtasks();
     await this.taskService.updateTask(this.task);
     this.isEditing = false;
     this.closeOverlay.emit();
+  }
+
+  private fillForm(): void {
+    this.taskForm.reset({
+      title: this.task.title,
+      description: this.task.description,
+      dueDate: toFormDate(this.task.dueDate),
+    });
+    this.submitted.set(false);
+  }
+
+  private buildSubtasks() {
+    return this.editableSubtasks().map((title) => {
+      const existing = this.task.subtasks?.find((s) => s.title === title);
+      return { id: existing?.id || '', title: title.trim(), done: existing?.done || false };
+    });
   }
 }
