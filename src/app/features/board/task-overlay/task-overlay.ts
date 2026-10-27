@@ -7,7 +7,13 @@ import { AssignedToDropdown } from '../../add-task/components/assigned-to-dropdo
 import { PrioritySelect } from '../../add-task/components/priority-select/priority-select';
 import { SubtaskInput } from '../../add-task/components/subtask-input/subtask-input';
 import { dueDateValidator, formatDateInput, toFormDate, toIsoDate } from '../../add-task/task-form/task-form-utils';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 
 /**
  * Die Detailansicht eines Tasks mit Bearbeiten und Löschen.
@@ -35,7 +41,7 @@ export class TaskOverlay {
   readonly taskForm = this.fb.nonNullable.group({
     title: ['', [Validators.required, Validators.pattern(/\S/)]],
     description: [''],
-    dueDate: ['', [Validators.required, dueDateValidator]],
+    dueDate: ['', [Validators.required, (control) => this.dueDateRule(control)]],
   });
 
   /**
@@ -57,6 +63,18 @@ export class TaskOverlay {
     if (errors?.['invalidDate']) return 'Please use the format dd/mm/yyyy';
     if (errors?.['pastDate']) return 'The date must not be in the past';
     return 'This field is required';
+  }
+
+  /**
+   * Prüft das Fälligkeitsdatum. Das alte Datum des Tasks bleibt erlaubt, auch wenn es
+   * schon in der Vergangenheit liegt. Nur ein geändertes Datum wird geprüft.
+   * @param control Das Datumsfeld im Formular.
+   * @returns Die Fehler des Feldes oder null, wenn es gültig ist.
+   */
+  private dueDateRule(control: AbstractControl): ValidationErrors | null {
+    const original = this.task ? toFormDate(this.task.dueDate) : '';
+    if (original && control.value === original) return null;
+    return dueDateValidator(control);
   }
 
   /**
