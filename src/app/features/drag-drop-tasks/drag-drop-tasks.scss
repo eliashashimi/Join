@@ -5,7 +5,6 @@
   display: block;
 }
 
-// -- Karte --
 .card {
   display: flex;
   flex-direction: column;
@@ -13,7 +12,7 @@
   box-sizing: border-box;
   padding: 16px;
   border-radius: 24px;
-  background: var(--color-white, #fff);
+  background-color: var(--drag-drop-card);
   box-shadow: $shadow-card;
   cursor: grab;
   transition: box-shadow $transition;
@@ -50,7 +49,7 @@
   margin: 0;
   overflow: hidden;
   font: 700 16px/1.2 $font-main;
-  color: var(--dark-blue);
+  color: var(--text);
   overflow-wrap: anywhere;
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -62,7 +61,7 @@
   margin: calc(8px - var(--card-gap, 20px)) 0 0;
   overflow: hidden;
   font: 400 16px/1.2 $font-main;
-  color: var(--color-muted);
+  color: var(--text);
   overflow-wrap: anywhere;
 
   display: -webkit-box;
@@ -100,7 +99,7 @@
   min-width: 0;
   overflow: hidden;
   font: 400 13px/1.2 $font-main;
-  color: var(--color-black);
+  color: var(--text);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -125,7 +124,7 @@
   box-sizing: border-box;
   width: $avatar-size;
   height: $avatar-size;
-  border: 1px solid var(--color-white);
+  border: 1px solid var(--surface, #ffffff);
   border-radius: 50%;
   overflow: hidden;
   font: 400 12px/1 $font-main;
@@ -138,8 +137,8 @@
 
 .avatar.avatar--more {
   background: var(--surface, #ffffff);
-  border: 2px solid var(--text, var(--dark-blue));
-  color: var(--text, var(--dark-blue));
+  border: 2px solid var(--text, #2a3647);
+  color: var(--text, #2a3647);
   font: 700 14px/1 $font-main;
 }
 
@@ -151,77 +150,6 @@
   object-fit: none;
 }
 
-// -- Move-Menü (nur mobil) --
-.move-btn {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: unset;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--dark-blue);
-  cursor: pointer;
-  transition: background-color $transition;
-
-  &:hover {
-    background: var(--empty-bg);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--light-blue);
-    outline-offset: 2px;
-  }
-}
-
-@container (max-width: 799px) {
-  .move-btn {
-    display: flex;
-  }
-}
-
-.move-menu {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 190px;
-  padding: 12px;
-  border-radius: 16px;
-  background: var(--color-white, #fff);
-  box-shadow: $shadow-card;
-}
-
-.move-menu-title {
-  margin: 0 0 4px;
-  font: 700 16px/1.2 $font-main;
-  color: var(--dark-blue);
-}
-
-.move-menu-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px;
-  border: unset;
-  border-radius: 8px;
-  background: transparent;
-  font: 400 16px/1.2 $font-main;
-  color: var(--dark-blue);
-  text-align: left;
-  cursor: pointer;
-  transition: background-color $transition;
-
-  &:hover {
-    background: var(--empty-bg);
-  }
-}
-
-// -- Drag & Drop --
 :host(.cdk-drag-preview) .card {
   transform: rotate(var(--drag-tilt, 5deg));
   cursor: grabbing;
@@ -237,7 +165,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    border: 1px dashed var(--color-muted);
+    border: 1px dashed var(--text-muted);
     border-radius: 30px;
     box-shadow: $shadow-empty;
   }
@@ -246,8 +174,6 @@
 @media (prefers-reduced-motion: reduce) {
   .card,
   :host(.cdk-drag-preview) .card,
-  .move-btn,
-  .move-menu-item,
   .progress-fill {
     transition: none;
   }

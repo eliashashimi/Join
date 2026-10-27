@@ -1,5 +1,8 @@
-<article class="modal-overlay" (click)="closeOverlay.emit()">
-  <div class="modal-container" (click)="$event.stopPropagation()">
+<article class="modal-overlay" (click)="onOverlayClick($event)">
+  <div
+    class="modal-container"
+    [class.modal-container--edit]="isEditing()"
+  >
     @if (!isEditing()) {
       <header class="modal-header">
         <span
@@ -178,7 +181,7 @@
       <div class="edit-form-wrapper" [formGroup]="taskForm">
         <div class="field" [class.field--invalid]="isInvalid('title')">
           <label class="field__label">Title<span class="field__required">*</span></label>
-          <input type="text" formControlName="title" maxlength="100" class="field__input overlay" />
+          <input type="text" formControlName="title" maxlength="100" class="field__input" />
           <span class="field__error">This field is required</span>
         </div>
         <div class="field">
@@ -186,7 +189,7 @@
           <textarea
             formControlName="description"
             maxlength="1000"
-            class="field__input field__input--textarea overlay"
+            class="field__input field__input--textarea"
           ></textarea>
         </div>
 
@@ -197,7 +200,7 @@
           <div class="field__control">
             <input
               id="task-due-date"
-              class="field__input field__input--date overlay"
+              class="field__input field__input--date"
               type="text"
               placeholder="dd/mm/yyyy"
               autocomplete="off"
@@ -206,7 +209,7 @@
               maxlength="10"
               inputmode="numeric"
             />
-            <svg class="field__icon overlay-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <svg class="field__icon" viewBox="0 0 24 24" aria-hidden="true">
               <path
                 fill="currentColor"
                 d="M14.5 18C13.8 18 13.21 17.76 12.73 17.28C12.24 16.79 12 16.2 12 15.5C12 14.8 12.24 14.21 12.73 13.73C13.21 13.24 13.8 13 14.5 13C15.2 13 15.79 13.24 16.28 13.73C16.76 14.21 17 14.8 17 15.5C17 16.2 16.76 16.79 16.28 17.28C15.79 17.76 15.2 18 14.5 18ZM5 22C4.45 22 3.98 21.8 3.59 21.41C3.2 21.02 3 20.55 3 20L3 6C3 5.45 3.2 4.98 3.59 4.59C3.98 4.2 4.45 4 5 4L6 4L6 3C6 2.72 6.1 2.48 6.29 2.29C6.48 2.1 6.72 2 7 2C7.28 2 7.52 2.1 7.71 2.29C7.9 2.48 8 2.72 8 3L8 4L16 4L16 3C16 2.72 16.1 2.48 16.29 2.29C16.48 2.1 16.72 2 17 2C17.28 2 17.52 2.1 17.71 2.29C17.9 2.48 18 2.72 18 3L18 4L19 4C19.55 4 20.02 4.2 20.41 4.59C20.8 4.98 21 5.45 21 6L21 20C21 20.55 20.8 21.02 20.41 21.41C20.02 21.8 19.55 22 19 22L5 22ZM5 20L19 20L19 10L5 10L5 20ZM5 8L19 8L19 6L5 6L5 8Z"
@@ -216,8 +219,8 @@
           <span class="field__error">{{ dueDateMessage() }}</span>
         </div>
 
-        <div class="field overlay">
-          <span class="field__label">Prio</span>
+        <div class="field">
+          <span class="field__label">Priority</span>
           <div class="field__slot">
             <app-priority-select [(priority)]="draft.priority"></app-priority-select>
           </div>
