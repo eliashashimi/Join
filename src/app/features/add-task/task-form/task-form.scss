@@ -1,3 +1,6 @@
+@use '../../../../styles.scss';
+@use '../../../../../public/assets/styles/' as *;
+
 :host {
   display: flex;
   flex: 1;
@@ -40,13 +43,13 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .field__label {
-  font-size: 20px;
-  line-height: 1.2;
+  font: 400 20px/1.2 $font-main;
   color: var(--text, #2a3647);
+  gap: 8px;
 }
 
 .field__required {
@@ -65,16 +68,16 @@
   border-radius: 10px;
   background-color: var(--surface, #ffffff);
   color: var(--text, #2a3647);
-  font-size: 20px;
+  font: 400 20px/1.2 $font-main;
   transition: border-color 0.1s;
 
   &::placeholder {
-    color: #d1d1d1;
+    color: var(--placeholder);
   }
 
   &:focus {
     outline: none;
-    border-color: var(--light-blue-2, #124658);
+    border-color: var(--search-focus, #124658);
   }
 }
 
@@ -103,8 +106,7 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  font-size: 12px;
-  line-height: 12px;
+  font: 400 12px/1.2 $font-main;
   color: #e60026;
   visibility: hidden;
 }
@@ -146,14 +148,43 @@
   height: 56px;
   padding: 0 16px;
   border-radius: 10px;
-  font-size: 20px;
+  font: 400 20px/1.2 $font-main;
   white-space: nowrap;
   cursor: pointer;
   transition:
-    background-color 0.1s,
-    border-color 0.1s,
-    color 0.1s,
-    box-shadow 0.1s;
+    background-color 0.1s ease-out,
+    border-color 0.1s ease-out,
+    color 0.1s ease-out,
+    box-shadow 0.1s ease-out;
+}
+
+.ok-submit-btn {
+  border: unset;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 57px;
+  padding: 16px;
+  border-radius: 10px;
+  color: var(--dark-btn-text);
+  font: 700 20px/1.2 $font-main;
+  white-space: nowrap;
+  cursor: pointer;
+  background-color: var(--dark-blue);
+  transition:
+    background-color 0.1s ease-out,
+    border-color 0.1s ease-out,
+    color 0.1s ease-out,
+    box-shadow 0.1s ease-out;
+
+    &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: var(--light-blue-2);
+  }
 }
 
 .btn--secondary {
@@ -161,13 +192,13 @@
   background-color: transparent;
   color: var(--text, #2a3647);
 
-  &:hover {
+  &:hover:not(:disabled) {
     border-color: var(--light-blue, #29abe2);
     color: var(--light-blue, #29abe2);
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   }
 
-  &:active {
+  &:active:not(:disabled) {
     border-color: var(--active-menu, #091931);
     color: var(--active-menu, #091931);
   }
@@ -180,12 +211,12 @@
   font-size: 21px;
   font-weight: 700;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: var(--light-blue, #29abe2);
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   }
 
-  &:active {
+  &:active:not(:disabled) {
     background-color: var(--active-menu, #091931);
   }
 }

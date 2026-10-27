@@ -69,9 +69,11 @@
     }
 
     .cards {
+      flex: 1 1 auto;
       flex-direction: column;
       overflow-x: hidden;
       overflow-y: auto;
+      min-height: 160px;
       max-height: max(320px, calc(100vh - 336px));
 
       app-drag-drop-tasks {

@@ -4,6 +4,7 @@
   [formGroup]="taskForm"
   novalidate
   (ngSubmit)="createTask()"
+  (keydown.enter)="blockSlotEnter($event)"
 >
   <div class="task-form__columns">
     <div class="task-form__column task-form__column--left">
@@ -16,6 +17,7 @@
           class="field__input"
           type="text"
           placeholder="Enter a title"
+          maxlength="100"
           autocomplete="off"
           formControlName="title"
         />
@@ -28,6 +30,7 @@
           id="task-description"
           class="field__input field__input--textarea"
           placeholder="Enter a Description"
+          maxlength="1000"
           formControlName="description"
         ></textarea>
       </div>
