@@ -28,6 +28,8 @@
   pointer-events: auto;
   overflow-y: auto;
 
+  
+
   &::-webkit-scrollbar {
     width: 6px;
   }
@@ -35,9 +37,11 @@
     background-color: #a8a8a8;
     border-radius: 4px;
   }
+  
   &::-webkit-scrollbar-track {
-    background: transparent;
-  }
+  background: transparent;
+  margin: 24px 0;
+}
 
   .modal-header .badge {
     align-self: flex-start;
