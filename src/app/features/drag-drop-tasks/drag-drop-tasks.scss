@@ -5,7 +5,6 @@
   display: block;
 }
 
-// -- Karte --
 .card {
   display: flex;
   flex-direction: column;
@@ -151,7 +150,6 @@
   object-fit: none;
 }
 
-// -- Move-Menü (nur mobil) --
 .move-btn {
   position: absolute;
   top: 12px;
@@ -221,7 +219,6 @@
   }
 }
 
-// -- Drag & Drop --
 :host(.cdk-drag-preview) .card {
   transform: rotate(var(--drag-tilt, 5deg));
   cursor: grabbing;
