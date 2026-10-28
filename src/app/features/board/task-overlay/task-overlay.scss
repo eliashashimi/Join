@@ -90,10 +90,12 @@
   margin: 0;
   width: 100%;
   min-height: 75px;
-  max-height: 220px;
+  max-height: 185px;
   flex-shrink: 0;
   overflow-y: auto;
   overflow-wrap: anywhere;
+  hyphens: auto;
+  overflow-wrap: break-word;
 
   &::-webkit-scrollbar {
     width: 6px;
