@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { AssignedToDropdown } from '../../add-task/components/assigned-to-dropdown/assigned-to-dropdown';
 import { PrioritySelect } from '../../add-task/components/priority-select/priority-select';
 import { SubtaskInput } from '../../add-task/components/subtask-input/subtask-input';
+import { DatePickerButton } from '../../../shared/date-picker-button/date-picker-button';
 import { dueDateValidator, formatDateInput, toFormDate, toIsoDate } from '../../add-task/task-form/task-form-utils';
 import {
   AbstractControl,
@@ -25,6 +26,7 @@ import {
     PrioritySelect,
     AssignedToDropdown,
     SubtaskInput,
+    DatePickerButton,
   ],
   selector: 'app-task-overlay',
   styleUrl: './task-overlay.scss',
@@ -78,14 +80,27 @@ export class TaskOverlay {
   }
 
   /**
-   * Formatiert die Eingabe im Datumsfeld als dd/mm/yyyy.
+   * Formatiert die Eingabe im Datumsfeld als dd/mm/yyyy und markiert das Feld als berührt.
    * @param event Das Eingabe-Ereignis des Feldes.
    */
   onDateInput(event: Event): void {
     const input = event.target as HTMLInputElement;
     const formatted = formatDateInput(input.value);
     input.value = formatted;
-    this.taskForm.controls.dueDate.setValue(formatted);
+    const control = this.taskForm.controls.dueDate;
+    control.setValue(formatted);
+    control.markAsTouched();
+  }
+
+  /**
+   * Übernimmt das im Kalender gewählte Datum ins Formular.
+   * @param date Das Datum als dd/mm/yyyy.
+   */
+  onDatePicked(date: string): void {
+    const control = this.taskForm.controls.dueDate;
+    control.setValue(date);
+    control.markAsTouched();
+    control.markAsDirty();
   }
 
   isEditing = signal(false);
@@ -113,6 +128,7 @@ export class TaskOverlay {
 
   /**
    * Schließt das Overlay nur, wenn direkt auf den grauen Hintergrund (modal-overlay) geklickt wird.
+   * @param event Der Klick auf das Overlay.
    */
   onOverlayClick(event: MouseEvent): void {
     if ((event.target as HTMLElement).classList.contains('modal-overlay')) {

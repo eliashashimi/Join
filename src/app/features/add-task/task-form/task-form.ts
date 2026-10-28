@@ -6,11 +6,19 @@ import { AssignedToDropdown } from '../components/assigned-to-dropdown/assigned-
 import { CategorySelect } from '../components/category-select/category-select';
 import { Priority, PrioritySelect } from '../components/priority-select/priority-select';
 import { SubtaskInput } from '../components/subtask-input/subtask-input';
+import { DatePickerButton } from '../../../shared/date-picker-button/date-picker-button';
 import { dueDateValidator, formatDateInput, toIsoDate } from './task-form-utils';
 
 @Component({
   selector: 'app-task-form',
-  imports: [ReactiveFormsModule, AssignedToDropdown, CategorySelect, PrioritySelect, SubtaskInput],
+  imports: [
+    ReactiveFormsModule,
+    AssignedToDropdown,
+    CategorySelect,
+    PrioritySelect,
+    SubtaskInput,
+    DatePickerButton,
+  ],
   templateUrl: './task-form.html',
   styleUrl: './task-form.scss',
 })
@@ -66,7 +74,20 @@ export class TaskForm {
     const input = event.target as HTMLInputElement;
     const formatted = formatDateInput(input.value);
     input.value = formatted;
-    this.taskForm.controls.dueDate.setValue(formatted);
+    const control = this.taskForm.controls.dueDate;
+    control.setValue(formatted);
+    control.markAsTouched();
+  }
+
+  /**
+   * Übernimmt das im Kalender gewählte Datum ins Formular.
+   * @param date Das Datum als dd/mm/yyyy.
+   */
+  onDatePicked(date: string): void {
+    const control = this.taskForm.controls.dueDate;
+    control.setValue(date);
+    control.markAsTouched();
+    control.markAsDirty();
   }
 
   /**
