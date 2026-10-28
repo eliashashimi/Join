@@ -60,6 +60,27 @@
   position: relative;
 }
 
+.textarea-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.resize-handle {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg path {
+    stroke: var(--text, #2a3647);
+  }
+}
+
 .field__input {
   width: 100%;
   height: 48px;
@@ -70,6 +91,10 @@
   color: var(--text, #2a3647);
   font: 400 20px/1.2 $font-main;
   transition: border-color 0.1s;
+
+  &::-webkit-resizer {
+    display: none;
+  }
 
   &::placeholder {
     color: var(--placeholder);
@@ -84,22 +109,11 @@
 .field__input--textarea {
   height: 120px;
   padding: 18px 16px;
-  resize: none;
+  resize: vertical;
 }
 
 .field__input--date {
   padding-right: 56px;
-}
-
-.field__icon {
-  position: absolute;
-  top: 50%;
-  right: 16px;
-  width: 24px;
-  height: 24px;
-  color: var(--text, #2a3647);
-  transform: translateY(-50%);
-  pointer-events: none;
 }
 
 .field__error {
@@ -177,7 +191,7 @@
     color 0.1s ease-out,
     box-shadow 0.1s ease-out;
 
-    &:disabled {
+  &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
   }
