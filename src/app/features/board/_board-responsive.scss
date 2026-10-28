@@ -103,4 +103,15 @@
       transition: none;
     }
   }
+
+  @media (max-width: 768px) {
+  :host {
+    height: calc(100% - 80px);
+    overflow-y: auto;
+  }
+
+  :host .board {
+    padding-bottom: 24px;
+  }
+}
 }

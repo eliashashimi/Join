@@ -3,6 +3,7 @@ import { TaskService } from '../../service/task-service';
 import { ContactService } from '../../service/contact-service';
 import { TaskInterface, TaskStatus } from '../../interface/task-interface';
 import { TaskOverlayService } from '../../service/task-overlay-service';
+import { CdkScrollable } from '@angular/cdk/scrolling';
 import {
   CDK_DRAG_CONFIG,
   CdkDrag,
@@ -18,7 +19,7 @@ import { DragDropTasks } from '../drag-drop-tasks/drag-drop-tasks';
 import { TaskOverlay } from './task-overlay/task-overlay';
 
 const DRAG_CONFIG: DragDropConfig = {
-  dragStartDelay: { touch: 99999999, mouse: 0 },
+  dragStartDelay: { touch: 100, mouse: 0 },
   listOrientation: 'mixed',
 };
 
@@ -30,6 +31,7 @@ const TILT_DEGREES = 5;
 @Component({
   imports: [DragDropTasks, CdkDropList, CdkDropListGroup, CdkDrag, TaskOverlay],
   providers: [{ provide: CDK_DRAG_CONFIG, useValue: DRAG_CONFIG }],
+  hostDirectives: [CdkScrollable],
   selector: 'app-board',
   styleUrl: './board.scss',
   templateUrl: './board.html',
