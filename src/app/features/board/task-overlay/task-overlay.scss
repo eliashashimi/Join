@@ -271,7 +271,7 @@
 .subtasks-list {
   display: flex;
   flex-direction: column;
-  max-height: 100px;
+  max-height: 80px;
   overflow-y: auto;
   padding-right: 4px;
   &::-webkit-scrollbar {
