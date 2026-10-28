@@ -191,7 +191,7 @@
         <app-drag-drop-tasks
           [task]="task"
           cdkDrag
-          cdkDragBoundary=".board"
+          [cdkDragBoundary]="'body'"
           [cdkDragData]="task"
           (cdkDragMoved)="onDragMoved($event)"
           (cdkDragEnded)="onDragEnded()"
