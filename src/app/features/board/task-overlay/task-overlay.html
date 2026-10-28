@@ -37,55 +37,56 @@
           </svg>
         </button>
       </header>
+      <div class="modal-scroll-content">
+        <h3 class="modal-title">{{ task.title }}</h3>
+        <p class="modal-description">{{ task.description }}</p>
 
-      <h3 class="modal-title">{{ task.title }}</h3>
-      <p class="modal-description">{{ task.description }}</p>
+        <div class="info">
+          <div class="info-row">
+            <span class="date label">Due date:</span>
+            <span class="date value">{{ dueDateText() }}</span>
+          </div>
+          <div class="info-row">
+            <span class="priority label">Priority:</span>
+            <span class="priority-wrapper value">
+              {{ task.priority | titlecase }}
+              <img [src]="'./assets/images/prio-' + task.priority + '.svg'" [alt]="task.priority" />
+            </span>
+          </div>
+        </div>
 
-      <div class="info">
-        <div class="info-row">
-          <span class="date label">Due date:</span>
-          <span class="date value">{{ dueDateText() }}</span>
-        </div>
-        <div class="info-row">
-          <span class="priority label">Priority:</span>
-          <span class="priority-wrapper value">
-            {{ task.priority | titlecase }}
-            <img [src]="'./assets/images/prio-' + task.priority + '.svg'" [alt]="task.priority" />
-          </span>
-        </div>
-      </div>
-
-      <div class="assigned-section">
-        <h3>Assigned To:</h3>
-        <div class="assignees-list">
-          @for (contact of assigneesOf(task); track contact.id) {
-            <div class="assignee-row">
-              <span class="avatar" [style.background-color]="contact.color">
-                {{ contact.initials }}
-              </span>
-              <span class="assignee-name">{{ contact.name }}</span>
-            </div>
-          }
-        </div>
-      </div>
-      @if (task.subtasks && task.subtasks.length > 0) {
-        <div class="subtasks-section">
-          <h3>Subtasks</h3>
-          <div class="subtasks-list">
-            @for (subtask of task.subtasks; track $index) {
-              <label class="subtask-row">
-                <input
-                  type="checkbox"
-                  [checked]="subtask.done"
-                  (change)="toggleSubtask($index, $any($event.target).checked)"
-                />
-                <span class="checkmark"></span>
-                <span class="subtask-text">{{ subtask.title }}</span>
-              </label>
+        <div class="assigned-section">
+          <h3>Assigned To:</h3>
+          <div class="assignees-list">
+            @for (contact of assigneesOf(task); track contact.id) {
+              <div class="assignee-row">
+                <span class="avatar" [style.background-color]="contact.color">
+                  {{ contact.initials }}
+                </span>
+                <span class="assignee-name">{{ contact.name }}</span>
+              </div>
             }
           </div>
         </div>
-      }
+        @if (task.subtasks && task.subtasks.length > 0) {
+          <div class="subtasks-section">
+            <h3>Subtasks</h3>
+            <div class="subtasks-list">
+              @for (subtask of task.subtasks; track $index) {
+                <label class="subtask-row">
+                  <input
+                    type="checkbox"
+                    [checked]="subtask.done"
+                    (change)="toggleSubtask($index, $any($event.target).checked)"
+                  />
+                  <span class="checkmark"></span>
+                  <span class="subtask-text">{{ subtask.title }}</span>
+                </label>
+              }
+            </div>
+          </div>
+        }
+      </div>
       @if (confirmingDelete()) {
         <footer class="modal-footer">
           <span class="confirm-text">Delete this task?</span>
