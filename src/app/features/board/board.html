@@ -98,6 +98,7 @@
           (cdkDragMoved)="onDragMoved($event)"
           (cdkDragEnded)="onDragEnded()"
           (openDetails)="openTaskDetails($event)"
+          (moveTo)="onMoveTo(task, $event)"
         ></app-drag-drop-tasks>
       } @empty {
         <div class="empty">No tasks To do</div>
@@ -131,6 +132,7 @@
           (cdkDragMoved)="onDragMoved($event)"
           (cdkDragEnded)="onDragEnded()"
           (openDetails)="openTaskDetails($event)"
+          (moveTo)="onMoveTo(task, $event)"
         ></app-drag-drop-tasks>
       } @empty {
         <div class="empty">No tasks In progress</div>
@@ -164,6 +166,7 @@
           (cdkDragMoved)="onDragMoved($event)"
           (cdkDragEnded)="onDragEnded()"
           (openDetails)="openTaskDetails($event)"
+          (moveTo)="onMoveTo(task, $event)"
         ></app-drag-drop-tasks>
       } @empty {
         <div class="empty">No tasks Await feedback</div>
@@ -189,6 +192,7 @@
           (cdkDragMoved)="onDragMoved($event)"
           (cdkDragEnded)="onDragEnded()"
           (openDetails)="openTaskDetails($event)"
+          (moveTo)="onMoveTo(task, $event)"
         ></app-drag-drop-tasks>
       } @empty {
         <div class="empty">No tasks Done</div>
