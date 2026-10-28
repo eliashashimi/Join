@@ -16,7 +16,7 @@
 .modal-container {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: clamp(8px, calc(3.789px + 1.404vw), 24px);
   width: 90%;
   max-width: 525px;
   max-height: 90svh;
@@ -28,17 +28,24 @@
   pointer-events: auto;
   overflow-y: auto;
 
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: var(--text-muted);
-    border-radius: 4px;
-  }
-  
-  &::-webkit-scrollbar-track {
-    background: transparent;
-    margin: 24px 0;
+  .modal-scroll-content {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(8px, calc(3.789px + 1.404vw), 24px);
+    padding-right: 8px;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: white;
+      border-radius: 4px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
   }
 
   .modal-header .badge {
@@ -50,11 +57,11 @@
     white-space: nowrap;
 
     &.user-story {
-        background: var(--user-story);
+      background: var(--user-story);
     }
 
     &.technical-task {
-        background: var(--technical-task);
+      background: var(--technical-task);
     }
   }
 }
@@ -79,7 +86,7 @@
 }
 
 .modal-title {
-  font: 700 clamp(28px, calc(19.316px + 2.895vw), 61px)/1.2 $font-main;
+  font: 700 clamp(28px, calc(19.316px + 2.895vw), 61px)/1 $font-main;
   margin: 0;
   width: 100%;
   min-height: 75px;
@@ -110,7 +117,7 @@
 .info {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: clamp(8px, calc(5.895px + 0.702vw), 16px);
   font-size: clamp(16px, calc(14.947px + 0.351vw), 20px);
 
   .info-row {
@@ -214,8 +221,7 @@
 .assignees-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  max-height: 176px;
+  max-height: 150px;
   overflow-y: auto;
   padding-right: 4px;
   &::-webkit-scrollbar {
@@ -283,7 +289,7 @@
     display: flex;
     align-items: flex-start;
     gap: 16px;
-    padding: 6px 16px;
+    padding: 3px 16px;
     cursor: pointer;
     border-radius: 8px;
     transition: background-color 0.1s;
@@ -313,7 +319,7 @@
         background-color: var(--surface);
 
         &::after {
-          content: "";
+          content: '';
           width: 5px;
           height: 10px;
           border: solid var(--text);
@@ -338,6 +344,15 @@
   align-items: center;
   gap: 8px;
   align-self: flex-end;
+  position: sticky;
+  flex: 1;
+  bottom: 0;
+  // bottom: 33px;
+  // height: 70px;
+  // width: 86%;
+  // // padding-top: 12px;
+  // background-color: white;
+  // border-radius: 0px 0px 10px 20px;
 
   .action-btn {
     background: none;

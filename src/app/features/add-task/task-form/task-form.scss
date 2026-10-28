@@ -163,8 +163,8 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  height: 57px;
-  padding: 16px;
+  height: clamp(42px, calc(38.053px + 1.316vw), 57px);
+  padding: clamp(8px, calc(5.895px + 0.702vw), 16px);
   border-radius: 10px;
   color: var(--dark-btn-text);
   font: 700 20px/1.2 $font-main;
@@ -177,7 +177,7 @@
     color 0.1s ease-out,
     box-shadow 0.1s ease-out;
 
-    &:disabled {
+  &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
   }
