@@ -19,6 +19,8 @@
   transition: box-shadow $transition;
   -webkit-touch-callout: none;
   user-select: none;
+  --overlay-top: 80px;
+  --overlay-bottom: 80px;
 
   &:has(.progress) {
     --card-gap: 24px;
