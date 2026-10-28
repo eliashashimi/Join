@@ -18,7 +18,7 @@ import { DragDropTasks } from '../drag-drop-tasks/drag-drop-tasks';
 import { TaskOverlay } from './task-overlay/task-overlay';
 
 const DRAG_CONFIG: DragDropConfig = {
-  dragStartDelay: { touch: 300, mouse: 0 },
+  dragStartDelay: { touch: 99999999, mouse: 0 },
   listOrientation: 'mixed',
 };
 
