@@ -11,6 +11,7 @@
 
 .field-input {
   width: 100%;
+  cursor: pointer;
   height: var(--field-height, 48px);
   padding: 0 48px 0 16px;
   border: 1px solid var(--border, #d1d1d1);
@@ -22,7 +23,7 @@
   transition: border-color 0.1s ease;
 
   &::placeholder {
-    color: #d1d1d1;
+    color: var(--text);
   }
 
   &:focus {
