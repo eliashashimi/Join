@@ -1,0 +1,68 @@
+$navy: #2a3647;
+$blue: #29abe2;
+
+.summary { padding: 48px; }
+
+.summary__head {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 50px;
+
+  h1 {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(32px, 5vw, 61px);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--summary);
+  }
+  p {
+    margin: 0;
+    font-size: clamp(16px, 2.2vw, 27px);
+    color: var(--text);
+  }
+}
+
+.summary__divider {
+  width: 3px;
+  height: 59px;
+  background: $blue;
+  flex-shrink: 0;
+}
+
+.summary__content {
+  display: flex;
+  align-items: center;
+  gap: 80px;
+}
+
+.summary__grid {
+  flex: 0 1 560px;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 28px;
+}
+
+.half  { grid-column: span 3; }
+.third { grid-column: span 2; }
+.full  { grid-column: 1 / -1; }
+
+/* Tablet und kleine Desktops: Begrüßung über die Kacheln */
+@media (max-width: 1360px) {
+  .summary__content { flex-direction: column; align-items: flex-start; gap: 40px; width: 100%; }
+  .summary__grid { flex: none; width: 100%; max-width: 560px; }
+  app-summary-greeting { order: -1; }
+}
+
+/* Mobil: wie im Figma ohne Begrüßung, Linie unter dem Text */
+@media (max-width: 767px) {
+  .summary { padding: 24px 16px; }
+  .summary__head { flex-direction: column; align-items: flex-start; gap: 8px; margin-bottom: 24px; }
+  .summary__head h1 { order: 1; }
+  .summary__head p { order: 2; }
+  .summary__divider { order: 3; width: 60px; height: 3px; }
+  .summary__grid { gap: 12px; }
+  app-summary-greeting { display: none; }
+}
