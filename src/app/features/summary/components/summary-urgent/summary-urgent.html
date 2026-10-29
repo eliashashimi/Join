@@ -1,0 +1,16 @@
+<div class="urgent">
+  <div class="urgent__main">
+    <img src="assets/icons/urgent-icon.svg" alt="" class="urgent__icon" />
+    <div class="urgent__text">
+      <span class="urgent__count">{{ count() }}</span>
+      <span class="urgent__label">Urgent</span>
+    </div>
+  </div>
+  <span class="urgent__divider"></span>
+  <div class="urgent__deadline">
+    <strong class="urgent__date">
+      {{ deadline() ? (deadline() | date: 'MMMM d, y') : 'No deadline' }}
+    </strong>
+    <span class="urgent__hint">Upcoming Deadline</span>
+  </div>
+</div>
