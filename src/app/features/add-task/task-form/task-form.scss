@@ -327,6 +327,12 @@
   }
 }
 
+@media (max-width: 576px) {
+  .btn {
+    height: clamp(40px, calc(35.789px + 1.404vw), 56px);
+  }
+}
+
 @media (max-width: 400px) {
   .task-form__actions {
     gap: 16px;
