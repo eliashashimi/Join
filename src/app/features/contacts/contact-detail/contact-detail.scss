@@ -3,7 +3,7 @@
   flex-direction: column;
   gap: clamp(16px, 4vw, 48px);
   padding: clamp(16px, 3vw, 24px) clamp(16px, 5vw, 40px);
-  color: var(--text);
+  color: var(--text, #2a3647);
   height: 100%;
   box-sizing: border-box;
   overflow-y: auto;
@@ -24,7 +24,7 @@
       color: #ffffff;
       font-size: clamp(1.75rem, 4vw, 2.9375rem);
       font-weight: 500;
-      border: 3px solid var(--surface);
+      border: 3px solid var(--surface, #ffffff);
       box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
       flex-shrink: 0;
     }
@@ -42,7 +42,7 @@
         font-size: clamp(36px, calc(33.105px + 0.965vw), 47px);
         font-weight: 500;
         margin: 0;
-        color: var(--text);
+        color: var(--text, #2a3647);
         line-height: 1.2;
         word-break: break-word;
         width: 100%;
@@ -70,45 +70,33 @@
         .action-btn {
           background: none;
           border: none;
-          display: flex;
+          display: inline-flex;
           align-items: center;
           justify-content: center;
           cursor: pointer;
+          gap: 8px; 
           padding: 0;
-          border-radius: 8px;
+          margin: 0;
           box-sizing: border-box;
-          transition:
-            background-color 0.1s,
-            transform 0.1s;
+          font-family: 'Inter', sans-serif;
+          font-size: 16px; 
+          font-weight: 400;
+          color: var(--text, #2a3647);
+          transition: color 0.1s ease;
 
-          &:hover {
-            background-color: var(--hover);
-          }
-        }
-
-        .edit-btn {
-          width: 64px;
-          height: 24px;
-
-          img {
-            width: 64px;
-            height: 20px;
-            object-fit: contain;
-          }
-        }
-
-        .delete-btn {
-          width: 81px;
-          height: 24px;
-
-          img {
-            width: 81px;
-            height: 20px;
-            object-fit: contain;
+          svg path {
+            fill: currentColor;
+            transition: fill 0.1s ease;
           }
 
           &:hover {
-            color: #ff8190;
+            font-weight: 700;
+            color: #124658;
+            text-shadow: 0 0 0.6px #124658; 
+
+            svg path {
+              fill: #124658;
+            }
           }
         }
       }
@@ -125,7 +113,7 @@
       font-weight: 400;
       line-height: 120%;
       margin: 0;
-      color: var(--text);
+      color: var(--text, #2a3647);
     }
 
     .info-group {
@@ -137,7 +125,7 @@
         font-size: 1rem;
         font-weight: 700;
         line-height: 120%;
-        color: var(--text);
+        color: var(--text, #2a3647);
       }
 
       .info-value {
@@ -153,7 +141,7 @@
         }
 
         &.phone-link {
-          color: var(--text);
+          color: var(--text, #2a3647);
         }
       }
     }

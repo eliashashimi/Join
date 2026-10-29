@@ -1,0 +1,210 @@
+<section class="board-head">
+  <h2>Board</h2>
+  <div class="searchbar-wrapper">
+    <div class="search-info">
+      <div class="search-bar">
+        <input
+          #searchInput
+          type="search"
+          placeholder="Find Task"
+          aria-label="Find Task"
+          autocomplete="off"
+          spellcheck="false"
+          enterkeyhint="search"
+          [value]="taskService.searchText()"
+          (input)="taskService.searchText.set($any($event.target).value)"
+        />
+        <button
+          class="search-button"
+          type="button"
+          aria-label="Suchen"
+          (click)="searchInput.focus()"
+        >
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 32 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              d="M13.7118 20.2137C11.8946 20.2137 10.3567 19.5843 9.098 18.3256C7.83931 17.0669 7.20996 15.529 7.20996 13.7118C7.20996 11.8946 7.83931 10.3567 9.098 9.098C10.3567 7.83931 11.8946 7.20996 13.7118 7.20996C15.529 7.20996 17.0669 7.83931 18.3256 9.098C19.5843 10.3567 20.2137 11.8946 20.2137 13.7118C20.2137 14.4454 20.097 15.1372 19.8636 15.7874C19.6302 16.4376 19.3134 17.0127 18.9133 17.5129L24.5149 23.1145C24.6983 23.2979 24.79 23.5313 24.79 23.8147C24.79 24.0981 24.6983 24.3315 24.5149 24.5149C24.3315 24.6983 24.0981 24.79 23.8147 24.79C23.5313 24.79 23.2979 24.6983 23.1145 24.5149L17.5129 18.9133C17.0127 19.3134 16.4376 19.6302 15.7874 19.8636C15.1372 20.097 14.4454 20.2137 13.7118 20.2137ZM13.7118 18.2131C14.9622 18.2131 16.025 17.7755 16.9002 16.9002C17.7755 16.025 18.2131 14.9622 18.2131 13.7118C18.2131 12.4615 17.7755 11.3987 16.9002 10.5234C16.025 9.64815 14.9622 9.21053 13.7118 9.21053C12.4615 9.21053 11.3987 9.64815 10.5234 10.5234C9.64815 11.3987 9.21053 12.4615 9.21053 13.7118C9.21053 14.9622 9.64815 16.025 10.5234 16.9002C11.3987 17.7755 12.4615 18.2131 13.7118 18.2131Z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
+      </div>
+      @if (taskService.noSearchResults()) {
+        <p class="no-results" role="status">No results found</p>
+      }
+    </div>
+    <button class="add-task-btn" type="button" aria-label="Add task" (click)="openAddTask()">
+      <span class="btn-text">Add task</span>
+      <svg
+        width="32"
+        height="32"
+        viewBox="0 0 32 32"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <mask
+          id="mask0_514980_576"
+          style="mask-type: alpha"
+          maskUnits="userSpaceOnUse"
+          x="0"
+          y="0"
+          width="32"
+          height="32"
+        >
+          <rect width="32" height="32" fill="#D9D9D9" />
+        </mask>
+        <g mask="url(#mask0_514980_576)">
+          <path
+            d="M14.666 17.3327H6.66602V14.666H14.666V6.66602H17.3327V14.666H25.3327V17.3327H17.3327V25.3327H14.666V17.3327Z"
+            fill="white"
+          />
+        </g>
+      </svg>
+    </button>
+  </div>
+</section>
+
+<div class="board" cdkDropListGroup>
+  <section class="column">
+    <header class="column-header">
+      <h2>To do</h2>
+      <button
+        type="button"
+        class="add-button"
+        aria-label="Add task to To do"
+        (click)="openAddTask('todo')"
+      >
+        +
+      </button>
+    </header>
+    <div
+      class="cards"
+      cdkDropList
+      [cdkDropListData]="todo()"
+      (cdkDropListDropped)="onTaskDrop($event, 'todo')"
+    >
+      @for (task of todo(); track task.id) {
+        <app-drag-drop-tasks
+          [task]="task"
+          cdkDrag
+          cdkDragBoundary="app-board"
+          [cdkDragData]="task"
+          (cdkDragMoved)="onDragMoved($event)"
+          (cdkDragEnded)="onDragEnded()"
+          (openDetails)="openTaskDetails($event)"
+          (moveTo)="onMoveTo(task, $event)"
+        ></app-drag-drop-tasks>
+      } @empty {
+        <div class="empty">No tasks To do</div>
+      }
+    </div>
+  </section>
+
+  <section class="column">
+    <header class="column-header">
+      <h2>In progress</h2>
+      <button
+        type="button"
+        class="add-button"
+        aria-label="Add task to In progress"
+        (click)="openAddTask('in_progress')"
+      >
+        +
+      </button>
+    </header>
+    <div
+      class="cards"
+      cdkDropList
+      [cdkDropListData]="inProgress()"
+      (cdkDropListDropped)="onTaskDrop($event, 'in_progress')"
+    >
+      @for (task of inProgress(); track task.id) {
+        <app-drag-drop-tasks
+          [task]="task"
+          cdkDrag
+          cdkDragBoundary=".board"
+          [cdkDragData]="task"
+          (cdkDragMoved)="onDragMoved($event)"
+          (cdkDragEnded)="onDragEnded()"
+          (openDetails)="openTaskDetails($event)"
+          (moveTo)="onMoveTo(task, $event)"
+        ></app-drag-drop-tasks>
+      } @empty {
+        <div class="empty">No tasks In progress</div>
+      }
+    </div>
+  </section>
+
+  <section class="column">
+    <header class="column-header">
+      <h2>Await feedback</h2>
+      <button
+        type="button"
+        class="add-button"
+        aria-label="Add task to Await feedback"
+        (click)="openAddTask('await_feedback')"
+      >
+        +
+      </button>
+    </header>
+    <div
+      class="cards"
+      cdkDropList
+      [cdkDropListData]="awaitFeedback()"
+      (cdkDropListDropped)="onTaskDrop($event, 'await_feedback')"
+    >
+      @for (task of awaitFeedback(); track task.id) {
+        <app-drag-drop-tasks
+          [task]="task"
+          cdkDrag
+          cdkDragBoundary=".board"
+          [cdkDragData]="task"
+          (cdkDragMoved)="onDragMoved($event)"
+          (cdkDragEnded)="onDragEnded()"
+          (openDetails)="openTaskDetails($event)"
+          (moveTo)="onMoveTo(task, $event)"
+        ></app-drag-drop-tasks>
+      } @empty {
+        <div class="empty">No tasks Await feedback</div>
+      }
+    </div>
+  </section>
+
+  <section class="column">
+    <header class="column-header">
+      <h2>Done</h2>
+    </header>
+    <div
+      class="cards"
+      cdkDropList
+      [cdkDropListData]="done()"
+      (cdkDropListDropped)="onTaskDrop($event, 'done')"
+    >
+      @for (task of done(); track task.id) {
+        <app-drag-drop-tasks
+          [task]="task"
+          cdkDrag
+          [cdkDragBoundary]="'body'"
+          [cdkDragData]="task"
+          (cdkDragMoved)="onDragMoved($event)"
+          (cdkDragEnded)="onDragEnded()"
+          (openDetails)="openTaskDetails($event)"
+          (moveTo)="onMoveTo(task, $event)"
+        ></app-drag-drop-tasks>
+      } @empty {
+        <div class="empty">No tasks Done</div>
+      }
+    </div>
+  </section>
+</div>
+
+@if (openedTask) {
+  <app-task-overlay [task]="openedTask" (closeOverlay)="closeTaskDetails()"> </app-task-overlay>
+}

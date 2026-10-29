@@ -1,0 +1,46 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.add-task {
+  height: 100%;
+  overflow-y: auto;
+  padding: clamp(32px, 12vh, 124px) 40px clamp(32px, 8vh, 79px) 96px;
+}
+
+.add-task__content {
+  display: flex;
+  flex-direction: column;
+  max-width: 976px;
+  min-height: 100%;
+}
+
+.add-task__title {
+  margin-bottom: 48px;
+  font-size: 61px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #000000;
+}
+
+:host-context([data-theme='dark']) .add-task__title {
+  color: var(--text);
+}
+
+@media (max-width: 1200px) {
+  .add-task {
+    padding-left: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .add-task {
+    padding: 48px 16px calc(176px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .add-task__title {
+    margin-bottom: 40px;
+    font-size: 47px;
+  }
+}

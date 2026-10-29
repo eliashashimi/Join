@@ -1,20 +1,34 @@
+:root {
+  --bg: #f6f7f8;
+  --surface: #ffffff;
+  --card-bg: #ffffff;
+  --text: #2a3647;
+  --text-muted: #a8a8a8;
+  --border: #d1d1d1;
+  --hover: #f0f0f0;
+  --input-border: #959595;
+  --drag-drop-card:#ffffff;
+}
+
 :root[data-theme='dark'] {
   --bg: #1b1f27;
   --surface: #252b36;
+  --card-bg: #7A93AC;
   --text: #e8eaed;
   --text-muted: #9aa3b2;
   --border: #3a4252;
+  --hover: #2f3644;
+  --input-border: #5a6478;
+  --drag-drop-card:#2f3644;
+
   color-scheme: dark;
 
-  /* Globaler dunkler Hintergrund und Textfarben im Dark Mode */
-  html,
-  body,
-  main {
+  & body,
+  & main {
     background-color: var(--bg) !important;
     color: var(--text) !important;
   }
 
-  /* Spezifische Container-Hintergründe im Dark Mode */
   .help-scroll-area,
   .legal-scroll-area,
   .privacy-scroll-area,
@@ -23,7 +37,6 @@
     background-color: var(--bg) !important;
   }
 
-  /* Header-Icons im Dark Mode anpassen */
   .top-header {
     .help-icon {
       border-color: var(--text-muted) !important;
@@ -36,19 +49,16 @@
     }
   }
 
-  /* Invertierung der Aktions-Icons (z.B. Edit/Delete in Contacts) */
   .contact-actions img {
     filter: brightness(0) invert(1);
   }
 
-  /* Zurück-Pfeil im Dark Mode auf helle Farbe umschalten */
-  .mobile-back-btn svg path,
-  .mobile-back-btn svg {
+  .mobile-back-btn svg,
+  .mobile-back-btn svg path {
     stroke: var(--text) !important;
   }
 }
 
-/* Allgemeine Helfer (unabhängig vom Theme) */
 img[src*='join-logo'] {
   -webkit-tap-highlight-color: transparent;
   user-select: none;

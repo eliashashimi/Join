@@ -4,3 +4,10 @@
   justify-content: center;
   align-items: center;
 }
+
+@mixin line-clamp($lines: 3) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $lines;
+  white-space: normal;
+}

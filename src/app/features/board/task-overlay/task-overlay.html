@@ -1,0 +1,255 @@
+<article class="modal-overlay" (click)="onOverlayClick($event)">
+  <div class="modal-container" [class.modal-container--edit]="isEditing()">
+    @if (!isEditing()) {
+      <header class="modal-header">
+        <span
+          class="badge"
+          [class.user-story]="task.category === 'user_story'"
+          [class.technical-task]="task.category === 'technical_task'"
+        >
+          {{ task.category === 'user_story' ? 'User Story' : 'Technical Task' }}
+        </span>
+        <button type="button" class="close-btn" (click)="closeOverlay.emit()">
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 32 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <mask
+              id="mask0_75609_16276"
+              style="mask-type: alpha"
+              maskUnits="userSpaceOnUse"
+              x="4"
+              y="4"
+              width="24"
+              height="24"
+            >
+              <rect x="4" y="4" width="24" height="24" fill="#D9D9D9" />
+            </mask>
+            <g mask="url(#mask0_75609_16276)">
+              <path
+                d="M15.9998 17.4L11.0998 22.3C10.9165 22.4833 10.6831 22.575 10.3998 22.575C10.1165 22.575 9.88314 22.4833 9.6998 22.3C9.51647 22.1167 9.4248 21.8833 9.4248 21.6C9.4248 21.3167 9.51647 21.0833 9.6998 20.9L14.5998 16L9.6998 11.1C9.51647 10.9167 9.4248 10.6833 9.4248 10.4C9.4248 10.1167 9.51647 9.88334 9.6998 9.7C9.88314 9.51667 10.1165 9.425 10.3998 9.425C10.6831 9.425 10.9165 9.51667 11.0998 9.7L15.9998 14.6L20.8998 9.7C21.0831 9.51667 21.3165 9.425 21.5998 9.425C21.8831 9.425 22.1165 9.51667 22.2998 9.7C22.4831 9.88334 22.5748 10.1167 22.5748 10.4C22.5748 10.6833 22.4831 10.9167 22.2998 11.1L17.3998 16L22.2998 20.9C22.4831 21.0833 22.5748 21.3167 22.5748 21.6C22.5748 21.8833 22.4831 22.1167 22.2998 22.3C22.1165 22.4833 21.8831 22.575 21.5998 22.575C21.3165 22.575 21.0831 22.4833 20.8998 22.3L15.9998 17.4Z"
+                fill="#2A3647"
+              />
+            </g>
+          </svg>
+        </button>
+      </header>
+      <div class="modal-scroll-content">
+        <h3 lang="de" class="modal-title">{{ task.title }}</h3>
+        <p class="modal-description">{{ task.description }}</p>
+
+        <div class="info">
+          <div class="info-row">
+            <span class="date label">Due date:</span>
+            <span class="date value">{{ dueDateText() }}</span>
+          </div>
+          <div class="info-row">
+            <span class="priority label">Priority:</span>
+            <span class="priority-wrapper value">
+              {{ task.priority | titlecase }}
+              <img [src]="'./assets/images/prio-' + task.priority + '.svg'" [alt]="task.priority" />
+            </span>
+          </div>
+        </div>
+
+        <div class="assigned-section">
+          <h3>Assigned To:</h3>
+          <div class="assignees-list">
+            @for (contact of assigneesOf(task); track contact.id) {
+              <div class="assignee-row">
+                <span class="avatar" [style.background-color]="contact.color">
+                  {{ contact.initials }}
+                </span>
+                <span class="assignee-name">{{ contact.name }}</span>
+              </div>
+            }
+          </div>
+        </div>
+        @if (task.subtasks && task.subtasks.length > 0) {
+          <div class="subtasks-section">
+            <h3>Subtasks</h3>
+            <div class="subtasks-list">
+              @for (subtask of task.subtasks; track $index) {
+                <label class="subtask-row">
+                  <input
+                    type="checkbox"
+                    [checked]="subtask.done"
+                    (change)="toggleSubtask($index, $any($event.target).checked)"
+                  />
+                  <span class="checkmark"></span>
+                  <span class="subtask-text">{{ subtask.title }}</span>
+                </label>
+              }
+            </div>
+          </div>
+        }
+      </div>
+      @if (confirmingDelete()) {
+        <footer class="modal-footer">
+          <span class="confirm-text">Delete this task?</span>
+          <button type="button" class="action-btn" (click)="cancelDelete()">Cancel</button>
+          <button type="button" class="action-btn confirm-delete-btn" (click)="confirmDelete()">
+            Delete
+          </button>
+        </footer>
+      } @else {
+        <footer class="modal-footer">
+          <button type="button" class="action-btn delete-btn" (click)="onDelete()">
+            <svg
+              width="16"
+              height="18"
+              viewBox="0 0 16 18"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M3 18C2.45 18 1.97917 17.8042 1.5875 17.4125C1.19583 17.0208 1 16.55 1 16V3C0.716667 3 0.479167 2.90417 0.2875 2.7125C0.0958333 2.52083 0 2.28333 0 2C0 1.71667 0.0958333 1.47917 0.2875 1.2875C0.479167 1.09583 0.716667 1 1 1H5C5 0.716667 5.09583 0.479167 5.2875 0.2875C5.47917 0.0958333 5.71667 0 6 0H10C10.2833 0 10.5208 0.0958333 10.7125 0.2875C10.9042 0.479167 11 0.716667 11 1H15C15.2833 1 15.5208 1.09583 15.7125 1.2875C15.9042 1.47917 16 1.71667 16 2C16 2.28333 15.9042 2.52083 15.7125 2.7125C15.5208 2.90417 15.2833 3 15 3V16C15 16.55 14.8042 17.0208 14.4125 17.4125C14.0208 17.8042 13.55 18 13 18H3ZM3 3V16H13V3H3ZM5 13C5 13.2833 5.09583 13.5208 5.2875 13.7125C5.47917 13.9042 5.71667 14 6 14C6.28333 14 6.52083 13.9042 6.7125 13.7125C6.90417 13.5208 7 13.2833 7 13V6C7 5.71667 6.90417 5.47917 6.7125 5.2875C6.52083 5.09583 6.28333 5 6 5C5.71667 5 5.47917 5.09583 5.2875 5.2875C5.09583 5.47917 5 5.71667 5 6V13ZM9 13C9 13.2833 9.09583 13.5208 9.2875 13.7125C9.47917 13.9042 9.71667 14 10 14C10.2833 14 10.5208 13.9042 10.7125 13.7125C10.9042 13.5208 11 13.2833 11 13V6C11 5.71667 10.9042 5.47917 10.7125 5.2875C10.5208 5.09583 10.2833 5 10 5C9.71667 5 9.47917 5.09583 9.2875 5.2875C9.09583 5.47917 9 5.71667 9 6V13Z"
+                fill="#2A3647"
+              />
+            </svg>
+
+            <span>Delete</span>
+          </button>
+          <div class="separator"></div>
+          <button type="button" class="action-btn edit-btn" (click)="onEdit()">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <mask
+                id="mask0_516174_5426"
+                style="mask-type: alpha"
+                maskUnits="userSpaceOnUse"
+                x="0"
+                y="0"
+                width="24"
+                height="24"
+              >
+                <rect width="24" height="24" fill="#D9D9D9" />
+              </mask>
+              <g mask="url(#mask0_516174_5426)">
+                <path
+                  d="M5 19H6.4L15.025 10.375L13.625 8.975L5 17.6V19ZM19.3 8.925L15.05 4.725L16.45 3.325C16.8333 2.94167 17.3042 2.75 17.8625 2.75C18.4208 2.75 18.8917 2.94167 19.275 3.325L20.675 4.725C21.0583 5.10833 21.2583 5.57083 21.275 6.1125C21.2917 6.65417 21.1083 7.11667 20.725 7.5L19.3 8.925ZM17.85 10.4L7.25 21H3V16.75L13.6 6.15L17.85 10.4Z"
+                  fill="#2A3647"
+                />
+              </g>
+            </svg>
+            <span>Edit</span>
+          </button>
+        </footer>
+      }
+    } @else {
+      <header class="modal-header">
+        <div></div>
+        <button type="button" class="close-btn" (click)="closeOverlay.emit()">
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 32 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <mask
+              id="mask0_75609_16276"
+              style="mask-type: alpha"
+              maskUnits="userSpaceOnUse"
+              x="4"
+              y="4"
+              width="24"
+              height="24"
+            >
+              <rect x="4" y="4" width="24" height="24" fill="#D9D9D9" />
+            </mask>
+            <g mask="url(#mask0_75609_16276)">
+              <path
+                d="M15.9998 17.4L11.0998 22.3C10.9165 22.4833 10.6831 22.575 10.3998 22.575C10.1165 22.575 9.88314 22.4833 9.6998 22.3C9.51647 22.1167 9.4248 21.8833 9.4248 21.6C9.4248 21.3167 9.51647 21.0833 9.6998 20.9L14.5998 16L9.6998 11.1C9.51647 10.9167 9.4248 10.6833 9.4248 10.4C9.4248 10.1167 9.51647 9.88334 9.6998 9.7C9.88314 9.51667 10.1165 9.425 10.3998 9.425C10.6831 9.425 10.9165 9.51667 11.0998 9.7L15.9998 14.6L20.8998 9.7C21.0831 9.51667 21.3165 9.425 21.5998 9.425C21.8831 9.425 22.1165 9.51667 22.2998 9.7C22.4831 9.88334 22.5748 10.1167 22.5748 10.4C22.5748 10.6833 22.4831 10.9167 22.2998 11.1L17.3998 16L22.2998 20.9C22.4831 21.0833 22.5748 21.3167 22.5748 21.6C22.5748 21.8833 22.4831 22.1167 22.2998 22.3C22.1165 22.4833 21.8831 22.575 21.5998 22.575C21.3165 22.575 21.0831 22.4833 20.8998 22.3L15.9998 17.4Z"
+                fill="#2A3647"
+              />
+            </g>
+          </svg>
+        </button>
+      </header>
+
+      <div class="edit-form-wrapper" [formGroup]="taskForm">
+        <div class="field" [class.field--invalid]="isInvalid('title')">
+          <label class="field__label">Title<span class="field__required">*</span></label>
+          <input type="text" formControlName="title" maxlength="100" class="field__input" />
+          <span class="field__error">This field is required</span>
+        </div>
+        <div class="field">
+          <label class="field__label">Description</label>
+          <textarea
+            formControlName="description"
+            maxlength="1000"
+            class="field__input field__input--textarea"
+          ></textarea>
+        </div>
+
+        <div class="field" [class.field--invalid]="isInvalid('dueDate')">
+          <label class="field__label" for="task-due-date">
+            Due date<span class="field__required">*</span>
+          </label>
+          <div class="field__control">
+            <input
+              id="task-due-date"
+              class="field__input field__input--date"
+              type="text"
+              placeholder="dd/mm/yyyy"
+              autocomplete="off"
+              formControlName="dueDate"
+              (input)="onDateInput($event)"
+              maxlength="10"
+              inputmode="numeric"
+            />
+            <app-date-picker-button
+              [value]="taskForm.controls.dueDate.value"
+              (picked)="onDatePicked($event)"
+            ></app-date-picker-button>
+          </div>
+          <span class="field__error">{{ dueDateMessage() }}</span>
+        </div>
+
+        <div class="field">
+          <span class="field__label">Priority</span>
+          <div class="field__slot">
+            <app-priority-select [(priority)]="draft.priority"></app-priority-select>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="field__label">Assigned to</span>
+          <div class="field__slot">
+            <app-assigned-to-dropdown
+              [(selectedIds)]="draft.assigneeIds"
+            ></app-assigned-to-dropdown>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="field__label">Subtasks</span>
+          <div class="field__slot">
+            <app-subtask-input [(subtasks)]="editableSubtasks"></app-subtask-input>
+          </div>
+        </div>
+      </div>
+
+      <footer class="modal-footer">
+        <button type="button" class="ok-submit-btn" [disabled]="saving()" (click)="saveChanges()">
+          Ok
+          <svg width="24" height="24" viewBox="-4 -6 24 24" aria-hidden="true">
+            <path
+              fill="currentColor"
+              d="M5.288 8.775L13.763 0.3C13.963 0.1 14.2005 0 14.4755 0C14.7505 0 14.988 0.1 15.188 0.3C15.388 0.5 15.488 0.7375 15.488 1.0125C15.488 1.2875 15.388 1.525 15.188 1.725L5.988 10.925C5.788 11.125 5.55467 11.225 5.288 11.225C5.02133 11.225 4.788 11.125 4.588 10.925L0.288 6.625C0.088 6.425 -0.00783333 6.1875 0.0005 5.9125C0.00883333 5.6375 0.113 5.4 0.313 5.2C0.513 5 0.7505 4.9 1.0255 4.9C1.3005 4.9 1.538 5 1.738 5.2L5.288 8.775Z"
+            />
+          </svg>
+        </button>
+      </footer>
+    }
+  </div>
+</article>

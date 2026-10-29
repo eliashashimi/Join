@@ -1,15 +1,34 @@
-  @use './app/dark-mode/dark-mode';
+@use '../public/assets/styles' as *;
+@use './app/dark-mode/dark-mode';
+
 :root {
-  --dark-blue: #2a3647; // Dunkles Blau (für Header, dunkle Hintergründe, Schriften)
-  --active-menu: #091931; // Dunkles Blau für aktives Menü (Summery, ..., Contacts )
-  --menu-hover: #2a3d59; // Aside-Menu Hovereffekt
-  --header-initial-hover: #0c2e621f; // Hovereffekt der Initialien im Header
-  --menu-text: #e7e7e7; // Menu-Text
-  --light-blue: #29abe2; // Add-Button Hover
-  --light-blue-2: #124658; // Button Hover dunkelblau
+  --dark-blue: #2a3647;
+  --active-menu: #091931;
+  --menu-hover: #2a3d59;
+  --header-initial-hover: #0c2e621f;
+  --dark-btn-text: #ffffff;
+  --badge-text: #ffffff;
+  --menu-text: #e7e7e7;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --light-blue: #29abe2;
+  --light-blue-2: #124658;
+  --user-story: #0038ff;
+  --technical-task: #1fd7c1;
+  --progress-bar: #4589ff;
+  --progress-bg: #f4f4f4;
+  --empty-bg: #e7e7e7;
+  --searchbar-bg: #ffffff;
+  --search-hover: #4589ff;
+  --search-focus: #005dff;
+  --column-title: #42526e;
+  --dark-grey: #686868;
+  --dark-grey2: #333333;
+  --color-muted: #a8a8a8;
+  --placeholder: #d1d1d1;
+  --valid-error: #E60026;
 }
 
-/* Optional: Automatischer Dark Mode über CSS-Features */
 @media (prefers-color-scheme: dark) {
   :root {
     --app-background: #121212;
@@ -17,10 +36,8 @@
   }
 }
 
-/* CSS Reset & Standard-Werte für das JOIN-Projekt */
 * {
   box-sizing: border-box;
-  font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
 }
@@ -31,6 +48,18 @@ body {
   height: 100%;
   background-color: #f6f7f8;
   color: var(--dark-blue);
+  font-family: $font-main;
+}
+
+label {
+  font-family: $font-label;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
 }
 
 .content-wrapper {

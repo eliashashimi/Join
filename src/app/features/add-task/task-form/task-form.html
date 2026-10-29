@@ -1,0 +1,134 @@
+<form
+  class="task-form"
+  [class.task-form--overlay]="isOverlay()"
+  [formGroup]="taskForm"
+  novalidate
+  (ngSubmit)="createTask()"
+  (keydown.enter)="blockSlotEnter($event)"
+>
+  <div class="task-form__columns">
+    <div class="task-form__column task-form__column--left">
+      <div class="field" [class.field--invalid]="isInvalid('title')">
+        <label class="field__label" for="task-title">
+          Title<span class="field__required">*</span>
+        </label>
+        <input
+          id="task-title"
+          class="field__input"
+          type="text"
+          placeholder="Enter a title"
+          maxlength="100"
+          autocomplete="off"
+          formControlName="title"
+        />
+        <span class="field__error">This field is required</span>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="task-description">Description</label>
+        <div class="textarea-wrapper">
+          <textarea
+            id="task-description"
+            class="field__input field__input--textarea"
+            placeholder="Enter a Description"
+            maxlength="1000"
+            formControlName="description"
+          ></textarea>
+          <div class="resize-handle" aria-hidden="true">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 1L1 9M9 5L5 9M9 9H9" stroke="#2A3647" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="field" [class.field--invalid]="isInvalid('dueDate')">
+        <label class="field__label" for="task-due-date">
+          Due date<span class="field__required">*</span>
+        </label>
+        <div class="field__control">
+          <input
+            id="task-due-date"
+            class="field__input field__input--date"
+            type="text"
+            placeholder="dd/mm/yyyy"
+            autocomplete="off"
+            formControlName="dueDate"
+            (input)="onDateInput($event)"
+            maxlength="10"
+            inputmode="numeric"
+          />
+          <app-date-picker-button
+            [value]="taskForm.controls.dueDate.value"
+            (picked)="onDatePicked($event)"
+          ></app-date-picker-button>
+        </div>
+        <span class="field__error">{{ dueDateMessage() }}</span>
+      </div>
+    </div>
+
+    <div class="task-form__divider"></div>
+
+    <div class="task-form__column task-form__column--right">
+      <div class="field">
+        <span class="field__label">Priority</span>
+        <div class="field__slot field__slot--priority">
+          <app-priority-select [(priority)]="priority" />
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="field__label">Assigned to</span>
+        <div class="field__slot">
+          <app-assigned-to-dropdown [(selectedIds)]="assigneeIds" />
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="field__label">Category<span class="field__required">*</span></span>
+        <div class="field__slot">
+          <app-category-select [(category)]="category" [invalid]="submitted() && !category()" />
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="field__label">Subtasks</span>
+        <div class="field__slot">
+          <app-subtask-input [(subtasks)]="subtasks" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="task-form__footer">
+    <p class="task-form__hint"><span class="field__required">*</span>This field is required</p>
+
+    @if (hasSaveError()) {
+      <p class="task-form__save-error">The task could not be saved. Please try again.</p>
+    }
+
+    <div class="task-form__actions">
+      <button type="button" class="btn btn--secondary" (click)="onSecondaryClick()">
+        {{ isOverlay() ? 'Cancel' : 'Clear' }}
+        <svg width="24" height="24" viewBox="-5.5 -5.5 24 24" fill="none" aria-hidden="true">
+          <path
+            d="M6.243 6.243L11.486 11.486M1 11.486L6.243 6.243L1 11.486ZM11.486 1L6.242 6.243L11.486 1ZM6.242 6.243L1 1L6.242 6.243Z"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+      <button type="submit" class="btn btn--primary" [disabled]="isSaving()">
+        Create Task
+        <svg width="24" height="24" viewBox="-4 -6 24 24" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M5.288 8.775L13.763 0.3C13.963 0.1 14.2005 0 14.4755 0C14.7505 0 14.988 0.1 15.188 0.3C15.388 0.5 15.488 0.7375 15.488 1.0125C15.488 1.2875 15.388 1.525 15.188 1.725L5.988 10.925C5.788 11.125 5.55467 11.225 5.288 11.225C5.02133 11.225 4.788 11.125 4.588 10.925L0.288 6.625C0.088 6.425 -0.00783333 6.1875 0.0005 5.9125C0.00883333 5.6375 0.113 5.4 0.313 5.2C0.513 5 0.7505 4.9 1.0255 4.9C1.3005 4.9 1.538 5 1.738 5.2L5.288 8.775Z"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+</form>

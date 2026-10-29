@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal, computed, inject } from '@angular/core';
+import { Component, OnInit, signal, computed, inject, HostListener } from '@angular/core';
 import { ContactInterface, GroupedContacts } from '../../../interface/contact-interface';
 import { ContactDetailComponent } from '../contact-detail/contact-detail';
 import { AddContact } from '../contact-form/add-contact/add-contact';
@@ -25,14 +25,12 @@ export class ContactsComponent implements OnInit {
   private contactService = inject(ContactService);
   contacts = this.contactService.contacts;
 
-  /** Berechnet den aktuell ausgewählten Kontakt anhand der ID. */
   selectedContact = computed(() => {
     const id = this.selectedContactId();
     if (!id) return null;
     return this.contacts().find((c) => c.id === id) || null;
   });
 
-  /** Lädt beim Initialisieren die Kontakte und merkt sich einen Ladefehler. */
   async ngOnInit(): Promise<void> {
     try {
       await this.contactService.getContacts();
@@ -41,7 +39,16 @@ export class ContactsComponent implements OnInit {
     }
   }
 
-  /** Gruppiert und sortiert alle Kontakte alphabetisch nach Anfangsbuchstaben. */
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (this.showMobileMenu()) {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.mobile-fab-wrapper')) {
+        this.showMobileMenu.set(false);
+      }
+    }
+  }
+
   groupedContacts = computed<GroupedContacts[]>(() => {
     const map = new Map<string, ContactInterface[]>();
     for (const c of this.contacts()) {
@@ -54,10 +61,8 @@ export class ContactsComponent implements OnInit {
       .map(([letter, contacts]) => ({ letter, contacts }));
   });
 
-  /** Prüft, ob die mobile Detailansicht geöffnet ist. */
   isMobileDetailOpen = computed(() => this.selectedContactId() !== null);
 
-  /** Setzt die Auswahl zurück und schließt das mobile Menü. */
   goBackToList(): void {
     this.selectedContactId.set(null);
     this.showMobileMenu.set(false);
@@ -71,25 +76,21 @@ export class ContactsComponent implements OnInit {
     this.selectedContactId.set(contactId);
   }
 
-  /** Schaltet das mobile Menü um. */
   toggleMobileMenu(): void {
     this.showMobileMenu.update((val) => !val);
   }
 
-  /** Öffnet das Bearbeitungsmodal für Kontakte. */
   openEditModal(): void {
     this.showEditContactModal.set(true);
     this.showMobileMenu.set(false);
   }
 
-  /** Schließt das mobile Menü und öffnet den Lösch-Dialog. */
   onDeleteContact(): void {
     if (!this.selectedContact()?.id) return;
     this.showMobileMenu.set(false);
     this.contactService.showDeleteModal.set(true);
   }
 
-  /** Schließt den Dialog und löscht den ausgewählten Kontakt. */
   async confirmDelete(): Promise<void> {
     const id = this.selectedContactId();
     this.contactService.showDeleteModal.set(false);

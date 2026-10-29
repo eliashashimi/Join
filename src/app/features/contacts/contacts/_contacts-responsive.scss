@@ -1,6 +1,4 @@
-// Responsive Styles der Kontaktseite.
-// Die Mixins werden am Ende von contacts.scss eingebunden, damit sie die
-// Basis-Styles überschreiben (bei gleicher Spezifität gewinnt die spätere Regel).
+@use '../../../../../public/assets/styles' as *;
 
 @keyframes fadeInPopup {
   from {
@@ -13,7 +11,6 @@
   }
 }
 
-// Handy: bis 768 px
 @mixin phone {
   @media (max-width: 768px) {
     .contacts-container {
@@ -70,7 +67,7 @@
       left: 0;
       width: 100vw;
       height: 100%;
-      background-color: #ffffff;
+      background-color: var(--bg, #f6f7f8);
       z-index: 50;
       transform: translateX(100%);
       transition: transform 0.3s ease-in-out;
@@ -84,20 +81,18 @@
 
     .mobile-back-btn {
       display: flex;
+      gap: 8px;
       background: none;
       border: none;
       cursor: pointer;
-      padding: 0;
-      position: absolute; // Klebt den Pfeil exakt nach oben rechts
-      right: 20px;
-      top: 32px;
+      transform: translateY(-80px);
     }
 
     .mobile-fab-wrapper {
-      display: block;
+      display: flex;
       position: fixed;
       right: 24px;
-      bottom: 96px;
+      bottom: 195px;
       z-index: 100;
 
       .mobile-fab-btn {
@@ -123,7 +118,7 @@
         position: absolute;
         right: -10px;
         bottom: -5px;
-        background: var(--surface);
+        background: var(--surface, #ffffff);
         border-radius: 20px 20px 0px 20px;
         box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.25);
         display: flex;
@@ -141,33 +136,32 @@
           gap: 12px;
           padding: 12px 20px;
           font-size: 16px;
-          color: var(--text);
+          font-family: $font-main;
+          color: var(--text, #2a3647);
           cursor: pointer;
           text-align: left;
           width: 100%;
 
           &:hover {
-            background-color: var(--hover);
+            background-color: var(--hover, #f0f0f0);
           }
 
           &.delete {
-            color: var(--text);
+            color: var(--text, #2a3647);
           }
         }
       }
     }
 
     .detail-hero {
-      display: flex;
-      flex-direction: column; // Elemente sauber untereinander
-      align-items: flex-start;
-      position: relative;     // Erforderlich für die absolute Positionierung des Pfeils
-      padding: 24px 60px 24px 20px; // Rechts Platz (60px) für den Pfeil reservieren
-      gap: 4px;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px 48px 20px;
+      flex-wrap: wrap;
+      gap: 8px;
 
       .hero-title {
         font-size: 47px;
-        margin: 0;
       }
       .hero-divider {
         display: none;
@@ -175,19 +169,18 @@
       .hero-subtitle {
         font-size: 20px;
         width: 100%;
-        margin: 0;
       }
       hr {
         display: block;
         width: 90px;
+        height: 0px;
         border: 1.5px solid var(--light-blue);
-        margin: 8px 0 15px 0;
+        margin-bottom: 15px;
       }
     }
   }
 }
 
-// Tablet: 769 bis 1024 px
 @mixin tablet {
   @media (min-width: 769px) and (max-width: 1024px) {
     .contacts-list-container {

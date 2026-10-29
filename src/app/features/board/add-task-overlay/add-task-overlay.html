@@ -1,0 +1,31 @@
+@if (isRendered()) {
+  <div class="overlay" [class.visible]="isVisible()">
+    <div class="backdrop" (click)="close()"></div>
+
+    <section class="panel" role="dialog" aria-modal="true" aria-labelledby="overlay-title">
+      <button type="button" class="close-btn" aria-label="Close" (click)="close()">
+        <svg
+          viewBox="0 0 24 24"
+          width="24"
+          height="24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="M6 6l12 12M18 6L6 18" />
+        </svg>
+      </button>
+
+      <h1 id="overlay-title" class="title">Add Task</h1>
+
+      <app-task-form
+        [isOverlay]="true"
+        [status]="status()"
+        (created)="close()"
+        (cancelled)="close()"
+      />
+    </section>
+  </div>
+}
