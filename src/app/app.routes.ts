@@ -5,15 +5,16 @@ import { PrivacyPolicy } from './features/privacy-policy/privacy-policy';
 import { LegalNotice } from './features/legal-notice/legal-notice';
 import { Board } from './features/board/board';
 import { AddTask } from './features/add-task/add-task';
+import { Summary } from './features/summary/summary';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'contacts', pathMatch: 'full' },
-    { path: 'contacts', component: ContactsComponent },
-    { path: 'help', component: HelpPageComponent },
-    { path: 'privacy-policy', component: PrivacyPolicy },
-    { path: 'legal-notice', component: LegalNotice },
-    { path: 'board', component: Board },
-    { path: 'add-task', component: AddTask },
-    { path: 'summary', redirectTo: 'contacts', pathMatch: 'full' },
-    { path: '**', redirectTo: 'contacts' }
+  { path: '', redirectTo: 'summary', pathMatch: 'full' },
+  { path: 'summary', component: Summary },
+  { path: 'contacts', component: ContactsComponent },
+  { path: 'help', component: HelpPageComponent },
+  { path: 'privacy-policy', component: PrivacyPolicy },
+  { path: 'legal-notice', component: LegalNotice },
+  { path: 'board', component: Board },
+  { path: 'add-task', component: AddTask },
+  { path: '**', redirectTo: 'summary' },
 ];
