@@ -32,7 +32,7 @@ export class TaskForm {
   readonly cancelled = output<void>();
 
   readonly taskForm = this.fb.nonNullable.group({
-    title: ['', Validators.required],
+    title: ['', [Validators.required, Validators.pattern(/\S/)]],
     description: [''],
     dueDate: ['', [Validators.required, dueDateValidator]],
   });
