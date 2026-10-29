@@ -92,11 +92,11 @@
 }
 
 .modal-title {
-  font: 700 clamp(20px, calc(9.211px + 3.596vw), 61px)/1 $font-main;
+  font: 700 clamp(20px, calc(61px - (var(--title-length, 0) * 0.5px)), 61px)/1 $font-main;
   margin: 0;
   width: 100%;
   min-height: 75px;
-  max-height: 185px;
+  max-height: 220px;
   flex-shrink: 0;
   overflow-wrap: anywhere;
   hyphens: auto;

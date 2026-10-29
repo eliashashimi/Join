@@ -38,7 +38,9 @@
         </button>
       </header>
       <div class="modal-scroll-content">
-        <h3 lang="de" class="modal-title">{{ task.title }}</h3>
+        <h3 lang="de" class="modal-title" [style.--title-length]="task.title.length">
+          {{ task.title }}
+        </h3>
         <p class="modal-description">{{ task.description }}</p>
 
         <div class="info">
