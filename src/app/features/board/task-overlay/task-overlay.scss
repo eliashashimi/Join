@@ -5,11 +5,11 @@
 .modal-overlay {
   @include flex-center;
   --overlay-top: 80px;
-  --overlay-bottom: 80px; 
+  --overlay-bottom: 80px;
   box-sizing: border-box;
   position: fixed;
   inset: 0;
-  padding: calc(var(--overlay-top) + 12px) 16px calc(var(--overlay-bottom) + 12px); 
+  padding: calc(var(--overlay-top) + 12px) 16px calc(var(--overlay-bottom) + 12px);
   background-color: rgba(0, 0, 0, 0.4);
   z-index: 150;
 }
@@ -92,27 +92,15 @@
 }
 
 .modal-title {
-  font: 700 clamp(28px, calc(19.316px + 2.895vw), 61px)/1 $font-main;
+  font: 700 clamp(20px, calc(9.211px + 3.596vw), 61px)/1 $font-main;
   margin: 0;
   width: 100%;
   min-height: 75px;
   max-height: 185px;
   flex-shrink: 0;
-  overflow-y: auto;
   overflow-wrap: anywhere;
   hyphens: auto;
   overflow-wrap: break-word;
-
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: var(--text-muted);
-    border-radius: 4px;
-  }
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
 }
 
 .modal-description {

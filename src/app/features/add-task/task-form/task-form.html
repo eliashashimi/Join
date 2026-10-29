@@ -17,11 +17,11 @@
           class="field__input"
           type="text"
           placeholder="Enter a title"
-          maxlength="100"
+          maxlength="120"
           autocomplete="off"
           formControlName="title"
         />
-        <span class="field__error">This field is required. Please enter a title.</span>
+        <span class="field__error">{{ titleMessage() }}</span>
       </div>
 
       <div class="field">
@@ -35,8 +35,19 @@
             formControlName="description"
           ></textarea>
           <div class="resize-handle" aria-hidden="true">
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9 1L1 9M9 5L5 9M9 9H9" stroke="#2A3647" stroke-width="1.5" stroke-linecap="round"/>
+            <svg
+              width="10"
+              height="10"
+              viewBox="0 0 10 10"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9 1L1 9M9 5L5 9M9 9H9"
+                stroke="#2A3647"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
             </svg>
           </div>
         </div>
@@ -104,7 +115,9 @@
     <p class="task-form__hint"><span class="field__required">*</span>This field is required</p>
 
     @if (hasSaveError()) {
-      <p class="task-form__save-error">Task could not be saved. Please fill out all required fields.</p>
+      <p class="task-form__save-error">
+        Task could not be saved. Please fill out all required fields.
+      </p>
     }
 
     <div class="task-form__actions">

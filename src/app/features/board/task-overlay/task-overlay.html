@@ -179,8 +179,8 @@
       <div class="edit-form-wrapper" [formGroup]="taskForm">
         <div class="field" [class.field--invalid]="isInvalid('title')">
           <label class="field__label">Title<span class="field__required">*</span></label>
-          <input type="text" formControlName="title" maxlength="100" class="field__input" />
-          <span class="field__error">This field is required. Please enter a title.</span>
+          <input type="text" formControlName="title" maxlength="120" class="field__input" />
+          <span class="field__error">{{ titleMessage() }}</span>
         </div>
         <div class="field">
           <label class="field__label">Description</label>

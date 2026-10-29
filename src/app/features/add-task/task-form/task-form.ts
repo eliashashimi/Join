@@ -32,7 +32,7 @@ export class TaskForm {
   readonly cancelled = output<void>();
 
   readonly taskForm = this.fb.nonNullable.group({
-    title: ['', [Validators.required, Validators.pattern(/\S/)]],
+    title: ['', [Validators.required, Validators.pattern(/\S/), Validators.maxLength(100)]],
     description: [''],
     dueDate: ['', [Validators.required, dueDateValidator]],
   });
@@ -52,7 +52,22 @@ export class TaskForm {
    */
   isInvalid(name: 'title' | 'dueDate'): boolean {
     const control = this.taskForm.controls[name];
-    return control.invalid && (control.touched || this.submitted());
+    return control.invalid && (control.touched || control.dirty || this.submitted());
+  }
+
+  titleMessage(): string {
+    const errors = this.taskForm.controls.title.errors;
+    if (!errors) return '';
+
+    if (errors['maxlength']) {
+      return 'Maxiumum 100 characters allowed';
+    }
+
+    if (errors['required'] || errors['pattern']) {
+      return 'Please enter a title';
+    }
+
+    return '';
   }
 
   /**
