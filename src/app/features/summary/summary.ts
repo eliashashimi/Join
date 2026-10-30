@@ -8,7 +8,7 @@ import { SummaryGreeting } from './components/summary-greeting/summary-greeting'
 
 @Component({
   selector: 'app-summary',
-  imports: [SummaryCard, SummaryUrgent, SummaryGreeting],
+  imports: [SummaryCard, SummaryUrgent, SummaryGreeting, RouterLink],
   templateUrl: './summary.html',
   styleUrl: './summary.scss',
 })
