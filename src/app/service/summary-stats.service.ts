@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SummaryStats } from '../interface/summary-stats';
+import { TaskInterface, TaskStatus } from '../interface/task-interface';
 
 @Injectable({ providedIn: 'root' })
 export class SummaryStatsService {
@@ -7,26 +8,35 @@ export class SummaryStatsService {
    * Berechnet alle Kennzahlen für das Summary-Dashboard.
    * @param tasks Liste aller Tasks aus Supabase
    */
-  calcStats(tasks: any[]): SummaryStats {
-    const count = (s: string) => tasks.filter(t => t.status === s).length;
-    const urgent = tasks.filter(t => t.priority === 'urgent' && t.status !== 'done');
+  calcStats(tasks: TaskInterface[]): SummaryStats {
+    const status = (s: TaskStatus) => tasks.filter((t) => t.status === s).length;
+    const open = tasks.filter((t) => t.status !== 'done');
     return {
-      todo: count('todo'),
-      done: count('done'),
-      urgent: urgent.length,
-      nextDeadline: this.nextDeadline(urgent),
+      todo: status('todo'),
+      done: status('done'),
+      ...this.priorityCounts(open),
+      nextDeadline: this.nextDeadline(open.filter((t) => t.priority === 'urgent')),
       inBoard: tasks.length,
-      inProgress: count('in_progress'),
-      awaitingFeedback: count('await_feedback'),
+      inProgress: status('in_progress'),
+awaitingFeedback: status('await_feedback'),
     };
+  }
+
+  /**
+   * Zählt die offenen Tasks pro Priorität.
+   * @param open Alle Tasks, die noch nicht in Done liegen
+   */
+  private priorityCounts(open: TaskInterface[]) {
+    const count = (p: TaskInterface['priority']) => open.filter((t) => t.priority === p).length;
+    return { urgent: count('urgent'), medium: count('medium'), low: count('low') };
   }
 
   /**
    * Findet das früheste Fälligkeitsdatum der dringenden Tasks.
    * @param urgent Dringende, noch offene Tasks
    */
-  private nextDeadline(urgent: any[]): string | null {
-    const dates = urgent.map(t => t.due_date).filter(Boolean).sort();
+  private nextDeadline(urgent: TaskInterface[]): string | null {
+    const dates = urgent.map((t) => t.dueDate).filter(Boolean).sort();
     return dates[0] ?? null;
   }
 }
