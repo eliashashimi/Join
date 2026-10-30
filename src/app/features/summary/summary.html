@@ -13,7 +13,7 @@
         <app-summary-card class="half" routerLink="/board"
           icon="assets/icons/done-icon.svg" [count]="s.done" label="Done" />
         <app-summary-urgent class="full" routerLink="/board"
-          [count]="s.urgent" [deadline]="s.nextDeadline" />
+  [urgent]="s.urgent" [medium]="s.medium" [low]="s.low" [deadline]="s.nextDeadline" />
         <app-summary-card class="third" routerLink="/board"
           [count]="s.inBoard" label="Tasks in Board" />
         <app-summary-card class="third" routerLink="/board"
