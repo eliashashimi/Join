@@ -38,7 +38,12 @@ $navy: #2a3647;
   }
 }
 
-.card--icon { flex-direction: row; gap: 18px; padding: 38px 19px; }
+.card--icon { 
+  flex-direction: row; 
+  gap: 18px; 
+  padding: 38px 19px; 
+}
+
 .card__icon { 
   width: 69px; 
   height: 69px; 
@@ -48,7 +53,12 @@ $navy: #2a3647;
   }
 }
 
-.card__text { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.card__text { 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  text-align: center; 
+}
 
 .card__count { 
   font-family: 'Inter', sans-serif; 
@@ -68,10 +78,32 @@ $navy: #2a3647;
 }
 
 @media (max-width: 767px) {
-  .card { min-height: 88px; padding: 10px 6px; gap: 4px; border-radius: 20px; }
-  .card--icon { gap: 10px; padding: 12px; }
-  .card__icon { width: 40px; height: 40px; }
-  .card__count { font-size: 36px; }
-  .card__label { font-size: 14px; }
-  .card:not(.card--icon) .card__label { font-size: 12px; }
+  .card { 
+    min-height: 88px; 
+    padding: 10px 6px; 
+    gap: 4px; 
+    border-radius: 20px; 
+  }
+
+  .card--icon { 
+    gap: 10px; 
+    padding: 12px; 
+  }
+
+  .card__icon { 
+    width: 40px; 
+    height: 40px; 
+  }
+
+  .card__count { 
+    font-size: 36px; 
+  }
+
+  .card__label { 
+    font-size: 14px; 
+  }
+
+  .card:not(.card--icon) .card__label { 
+    font-size: 12px; 
+  }
 }
