@@ -1,0 +1,30 @@
+@use '../../../styles.scss';
+
+:host {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    min-height: 100vh;
+    background: #f6f7f8;
+}
+
+.logo {
+    width: 100px;
+    margin: 65px 0 0 77px;
+}
+
+.signup-form {
+    display: flex;
+    justify-content: center;
+    width: 598px;
+    height: 630px;
+    border-radius: 30px;
+    box-shadow: 0 0 14px 3px rgba(0, 0, 0, 0.14);
+    padding: 48px 88px;
+
+    .signup-header {
+        width: 100%;
+        flex-direction: row;
+    }
+}
