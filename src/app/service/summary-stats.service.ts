@@ -15,10 +15,10 @@ export class SummaryStatsService {
       todo: status('todo'),
       done: status('done'),
       ...this.priorityCounts(open),
-      nextDeadline: this.nextDeadline(open.filter((t) => t.priority === 'urgent')),
+      nextDeadline: this.nextDeadline(open),
       inBoard: tasks.length,
       inProgress: status('in_progress'),
-awaitingFeedback: status('await_feedback'),
+      awaitingFeedback: status('await_feedback'),
     };
   }
 
@@ -31,12 +31,12 @@ awaitingFeedback: status('await_feedback'),
     return { urgent: count('urgent'), medium: count('medium'), low: count('low') };
   }
 
-  /**
-   * Findet das früheste Fälligkeitsdatum der dringenden Tasks.
-   * @param urgent Dringende, noch offene Tasks
+    /**
+   * Findet das früheste Fälligkeitsdatum der offenen Tasks.
+   * @param open Alle Tasks, die noch nicht in Done liegen
    */
-  private nextDeadline(urgent: TaskInterface[]): string | null {
-    const dates = urgent.map((t) => t.dueDate).filter(Boolean).sort();
+  private nextDeadline(open: TaskInterface[]): string | null {
+    const dates = open.map((t) => t.dueDate).filter(Boolean).sort();
     return dates[0] ?? null;
   }
 }
