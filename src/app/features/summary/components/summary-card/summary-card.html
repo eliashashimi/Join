@@ -1,0 +1,9 @@
+<div class="card" [class.card--icon]="icon()">
+  @if (icon()) {
+    <img [src]="icon()" alt="" class="card__icon" />
+  }
+  <div class="card__text">
+    <span class="card__count">{{ count() }}</span>
+    <span class="card__label">{{ label() }}</span>
+  </div>
+</div>

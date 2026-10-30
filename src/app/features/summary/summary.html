@@ -1,0 +1,27 @@
+<section class="summary">
+  <header class="summary__head">
+    <h1>Join 360</h1>
+    <span class="summary__divider"></span>
+    <p>Key Metrics at a Glance</p>
+  </header>
+
+  @if (stats(); as s) {
+    <div class="summary__content">
+      <div class="summary__grid">
+        <app-summary-card class="half" routerLink="/board"
+          icon="assets/icons/pencil-icon.svg" [count]="s.todo" label="To-do" />
+        <app-summary-card class="half" routerLink="/board"
+          icon="assets/icons/done-icon.svg" [count]="s.done" label="Done" />
+        <app-summary-urgent class="full" routerLink="/board"
+  [urgent]="s.urgent" [medium]="s.medium" [low]="s.low" [deadline]="s.nextDeadline" />
+        <app-summary-card class="third" routerLink="/board"
+          [count]="s.inBoard" label="Tasks in Board" />
+        <app-summary-card class="third" routerLink="/board"
+          [count]="s.inProgress" label="Tasks In Progress" />
+        <app-summary-card class="third" routerLink="/board"
+          [count]="s.awaitingFeedback" label="Awaiting Feedback" />
+      </div>
+      <app-summary-greeting [name]="userName()" />
+    </div>
+  }
+</section>
