@@ -1,10 +1,14 @@
 <div class="urgent">
-  <div class="urgent__main">
-    <img src="assets/icons/urgent-icon.svg" alt="" class="urgent__icon" />
-    <div class="urgent__text">
-      <span class="urgent__count">{{ count() }}</span>
-      <span class="urgent__label">Urgent</span>
-    </div>
+  <div class="urgent__prios">
+    @for (item of items(); track item.key) {
+      <div class="prio">
+        <span class="prio__count">{{ item.count }}</span>
+        <span [class]="'prio__circle prio__circle--' + item.key">
+          <img [src]="item.icon" alt="" />
+        </span>
+        <span class="prio__label">{{ item.label }}</span>
+      </div>
+    }
   </div>
   <span class="urgent__divider"></span>
   <div class="urgent__deadline">
