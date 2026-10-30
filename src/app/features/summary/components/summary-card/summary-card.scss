@@ -16,94 +16,76 @@ $navy: #2a3647;
   border-radius: 30px;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
   cursor: pointer;
-  transition: transform 0.1s ease, background-color 0.2s ease, color 0.2s ease; 
+  transition: transform 0.1s ease, background-color 0.1s ease;
 
-  &:hover { 
-    transform: scale(1.03); 
-    background-color: $navy; 
+  &:hover {
+    transform: scale(1.03);
+    background-color: $navy;
 
     .card__count,
-    .card__label {
-      color: #ffffff;
-    }
+    .card__label { color: #fff; }
 
-    .card__icon {
-      circle, rect, path.bg {
-        fill: #ffffff;
-      }
-      path:not(.bg) {
-        fill: $navy; 
-      }
-    }
+    .card__icon { filter: invert(1) hue-rotate(180deg) brightness(1.2); }
   }
 }
 
-.card--icon { 
-  flex-direction: row; 
-  gap: 18px; 
-  padding: 38px 19px; 
+.card--icon {
+  flex-direction: row;
+  gap: 18px;
+  padding: 38px 19px;
 }
 
-.card__icon { 
-  width: 69px; 
-  height: 69px; 
-  flex-shrink: 0; 
-  svg, circle, path {
-    transition: fill 0.2s ease, background-color 0.2s ease;
-  }
+.card__icon {
+  width: 69px;
+  height: 69px;
+  flex-shrink: 0;
+  transition: filter 0.1s ease;
 }
 
-.card__text { 
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
-  text-align: center; 
+.card__text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
-.card__count { 
-  font-family: 'Inter', sans-serif; 
-  font-size: 64px; 
-  font-weight: 700; 
-  line-height: 1; 
-  color: #000; 
-  transition: color 0.2s ease;
+.card__count {
+  font-family: 'Inter', sans-serif;
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  transition: color 0.1s ease;
 }
 
-.card__label { 
-  font-family: 'Open Sans', sans-serif; 
-  font-size: 21px; 
-  line-height: 1.2; 
-  color: $navy; 
-  transition: color 0.2s ease;
+.card__label {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 21px;
+  line-height: 1.2;
+  color: $navy;
+  transition: color 0.1s ease;
 }
 
 @media (max-width: 767px) {
-  .card { 
-    min-height: 88px; 
-    padding: 10px 6px; 
-    gap: 4px; 
-    border-radius: 20px; 
+  .card {
+    min-height: 88px;
+    padding: 10px 6px;
+    gap: 4px;
+    border-radius: 20px;
   }
 
-  .card--icon { 
-    gap: 10px; 
-    padding: 12px; 
+  .card--icon {
+    gap: 10px;
+    padding: 12px;
   }
 
-  .card__icon { 
-    width: 40px; 
-    height: 40px; 
+  .card__icon {
+    width: 40px;
+    height: 40px;
   }
 
-  .card__count { 
-    font-size: 36px; 
-  }
+  .card__count { font-size: 36px; }
+  .card__label { font-size: 14px; }
 
-  .card__label { 
-    font-size: 14px; 
-  }
-
-  .card:not(.card--icon) .card__label { 
-    font-size: 12px; 
-  }
+  .card:not(.card--icon) .card__label { font-size: 12px; }
 }
