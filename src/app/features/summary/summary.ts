@@ -19,6 +19,7 @@ export class Summary {
   readonly stats = computed(() => this.statsService.calcStats(this.taskService.tasks()));
   readonly userName = signal<string | null>(null);
 
+  /** Lädt beim Öffnen der Seite alle Tasks aus Supabase. */
   constructor() {
     this.taskService.getTasks();
   }
