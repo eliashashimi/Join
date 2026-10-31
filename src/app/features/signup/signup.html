@@ -1,19 +1,149 @@
 <section class="signup">
-    <img class="logo" src="./assets/Join-logo.png" alt="Join Logo">
+    <div class="landing-logo">
+        <img class="logo" src="./assets/Join-logo.png" alt="Join Logo" />
+    </div>
 
-    <form>
+    <form
+        [formGroup]="signupForm"
+        (ngSubmit)="onSubmit()"
+        (input)="clearServerErrors()"
+        novalidate
+    >
+        @let nameError = errorMessage('name');
+        @let emailError = errorMessage('email');
+        @let passwordError = errorMessage('password');
+        @let confirmError = errorMessage('confirm');
+
         <div class="signup-form">
-            <div class="signup-header">
-                <button class="back-btn" (click)="onBack()">
-                    <img src="./assets/icons/pfeil-icon.svg" alt="Back" width="24" height="24" />
-                </button>
-                <h1>Sign up</h1>
-            </div>
+        <button class="back-btn" type="button" aria-label="Back" (click)="onBack()">
+            <img src="./assets/icons/pfeil-icon.svg" alt="" width="24" height="24" />
+        </button>
 
+        <div class="signup-header">
+            <h1>Sign up</h1>
+            <hr />
         </div>
 
+        <div class="signup-form__body">
+            <div class="signup-form__column">
+            <div class="field" [class.field--invalid]="nameError">
+                <input
+                id="signup-name"
+                class="field__input"
+                type="text"
+                placeholder="Name"
+                aria-label="Name"
+                maxlength="100"
+                autocomplete="name"
+                formControlName="name"
+                [attr.aria-invalid]="nameError ? true : null"
+                [attr.aria-describedby]="nameError ? 'signup-name-error' : null"
+                />
+                <svg class="field__icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                    d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                />
+                </svg>
+                @if (nameError) {
+                <span id="signup-name-error" class="field__error">{{ nameError }}</span>
+                }
+            </div>
 
+            <div class="field" [class.field--invalid]="emailError">
+                <input
+                id="signup-email"
+                class="field__input"
+                type="email"
+                placeholder="Email"
+                aria-label="Email"
+                maxlength="254"
+                autocomplete="email"
+                formControlName="email"
+                [attr.aria-invalid]="emailError ? true : null"
+                [attr.aria-describedby]="emailError ? 'signup-email-error' : null"
+                />
+                <svg class="field__icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                    d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"
+                />
+                </svg>
+                @if (emailError) {
+                <span id="signup-email-error" class="field__error">{{ emailError }}</span>
+                }
+            </div>
+
+            <div class="field" [class.field--invalid]="passwordError">
+                <input
+                id="signup-password"
+                class="field__input"
+                type="password"
+                placeholder="Password"
+                aria-label="Password"
+                autocomplete="new-password"
+                formControlName="password"
+                [attr.aria-invalid]="passwordError ? true : null"
+                [attr.aria-describedby]="passwordError ? 'signup-password-error' : null"
+                />
+                <svg class="field__icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                    d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"
+                />
+                </svg>
+                @if (passwordError) {
+                <span id="signup-password-error" class="field__error">{{ passwordError }}</span>
+                }
+            </div>
+
+            <div class="field field--last" [class.field--invalid]="confirmError">
+                <input
+                id="signup-confirm"
+                class="field__input"
+                type="password"
+                placeholder="Confirm Password"
+                aria-label="Confirm Password"
+                autocomplete="new-password"
+                formControlName="confirm"
+                [attr.aria-invalid]="confirmError ? true : null"
+                [attr.aria-describedby]="confirmError ? 'signup-confirm-error' : null"
+                />
+                <svg class="field__icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                    d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"
+                />
+                </svg>
+                @if (confirmError) {
+                <span id="signup-confirm-error" class="field__error">{{ confirmError }}</span>
+                }
+            </div>
+            </div>
+
+            <div class="privacy">
+            <label class="privacy__label">
+                <input class="privacy__checkbox" type="checkbox" formControlName="privacy" />
+                <span class="privacy__box" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M8.5 10.5 12 15 19.5 5" /></svg>
+                </span>
+                <span>I accept the</span>
+            </label>
+            <a class="privacy__link" routerLink="/privacy-policy">Privacy policy</a>
+            @if (submitError()) {
+                <p class="signup-form__error" role="alert">{{ submitError() }}</p>
+            }
+            </div>
+        </div>
+
+        <button class="signup-btn" type="submit" [disabled]="signupForm.invalid || isSubmitting()">
+            Sign up
+        </button>
+
+        @if (showSuccess()) {
+            <div class="toast" role="status">You Signed Up successfully</div>
+        }
+        </div>
     </form>
 </section>
 
-
+<footer class="signup-footer">
+    <a class="signup-footer__link" routerLink="/privacy-policy">Privacy Policy</a>
+    <a class="signup-footer__link" routerLink="/legal-notice">Legal notice</a>
+</footer>
