@@ -14,9 +14,8 @@ import { capitalizeFirstLetter, EMAIL_REGEX, NAME_REGEX } from '../../shared/con
 const LOGIN_ROUTE = '/login';
 const REDIRECT_DELAY_MS = 2000;
 const MIN_PASSWORD_LENGTH = 6;
-const EMAIL_TAKEN = 'user_already_exists';
+const EMAIL_TAKEN = 'email_exists';
 const REQUIRED_MESSAGE = 'This field is required';
-const EMAIL_TAKEN_MESSAGE = 'This email is already registered';
 const MISMATCH_MESSAGE = "Your passwords don't match. Please try again.";
 const GENERIC_SUBMIT_ERROR = 'Sign up failed. Please try again.';
 
@@ -32,8 +31,19 @@ const ERROR_MESSAGES: Record<FieldName, Record<string, string>> = {
   confirm: {},
 };
 
+const EMAIL_ERRORS: Record<string, string> = {
+  email_exists: 'This email is already registered',
+  user_already_exists: 'This email is already registered',
+  email_address_invalid: 'Please use a real email address',
+  email_address_not_authorized: "We can't send a confirmation email to this address",
+};
+
 const SUBMIT_ERRORS: Record<string, string> = {
   weak_password: 'Please choose a stronger password',
+  over_email_send_rate_limit: 'Too many attempts. Please try again later',
+  over_request_rate_limit: 'Too many attempts. Please try again later',
+  signup_disabled: 'Sign up is currently disabled',
+  email_provider_disabled: 'Sign up is currently disabled',
 };
 
 @Component({
@@ -51,7 +61,7 @@ export class Signup {
 
   isSubmitting = signal(false);
   showSuccess = signal(false);
-  emailTaken = signal(false);
+  emailServerError = signal('');
   submitError = signal('');
 
   signupForm = this.fb.nonNullable.group(
@@ -81,7 +91,7 @@ export class Signup {
    */
   errorMessage(field: FieldName): string {
     const control = this.signupForm.controls[field];
-    if (field === 'email' && this.emailTaken()) return EMAIL_TAKEN_MESSAGE;
+    if (field === 'email' && this.emailServerError()) return this.emailServerError();
     if (!control.touched) return '';
     if (control.hasError('required')) return REQUIRED_MESSAGE;
     if (field === 'confirm' && this.signupForm.hasError('passwordMismatch')) return MISMATCH_MESSAGE;
@@ -89,7 +99,7 @@ export class Signup {
   }
 
   clearServerErrors(): void {
-    this.emailTaken.set(false);
+    this.emailServerError.set('');
     this.submitError.set('');
   }
 
@@ -107,7 +117,7 @@ export class Signup {
 
   /**
    * Erstellt das Konto in Supabase Auth. Der Name wird als user_metadata gespeichert.
-   * Ist die E-Mail-Adresse schon registriert, wirft die Funktion einen Fehler mit dem Code `user_already_exists`.
+   * Ist die E-Mail-Adresse schon registriert, wirft die Funktion einen Fehler mit dem Code `email_exists`.
    */
   private async createAccount(): Promise<void> {
     const { name, email, password } = this.signupForm.getRawValue();
@@ -118,6 +128,8 @@ export class Signup {
     });
     if (error) throw error;
     if (data.user?.identities?.length === 0) throw { code: EMAIL_TAKEN };
+    // Ohne E-Mail-Bestätigung loggt signUp sofort ein, im Figma folgt aber der Login
+    if (data.session) await this.db.auth.signOut({ scope: 'local' });
   }
 
   private showSuccessAndLeave(): void {
@@ -126,12 +138,14 @@ export class Signup {
   }
 
   /**
-   * Zeigt den passenden Fehler und gibt den Button wieder frei.
+   * Zeigt den passenden Fehler und gibt den Button wieder frei. Den echten Grund von Supabase
+   * gibt es zusätzlich in der Konsole, damit man bei einem Fehler nicht raten muss.
    * @param error Fehler aus createAccount
    */
   private handleError(error: unknown): void {
     const code = (error as { code?: string })?.code ?? '';
-    if (code === EMAIL_TAKEN) this.emailTaken.set(true);
+    console.error('Sign up failed:', error);
+    if (EMAIL_ERRORS[code]) this.emailServerError.set(EMAIL_ERRORS[code]);
     else this.submitError.set(SUBMIT_ERRORS[code] ?? GENERIC_SUBMIT_ERROR);
     this.isSubmitting.set(false);
   }
