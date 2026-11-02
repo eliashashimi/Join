@@ -39,7 +39,7 @@ create trigger tasks_set_updated_at
     for each row
     execute function extensions.moddatetime(updated_at);
 
--- Rechte und RLS wie bei contacts (Sprint 1: ohne Login für alle)
+-- Rechte und RLS wie bei contacts
 grant select, insert, update, delete
     on public.tasks, public.task_assignees, public.subtasks
     to anon, authenticated, service_role;
@@ -49,10 +49,10 @@ declare t text;
 begin
     foreach t in array array['tasks', 'task_assignees', 'subtasks'] loop
         execute format('alter table public.%I enable row level security', t);
-        execute format('create policy "Anyone can read %1$s"   on public.%1$I for select to anon, authenticated using (true)', t);
-        execute format('create policy "Anyone can add %1$s"    on public.%1$I for insert to anon, authenticated with check (true)', t);
-        execute format('create policy "Anyone can update %1$s" on public.%1$I for update to anon, authenticated using (true) with check (true)', t);
-        execute format('create policy "Anyone can delete %1$s" on public.%1$I for delete to anon, authenticated using (true)', t);
+        execute format('create policy "Logged-in users can read %1$s"   on public.%1$I for select to authenticated using (true)', t);
+        execute format('create policy "Logged-in users can add %1$s"    on public.%1$I for insert to authenticated with check (true)', t);
+        execute format('create policy "Logged-in users can update %1$s" on public.%1$I for update to authenticated using (true) with check (true)', t);
+        execute format('create policy "Logged-in users can delete %1$s" on public.%1$I for delete to authenticated using (true)', t);
     end loop;
 end $$;
 

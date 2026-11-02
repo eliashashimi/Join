@@ -65,33 +65,28 @@ grant select, insert, update, delete on public.contacts to service_role;
 -- 4) Row Level Security (RLS)
 --    RLS bleibt eingeschaltet. Ohne Policy darf niemand etwas, deshalb gibt es
 --    für jede der vier Aktionen eine eigene Regel.
---
---    Sprint1 hat noch keinen Login, darum gelten die Regeln für alle (true).
---    Sobald es einen Login gibt: in allen vier Policies "anon, authenticated"
---    durch "authenticated" ersetzen, dann kommen nur noch Eingeloggte an die
---    Daten.
 -- -----------------------------------------------------------------------------
 alter table public.contacts enable row level security;
 
-create policy "Anyone can read contacts"
+create policy "Logged-in users can read contacts"
   on public.contacts for select
-  to anon, authenticated
+  to authenticated
   using (true);
 
-create policy "Anyone can add contacts"
+create policy "Logged-in users can add contacts"
   on public.contacts for insert
-  to anon, authenticated
+  to authenticated
   with check (true);
 
-create policy "Anyone can update contacts"
+create policy "Logged-in users can update contacts"
   on public.contacts for update
-  to anon, authenticated
+  to authenticated
   using (true)
   with check (true);
 
-create policy "Anyone can delete contacts"
+create policy "Logged-in users can delete contacts"
   on public.contacts for delete
-  to anon, authenticated
+  to authenticated
   using (true);
 
 -- -----------------------------------------------------------------------------

@@ -51,6 +51,8 @@ function hint(error) {
     return '\n    Tipp: supabaseUrl in environment.ts prüfen.';
   if (/API key/i.test(message))
     return '\n    Tipp: supabasePublishableKey in environment.ts prüfen.';
+  if (/anonymous sign-ins are disabled/i.test(message))
+    return '\n    Tipp: In Supabase unter Authentication „Allow anonymous sign-ins“ einschalten.';
   return '';
 }
 
@@ -69,9 +71,18 @@ if (!supabaseUrl || !supabasePublishableKey) {
 const supabase = createClient(supabaseUrl, supabasePublishableKey, {
   auth: { persistSession: false, autoRefreshToken: false },
 });
+const withoutLogin = createClient(supabaseUrl, supabasePublishableKey, {
+  auth: { persistSession: false, autoRefreshToken: false },
+});
 const restUrl = `${supabaseUrl}/rest/v1/${TABLE}?select=id&limit=1`;
 
 console.log(`Supabase-Test für ${supabaseUrl}\n`);
+
+await check('Gast-Login', async () => {
+  const { error } = await supabase.auth.signInAnonymously();
+  if (error) throw error;
+  return 'Als Gast angemeldet, die nächsten Prüfungen laufen mit Login';
+});
 
 await check('Verbindung und SELECT', async () => {
   const { data } = await supabase.from(TABLE).select(COLUMNS).throwOnError();
@@ -119,6 +130,16 @@ await check('Ungültige Daten werden abgelehnt', async () => {
   expect(!data, 'Ein Kontakt mit ungültiger E-Mail wurde gespeichert.');
   if (error?.code !== '23514') throw error ?? new Error('Unerwartete Antwort ohne Fehlermeldung.');
   return 'Kontakt mit ungültiger E-Mail wird nicht gespeichert';
+});
+
+await check('Ohne Login gibt es keine Daten', async () => {
+  const { data } = await withoutLogin.from(TABLE).select('id').throwOnError();
+  expect(data.length === 0, `Ohne Login wurden ${data.length} Kontakte gelesen.`);
+  const row = { name: 'Test Kontakt', email: 'test.kontakt@example.com' };
+  const { data: added, error } = await withoutLogin.from(TABLE).insert(row).select().maybeSingle();
+  if (added) await withoutLogin.from(TABLE).delete().eq('id', added.id);
+  expect(error?.code === '42501', 'Ohne Login konnte ein Kontakt angelegt werden.');
+  return 'Lesen liefert nichts, Anlegen wird abgelehnt';
 });
 
 await check('Zugriff ohne API-Key wird abgelehnt', async () => {
