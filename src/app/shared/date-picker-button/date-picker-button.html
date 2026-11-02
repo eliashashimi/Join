@@ -1,4 +1,11 @@
-<button type="button" class="picker-btn" aria-label="Open date picker" (click)="open()">
+<button
+  type="button"
+  class="picker-btn"
+  aria-label="Open date picker"
+  aria-haspopup="dialog"
+  [attr.aria-expanded]="calendarOpen"
+  (click)="open()"
+>
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <path
       fill="currentColor"
@@ -6,12 +13,65 @@
     />
   </svg>
 </button>
-<input
-  #dateInput
-  class="picker-input"
-  type="date"
-  tabindex="-1"
-  aria-hidden="true"
-  [min]="minDate"
-  (change)="onPick($event)"
-/>
+
+@if (calendarOpen) {
+  <div class="calendar-backdrop" (click)="close()">
+    <section
+      class="calendar-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Choose due date"
+      (click)="$event.stopPropagation()"
+    >
+      <header class="calendar-header">
+        <button
+          type="button"
+          class="calendar-nav"
+          aria-label="Previous month"
+          [disabled]="!canGoToPreviousMonth()"
+          (click)="changeMonth(-1)"
+        >
+          ‹
+        </button>
+        <h2>{{ monthLabel }}</h2>
+        <button
+          type="button"
+          class="calendar-nav"
+          aria-label="Next month"
+          (click)="changeMonth(1)"
+        >
+          ›
+        </button>
+      </header>
+
+      <div class="calendar-grid">
+        @for (weekday of weekdays; track weekday) {
+          <span class="calendar-weekday">{{ weekday }}</span>
+        }
+        @for (day of calendarDays; track $index) {
+          @if (day; as calendarDay) {
+            <button
+              type="button"
+              class="calendar-day"
+              [class.calendar-day--today]="calendarDay.isToday"
+              [class.calendar-day--selected]="calendarDay.isSelected"
+              [disabled]="calendarDay.disabled"
+              [attr.aria-label]="calendarDay.value"
+              [attr.aria-pressed]="calendarDay.isSelected"
+              (click)="selectDate(calendarDay.value)"
+            >
+              {{ calendarDay.day }}
+            </button>
+          } @else {
+            <span class="calendar-day calendar-day--empty" aria-hidden="true"></span>
+          }
+        }
+      </div>
+
+      <footer class="calendar-footer">
+        <button type="button" class="calendar-today" (click)="selectDate(today)">Today</button>
+        <button type="button" class="calendar-close" (click)="close()">Cancel</button>
+      </footer>
+    </section>
+  </div>
+}

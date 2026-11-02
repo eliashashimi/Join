@@ -7,7 +7,12 @@ import { AssignedToDropdown } from '../../add-task/components/assigned-to-dropdo
 import { PrioritySelect } from '../../add-task/components/priority-select/priority-select';
 import { SubtaskInput } from '../../add-task/components/subtask-input/subtask-input';
 import { DatePickerButton } from '../../../shared/date-picker-button/date-picker-button';
-import { dueDateValidator, formatDateInput, toFormDate, toIsoDate } from '../../add-task/task-form/task-form-utils';
+import {
+  dueDateValidator,
+  formatDateInput,
+  toFormDate,
+  toIsoDate,
+} from '../../add-task/task-form/task-form-utils';
 import {
   AbstractControl,
   FormBuilder,
@@ -41,7 +46,7 @@ export class TaskOverlay {
   readonly submitted = signal(false);
   private readonly fb = inject(FormBuilder);
   readonly taskForm = this.fb.nonNullable.group({
-    title: ['', [Validators.required, Validators.pattern(/\S/)]],
+    title: ['', [Validators.required, Validators.pattern(/\S/), Validators.maxLength(100)]],
     description: [''],
     dueDate: ['', [Validators.required, (control) => this.dueDateRule(control)]],
   });
@@ -53,7 +58,22 @@ export class TaskOverlay {
    */
   isInvalid(name: 'title' | 'dueDate'): boolean {
     const control = this.taskForm.controls[name];
-    return control.invalid && (control.touched || this.submitted());
+    return control.invalid && (control.touched || control.dirty || this.submitted());
+  }
+
+  titleMessage(): string {
+    const errors = this.taskForm.controls.title.errors;
+    if (!errors) return '';
+
+    if (errors['maxlength']) {
+      return 'Maxiumum 100 characters allowed';
+    }
+
+    if (errors['required'] || errors['pattern']) {
+      return 'Please enter a title';
+    }
+
+    return '';
   }
 
   /**

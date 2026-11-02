@@ -38,7 +38,9 @@
         </button>
       </header>
       <div class="modal-scroll-content">
-        <h3 lang="de" class="modal-title">{{ task.title }}</h3>
+        <h3 lang="de" class="modal-title" [style.--title-length]="task.title.length">
+          {{ task.title }}
+        </h3>
         <p class="modal-description">{{ task.description }}</p>
 
         <div class="info">
@@ -179,8 +181,8 @@
       <div class="edit-form-wrapper" [formGroup]="taskForm">
         <div class="field" [class.field--invalid]="isInvalid('title')">
           <label class="field__label">Title<span class="field__required">*</span></label>
-          <input type="text" formControlName="title" maxlength="100" class="field__input" />
-          <span class="field__error">This field is required</span>
+          <input type="text" formControlName="title" maxlength="120" class="field__input" />
+          <span class="field__error">{{ titleMessage() }}</span>
         </div>
         <div class="field">
           <label class="field__label">Description</label>
