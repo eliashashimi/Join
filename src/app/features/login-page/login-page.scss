@@ -152,6 +152,16 @@ $error-color: #ff8190;
   }
 }
 
+.svg {
+  position: fixed;
+  transform: translateX(-40px) translateY(14px);
+  border-style: none;
+  background-color: white;
+  @media screen and (max-width: 650px) {
+    transform: translateX(-40px) translateY(12px);
+  }
+}
+
 .form-actions {
   display: flex;
   margin-bottom: 30px;
@@ -235,4 +245,14 @@ $error-color: #ff8190;
       width: 100%;
     }
   }
+}
+
+.full-screen-layout {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  background-color: #f6f7f8;
 }
