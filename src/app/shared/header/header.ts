@@ -2,6 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
+import { AuthService } from '../../service/auth-service';
 
 @Component({
   selector: 'app-header',
@@ -12,6 +13,7 @@ import { filter, map, startWith } from 'rxjs';
 })
 export class HeaderComponent {
   private router = inject(Router);
+  readonly auth = inject(AuthService);
 
   showUserMenu = signal(false);
 
@@ -37,5 +39,11 @@ export class HeaderComponent {
   closeUserMenuOnOutsideClick(event: MouseEvent): void {
     const target = event.target as Element;
     if (!target.closest('.user-menu, .user-avatar-sm')) this.showUserMenu.set(false);
+  }
+
+  async logout(): Promise<void> {
+    this.showUserMenu.set(false);
+    await this.auth.logout();
+    this.router.navigate(['/login']);
   }
 }

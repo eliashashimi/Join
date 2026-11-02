@@ -1,6 +1,7 @@
 import { RouterLink } from '@angular/router';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { TaskService } from '../../service/task-service';
+import { AuthService } from '../../service/auth-service';
 import { SummaryStatsService } from '../../service/summary-stats.service';
 import { SummaryCard } from './components/summary-card/summary-card';
 import { SummaryUrgent } from './components/summary-urgent/summary-urgent';
@@ -17,7 +18,7 @@ export class Summary {
   private readonly statsService = inject(SummaryStatsService);
 
   readonly stats = computed(() => this.statsService.calcStats(this.taskService.tasks()));
-  readonly userName = signal<string | null>(null);
+  readonly userName = inject(AuthService).userName;
 
   /** Lädt beim Öffnen der Seite alle Tasks aus Supabase. */
   constructor() {

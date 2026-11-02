@@ -1,12 +1,14 @@
 <header class="top-header">
   <span class="header-title">Kanban Project Management Tool</span>
   <div class="user-profile">
-    @if (isHelpVisible()) {
+    @if (auth.user() && isHelpVisible()) {
       <a routerLink="/help" class="help-icon-link">
         <span class="help-icon">?</span>
       </a>
     }
-    <button class="user-avatar-sm" (click)="toggleUserMenu()">SM</button>
+    @if (auth.user()) {
+      <button class="user-avatar-sm" (click)="toggleUserMenu()">{{ auth.initials() }}</button>
+    }
 
     @if (showUserMenu()) {
       <nav class="user-menu">
@@ -19,7 +21,7 @@
         <a routerLink="/privacy-policy" class="user-menu-item" (click)="showUserMenu.set(false)"
           >Privacy Policy</a
         >
-        <button class="user-menu-item" disabled>Log out</button>
+        <button class="user-menu-item" (click)="logout()">Log out</button>
       </nav>
     }
   </div>
