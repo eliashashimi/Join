@@ -9,21 +9,21 @@ import { ContactsComponent } from './features/contacts/contacts/contacts';
 import { HelpPageComponent } from './features/help-page/help-page';
 import { PrivacyPolicy } from './features/privacy-policy/privacy-policy';
 import { LegalNotice } from './features/legal-notice/legal-notice';
+import { authGuard, loggedOutGuard } from './guards/auth-guard';
 
 export const routes: Routes = [
-  // { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: Login },
-  { path: 'signup', component: Signup },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'login', component: Login, canActivate: [loggedOutGuard] },
+  { path: 'signup', component: Signup, canActivate: [loggedOutGuard] },
   {
     path: '',
     component: MainLayout,
-    // später: canActivate: [authGuard],
     children: [
-      { path: 'summary', component: Summary },
-      { path: 'board', component: Board },
-      { path: 'add-task', component: AddTask },
-      { path: 'contacts', component: ContactsComponent },
-      { path: 'help', component: HelpPageComponent },
+      { path: 'summary', component: Summary, canActivate: [authGuard] },
+      { path: 'board', component: Board, canActivate: [authGuard] },
+      { path: 'add-task', component: AddTask, canActivate: [authGuard] },
+      { path: 'contacts', component: ContactsComponent, canActivate: [authGuard] },
+      { path: 'help', component: HelpPageComponent, canActivate: [authGuard] },
       { path: 'privacy-policy', component: PrivacyPolicy },
       { path: 'legal-notice', component: LegalNotice },
     ],
