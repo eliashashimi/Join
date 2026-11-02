@@ -11,7 +11,7 @@ import { PrivacyPolicy } from './features/privacy-policy/privacy-policy';
 import { LegalNotice } from './features/legal-notice/legal-notice';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  // { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: Login },
   { path: 'signup', component: Signup },
   {
