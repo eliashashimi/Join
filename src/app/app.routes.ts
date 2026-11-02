@@ -6,9 +6,10 @@ import { LegalNotice } from './features/legal-notice/legal-notice';
 import { Board } from './features/board/board';
 import { AddTask } from './features/add-task/add-task';
 import { Summary } from './features/summary/summary';
+import { LoginPage } from './features/login-page/login-page';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'summary', pathMatch: 'full' },
+  { path: '', component: LoginPage, pathMatch: 'full' },
   { path: 'summary', component: Summary },
   { path: 'contacts', component: ContactsComponent },
   { path: 'help', component: HelpPageComponent },
@@ -16,5 +17,5 @@ export const routes: Routes = [
   { path: 'legal-notice', component: LegalNotice },
   { path: 'board', component: Board },
   { path: 'add-task', component: AddTask },
-  { path: '**', redirectTo: 'summary' },
+  { path: '**', redirectTo: '' },
 ];
