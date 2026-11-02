@@ -5,7 +5,7 @@
 <section class="login-container">
   <header class="login-header">
     <span>Not a Join user?</span>
-    <button class="btn-secondary" routerLink="/sign-up">Sign up</button>
+    <button class="btn-secondary" routerLink="/signup">Sign up</button>
   </header>
 
   <main class="login-main">
@@ -51,7 +51,7 @@
           [class.invalid]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid"
         >
           <input type="password" formControlName="password" placeholder="Password" />
-          <button class="svg">
+          <button type="button" class="svg">
             <svg
               width="22"
               height="19"
@@ -73,6 +73,7 @@
           >
             Password is required.
           </div>
+          <div class="error-msg" *ngIf="loginError()">{{ loginError() }}</div>
         </div>
 
         <!-- <div class="form-actions">
@@ -88,8 +89,8 @@
         </div> -->
 
         <div class="button-group">
-          <button type="submit" class="btn-primary" [disabled]="loginForm.invalid">Log in</button>
-          <button type="button" class="btn-secondary" (click)="guestLogin()">Guest Log in</button>
+          <button type="submit" class="btn-primary" [disabled]="loginForm.invalid || isLoading()">Log in</button>
+          <button type="button" class="btn-secondary" [disabled]="isLoading()" (click)="guestLogin()">Guest Log in</button>
         </div>
       </form>
     </div>

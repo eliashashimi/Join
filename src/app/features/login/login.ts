@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -8,6 +8,10 @@ import {
   FormsModule,
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../service/auth-service';
+
+const LOGIN_ERROR = 'Check your email and password. Please try again.';
+const GUEST_ERROR = 'Guest log in failed. Please try again.';
 
 @Component({
   imports: [CommonModule, ReactiveFormsModule, RouterModule, FormsModule],
@@ -19,15 +23,21 @@ import { Router, RouterModule } from '@angular/router';
 export class Login implements OnInit {
   loginForm!: FormGroup;
   rememberMe: boolean = false;
+  isLoading = signal(false);
+  loginError = signal('');
+
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
+    private auth: AuthService,
   ) {}
+
 
   ngOnInit(): void {
     this.initForm();
   }
+
 
   initForm(): void {
     this.loginForm = this.fb.group({
@@ -36,19 +46,31 @@ export class Login implements OnInit {
     });
   }
 
+
   onSubmit(): void {
-    if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
-      console.log('Login abgesendet:', email, password);
-      this.router.navigate(['/summary']);
-    } else {
+    if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
+      return;
     }
+    const { email, password } = this.loginForm.value;
+    this.runLogin(() => this.auth.login(email, password), LOGIN_ERROR);
   }
 
+
   guestLogin(): void {
-    console.log('Als Gast eingeloggt - Eingeschränkte Rechte');
-    localStorage.setItem('user_role', 'guest');
-    this.router.navigate(['/summary']);
+    this.runLogin(() => this.auth.loginAsGuest(), GUEST_ERROR);
+  }
+
+
+  private async runLogin(login: () => Promise<void>, errorText: string): Promise<void> {
+    this.isLoading.set(true);
+    this.loginError.set('');
+    try {
+      await login();
+      this.router.navigate(['/summary']);
+    } catch {
+      this.loginError.set(errorText);
+      this.isLoading.set(false);
+    }
   }
 }
