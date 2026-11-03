@@ -4,8 +4,13 @@
 
 <section class="login-container">
   <header class="login-header">
-    <span>Not a Join user?</span>
-    <button class="btn-secondary" routerLink="/signup">Sign up</button>
+    <div class="header-left">
+      <img src="assets/Join-logo.png" alt="Join Logo" class="static-logo" />
+    </div>
+    <div class="header-right">
+      <span>Not a Join user?</span>
+      <button class="btn-primary sign-up-btn" routerLink="/signup">Sign up</button>
+    </div>
   </header>
 
   <main class="login-main">
@@ -73,7 +78,14 @@
           >
             Password is required.
           </div>
-          <div class="error-msg" *ngIf="loginError()">{{ loginError() }}</div>
+          <div
+            class="error-msg"
+            *ngIf="
+              loginForm.get('password')?.touched && loginForm.get('password')?.hasError('minlength')
+            "
+          >
+            Password must be at least 5 characters long.
+          </div>
         </div>
 
         <!-- <div class="form-actions">
@@ -89,12 +101,28 @@
         </div> -->
 
         <div class="button-group">
-          <button type="submit" class="btn-primary" [disabled]="loginForm.invalid || isLoading()">Log in</button>
-          <button type="button" class="btn-secondary" [disabled]="isLoading()" (click)="guestLogin()">Guest Log in</button>
+          <button type="submit" class="btn-primary" [disabled]="loginForm.invalid || isLoading()">
+            Log in
+          </button>
+          <button
+            type="button"
+            class="btn-secondary"
+            [disabled]="isLoading()"
+            (click)="guestLogin()"
+          >
+            Guest Log in
+          </button>
         </div>
       </form>
     </div>
   </main>
+
+  <div class="header-right-mobile">
+    <div class="header-right-mobile-wrapper">
+      <span>Not a Join user?</span>
+      <button class="btn-primary sign-up-btn" routerLink="/signup">Sign up</button>
+    </div>
+  </div>
 
   <footer class="login-footer">
     <a routerLink="/privacy-policy">Privacy Policy</a>
