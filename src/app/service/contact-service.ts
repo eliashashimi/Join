@@ -112,9 +112,6 @@ export class ContactService {
     return this.contactList().some((c) => c.id !== exceptId && c.email.toLowerCase() === wanted);
   }
 
-  /**
-   * Holt die ID des eingeloggten Users aus der lokalen Session.
-   */
   private async loadCurrentUser(): Promise<void> {
     const { data } = await this.db.auth.getSession();
     this.currentUserId.set(data.session?.user.id ?? null);
