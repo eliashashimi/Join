@@ -1,5 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal, computed, inject, HostListener } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  signal,
+  computed,
+  inject,
+  HostListener,
+  WritableSignal,
+} from '@angular/core';
+import { Router } from '@angular/router';
 import { ContactInterface, GroupedContacts } from '../../../interface/contact-interface';
 import { ContactDetailComponent } from '../contact-detail/contact-detail';
 import { AddContact } from '../contact-form/add-contact/add-contact';
@@ -23,12 +32,19 @@ export class ContactsComponent implements OnInit {
   loadError = signal<boolean>(false);
 
   private contactService = inject(ContactService);
+  private router = inject(Router);
   contacts = this.contactService.contacts;
 
   selectedContact = computed(() => {
     const id = this.selectedContactId();
     if (!id) return null;
     return this.contacts().find((c) => c.id === id) || null;
+  });
+
+  /** Ist der gewählte Kontakt löschbar (eigener Kontakt oder Dummy-Kontakt)? */
+  canDeleteSelected = computed(() => {
+    const contact = this.selectedContact();
+    return !!contact && this.contactService.canDelete(contact);
   });
 
   async ngOnInit(): Promise<void> {
@@ -85,8 +101,11 @@ export class ContactsComponent implements OnInit {
     this.showMobileMenu.set(false);
   }
 
+  /**
+   * Öffnet den Lösch-Dialog, aber nur für Kontakte, die der User löschen darf.
+   */
   onDeleteContact(): void {
-    if (!this.selectedContact()?.id) return;
+    if (!this.canDeleteSelected()) return;
     this.showMobileMenu.set(false);
     this.contactService.showDeleteModal.set(true);
   }
@@ -98,18 +117,30 @@ export class ContactsComponent implements OnInit {
   }
 
   /**
-   * Löscht den Kontakt, setzt die Auswahl sofort zurück und blendet die Meldung nach 3 Sekunden aus.
+   * Löscht den Kontakt. Ist es der eigene, wird der ganze Account gelöscht und zum Login weitergeleitet.
    * @param id ID des Kontakts
    */
   private async executeContactDeletion(id: string): Promise<void> {
     try {
+      if (this.contactService.isOwnContact(id)) {
+        await this.contactService.deleteOwnAccount();
+        await this.router.navigate(['/login']);
+        return;
+      }
       await this.contactService.deleteContact(id);
       this.selectedContactId.set(null);
-      this.contactService.showDeletedMessage.set(true);
-      setTimeout(() => this.contactService.showDeletedMessage.set(false), 3000);
+      this.showMessage(this.contactService.showDeletedMessage);
     } catch {
-      this.contactService.showDeleteErrorMessage.set(true);
-      setTimeout(() => this.contactService.showDeleteErrorMessage.set(false), 3000);
+      this.showMessage(this.contactService.showDeleteErrorMessage);
     }
+  }
+
+  /**
+   * Zeigt eine Meldung und blendet sie nach 3 Sekunden wieder aus.
+   * @param flag Signal der Meldung
+   */
+  private showMessage(flag: WritableSignal<boolean>): void {
+    flag.set(true);
+    setTimeout(() => flag.set(false), 3000);
   }
 }

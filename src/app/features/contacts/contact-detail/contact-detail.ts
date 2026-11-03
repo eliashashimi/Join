@@ -23,3 +23,4 @@ export class ContactDetailComponent {
     this.srv.showDeleteModal.set(true);
   }
 }
+

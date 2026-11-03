@@ -11,6 +11,7 @@ export class ContactService {
   private readonly contactList = signal<ContactInterface[]>([]);
 
   readonly contacts = this.contactList.asReadonly();
+  readonly currentUserId = signal<string | null>(null);
   showSuccessMessage = signal<boolean>(false);
   showDeletedMessage = signal<boolean>(false);
   showUpdatedMessage = signal<boolean>(false);
@@ -19,9 +20,11 @@ export class ContactService {
 
   /**
    * READ: Lädt alle Kontakte und legt sie im Signal `contacts` ab.
+   * Merkt sich außerdem die ID des eingeloggten Users für die Löschrechte.
    * @returns die sortierte Kontaktliste
    */
   async getContacts(): Promise<ContactInterface[]> {
+    await this.loadCurrentUser();
     const { data } = await this.db.from(TABLE).select('*').throwOnError();
     const contacts = sortContacts(data.map(toContact));
     this.contactList.set(contacts);
@@ -29,7 +32,7 @@ export class ContactService {
   }
 
   /**
-   * CREATE: Speichert einen neuen Kontakt.
+   * CREATE: Speichert einen neuen Kontakt. Er hat keine `user_id` und gilt daher als Dummy-Kontakt.
    * @param contact Daten aus dem Formular
    * @returns den gespeicherten Kontakt inklusive ID
    */
@@ -59,12 +62,43 @@ export class ContactService {
   }
 
   /**
-   * DELETE: Löscht einen Kontakt.
+   * DELETE: Löscht einen Kontakt. Die Datenbank erlaubt das nur für den eigenen
+   * Kontakt und für Dummy-Kontakte (siehe Delete-Policy).
    * @param id ID des Kontakts
    */
   async deleteContact(id: string): Promise<void> {
     await this.db.from(TABLE).delete().eq('id', id).throwOnError();
     this.contactList.update((list) => list.filter((c) => c.id !== id));
+  }
+
+  /**
+   * Löscht den eigenen Account samt Kontakt und meldet den User lokal ab.
+   */
+  async deleteOwnAccount(): Promise<void> {
+    await this.db.rpc('delete_own_account').throwOnError();
+    await this.db.auth.signOut({ scope: 'local' });
+    this.contactList.set([]);
+    this.currentUserId.set(null);
+  }
+
+  /**
+   * Darf der eingeloggte User diesen Kontakt löschen? Erlaubt sind der eigene Kontakt
+   * und Dummy-Kontakte ohne Account, nicht aber andere registrierte User.
+   * @param contact der Kontakt
+   * @returns `true`, wenn das Löschen erlaubt ist
+   */
+  canDelete(contact: ContactInterface): boolean {
+    return !contact.userId || contact.userId === this.currentUserId();
+  }
+
+  /**
+   * Prüft, ob der Kontakt zum eingeloggten User gehört.
+   * @param id ID des Kontakts
+   * @returns `true`, wenn es der eigene Kontakt ist
+   */
+  isOwnContact(id: string): boolean {
+    const userId = this.currentUserId();
+    return !!userId && this.contactList().some((c) => c.id === id && c.userId === userId);
   }
 
   /**
@@ -77,6 +111,14 @@ export class ContactService {
     const wanted = email.toLowerCase();
     return this.contactList().some((c) => c.id !== exceptId && c.email.toLowerCase() === wanted);
   }
+
+  /**
+   * Holt die ID des eingeloggten Users aus der lokalen Session.
+   */
+  private async loadCurrentUser(): Promise<void> {
+    const { data } = await this.db.auth.getSession();
+    this.currentUserId.set(data.session?.user.id ?? null);
+  }
 }
 
 function toContact(row: ContactRow): ContactInterface {
@@ -87,6 +129,7 @@ function toContact(row: ContactRow): ContactInterface {
     phone: row.phone ?? '',
     color: row.color,
     initials: getInitials(row.name),
+    userId: row.user_id,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
