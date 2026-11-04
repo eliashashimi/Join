@@ -25,7 +25,7 @@ export class Login implements OnInit {
   rememberMe: boolean = false;
   isLoading = signal(false);
   loginError = signal('');
-
+  showPassword = false;
 
   constructor(
     private fb: FormBuilder,
@@ -33,11 +33,13 @@ export class Login implements OnInit {
     private auth: AuthService,
   ) {}
 
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
 
   ngOnInit(): void {
     this.initForm();
   }
-
 
   initForm(): void {
     this.loginForm = this.fb.group({
@@ -45,7 +47,6 @@ export class Login implements OnInit {
       password: ['', [Validators.required, Validators.minLength(5)]],
     });
   }
-
 
   onSubmit(): void {
     if (this.loginForm.invalid) {
@@ -56,11 +57,15 @@ export class Login implements OnInit {
     this.runLogin(() => this.auth.login(email, password), LOGIN_ERROR);
   }
 
-
   guestLogin(): void {
     this.runLogin(() => this.auth.loginAsGuest(), GUEST_ERROR);
   }
 
+  // guestLogin(): void {
+  //   console.log('Als Gast eingeloggt - Eingeschränkte Rechte');
+  //   localStorage.setItem('user_role', 'guest');
+  //   this.router.navigate(['/summary']);
+  // }
 
   private async runLogin(login: () => Promise<void>, errorText: string): Promise<void> {
     this.isLoading.set(true);
