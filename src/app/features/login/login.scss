@@ -301,7 +301,8 @@ $error-color: #ff8190;
   font-size: clamp(10px, calc(8.077px + 0.641vw), 13px);
   color: $error-color;
   text-align: center;
-  transform: translateY(-10px);
+  position: absolute;
+  transform: translateY(-20px);
 }
 
 .button-group {
