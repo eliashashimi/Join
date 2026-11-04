@@ -326,7 +326,7 @@ $error-color: #ff8190;
   position: fixed;
   transform: translateX(-40px) translateY(14px);
   border-style: none;
-  background-color: white;
+  background-color: transparent;
   @media screen and (max-width: 650px) {
     transform: translateX(-40px) translateY(12px);
   }
