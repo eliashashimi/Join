@@ -11,6 +11,8 @@ import { TaskForm } from './task-form/task-form';
 export class AddTask {
   private readonly router = inject(Router);
 
+
+  /** Wechselt nach dem Anlegen eines Tasks zum Board. */
   goToBoard(): void {
     this.router.navigate(['/board']);
   }

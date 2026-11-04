@@ -23,6 +23,7 @@ export class CategorySelect {
   isOpen = signal<boolean>(false);
   invalid = input<boolean>(false);
 
+
   /**
    * Liefert die Bezeichnung der gewählten Kategorie.
    * @returns das Label oder undefined, wenn noch nichts gewählt ist
@@ -32,12 +33,14 @@ export class CategorySelect {
     return found ? found.label : undefined;
   }
 
+
   /**
    * Öffnet das Auswahlmenü oder schließt es, wenn es schon offen ist.
    */
   toggleOpen(): void {
     this.isOpen.update((value) => !value);
   }
+
 
   /**
    * Wählt eine Kategorie und schließt das Menü.
@@ -47,6 +50,7 @@ export class CategorySelect {
     this.category.set(value);
     this.isOpen.set(false);
   }
+
 
   /**
    * Schließt das Menü bei einem Klick außerhalb der Komponente.

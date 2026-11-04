@@ -20,24 +20,39 @@ export class AuthService {
   }
 
 
+  /**
+   * Prüft, ob im Browser eine Sitzung gespeichert ist.
+   * @returns `true`, wenn jemand angemeldet ist
+   */
   async isLoggedIn(): Promise<boolean> {
     const { data } = await this.db.auth.getSession();
     return data.session !== null;
   }
 
 
+  /**
+   * Meldet einen registrierten Nutzer an.
+   * @param email die E-Mail-Adresse
+   * @param password das Passwort
+   * @throws den Fehler von Supabase, z. B. bei falschem Passwort
+   */
   async login(email: string, password: string): Promise<void> {
     const { error } = await this.db.auth.signInWithPassword({ email, password });
     if (error) throw error;
   }
 
 
+  /**
+   * Meldet den Besucher als Gast an (anonymer Nutzer in Supabase).
+   * @throws den Fehler von Supabase
+   */
   async loginAsGuest(): Promise<void> {
     const { error } = await this.db.auth.signInAnonymously();
     if (error) throw error;
   }
 
 
+  /** Meldet den Nutzer ab und löscht die Sitzung im Browser. */
   async logout(): Promise<void> {
     await this.db.auth.signOut();
   }

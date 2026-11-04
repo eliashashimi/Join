@@ -12,8 +12,11 @@ import { filter } from 'rxjs';
 export class App implements OnInit{
   isLogin: boolean = true;
 
+
   constructor(private router: Router) {}
 
+
+  /** Merkt sich nach jedem Seitenwechsel, ob gerade die Start-URL offen ist. */
   ngOnInit() {
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))

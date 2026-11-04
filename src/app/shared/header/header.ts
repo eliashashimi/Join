@@ -32,15 +32,24 @@ export class HeaderComponent {
     () => !this.hiddenHelpRoutes.some((route) => this.currentUrl().startsWith(route)),
   );
 
+
+  /** Öffnet oder schließt das Menü unter dem Avatar. */
   toggleUserMenu(): void {
     this.showUserMenu.update((v) => !v);
   }
 
+
+  /**
+   * Schließt das Menü, wenn außerhalb davon geklickt wird.
+   * @param event der Klick auf der Seite
+   */
   closeUserMenuOnOutsideClick(event: MouseEvent): void {
     const target = event.target as Element;
     if (!target.closest('.user-menu, .user-avatar-sm')) this.showUserMenu.set(false);
   }
 
+
+  /** Meldet den Nutzer ab und geht zur Login-Seite. */
   async logout(): Promise<void> {
     this.showUserMenu.set(false);
     await this.auth.logout();

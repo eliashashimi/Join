@@ -30,6 +30,7 @@ export class AssignedToDropdown implements OnInit {
   readonly visibleChips = computed(() => this.selectedContacts().slice(0, MAX_CHIPS));
   readonly hiddenCount = computed(() => Math.max(0, this.selectedContacts().length - MAX_CHIPS));
 
+
   /**
    * Lädt die Kontakte, falls sie noch fehlen, und merkt sich einen Ladefehler.
    */
@@ -42,12 +43,14 @@ export class AssignedToDropdown implements OnInit {
     }
   }
 
+
   /**
    * Öffnet die Kontaktliste.
    */
   open(): void {
     this.isOpen.set(true);
   }
+
 
   /**
    * Schließt die Kontaktliste und leert das Suchfeld.
@@ -57,6 +60,7 @@ export class AssignedToDropdown implements OnInit {
     this.searchText.set('');
   }
 
+
   /**
    * Öffnet die Kontaktliste oder schließt sie, wenn sie schon offen ist.
    */
@@ -64,6 +68,7 @@ export class AssignedToDropdown implements OnInit {
     if (this.isOpen()) this.close();
     else this.open();
   }
+
 
   /**
    * Schließt die Liste bei einem Klick außerhalb der Komponente.
@@ -75,6 +80,7 @@ export class AssignedToDropdown implements OnInit {
     if (!this.host.nativeElement.contains(target)) this.close();
   }
 
+
   /**
    * Übernimmt den Suchtext und öffnet die Liste.
    * @param event das Input-Event des Suchfelds
@@ -83,6 +89,7 @@ export class AssignedToDropdown implements OnInit {
     this.searchText.set((event.target as HTMLInputElement).value);
     this.open();
   }
+
 
   /**
    * Wählt einen Kontakt aus oder wieder ab.
@@ -93,6 +100,7 @@ export class AssignedToDropdown implements OnInit {
       ids.includes(id) ? ids.filter((selectedId) => selectedId !== id) : [...ids, id],
     );
   }
+
 
   /**
    * Prüft, ob ein Kontakt ausgewählt ist.
