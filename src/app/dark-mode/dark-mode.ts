@@ -18,6 +18,7 @@ function readSavedTheme(): string | null {
   }
 }
 
+
 /**
  * Speichert das gewählte Theme im Browser-Speicher.
  * @param theme das Theme, das gespeichert werden soll
@@ -30,6 +31,7 @@ function saveTheme(theme: Theme): void {
   }
 }
 
+
 /**
  * Setzt das Theme am Root-Element und speichert es.
  * @param theme das Theme, das aktiv werden soll
@@ -40,12 +42,14 @@ function applyTheme(theme: Theme): void {
   saveTheme(theme);
 }
 
+
 /**
  * Wechselt zwischen hellem und dunklem Theme.
  */
 function toggleTheme(): void {
   applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
 }
+
 
 /**
  * Prüft, ob ein Klick auf dem blauen Viereck im Logo liegt.
@@ -66,6 +70,7 @@ function isInHotspot(e: MouseEvent, logo: Element): boolean {
   );
 }
 
+
 /**
  * Behandelt Klicks auf das Logo und schaltet das Theme um, wenn der Hotspot getroffen wird.
  * @param e das Klick-Event
@@ -77,6 +82,7 @@ function onLogoClick(e: MouseEvent): void {
   e.stopPropagation();
   toggleTheme();
 }
+
 
 /**
  * Berechnet die Position und das Aussehen des roten Debug-Rahmens um den Hotspot.
@@ -96,6 +102,7 @@ function debugBoxStyle(r: DOMRect): Partial<CSSStyleDeclaration> {
   };
 }
 
+
 /**
  * Zeichnet für jedes Logo einen roten Rahmen um den Hotspot (nur zum Debuggen).
  */
@@ -106,6 +113,7 @@ function drawDebugOverlay(): void {
     document.body.appendChild(box);
   });
 }
+
 
 /**
  * Startet den Dark Mode: lädt das gespeicherte Theme und hört auf Klicks im Logo-Hotspot.

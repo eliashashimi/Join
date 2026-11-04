@@ -8,6 +8,7 @@ import { Component, input } from '@angular/core';
 export class SummaryGreeting {
   name = input<string | null>(null);
 
+
   /** Liefert die Begrüßung passend zur Tageszeit. */
   get greeting(): string {
     const h = new Date().getHours();

@@ -22,6 +22,7 @@ export class SummaryStatsService {
     };
   }
 
+
   /**
    * Zählt die offenen Tasks pro Priorität.
    * @param open Alle Tasks, die noch nicht in Done liegen
@@ -31,7 +32,8 @@ export class SummaryStatsService {
     return { urgent: count('urgent'), medium: count('medium'), low: count('low') };
   }
 
-    /**
+
+  /**
    * Findet das früheste Fälligkeitsdatum der offenen Tasks.
    * @param open Alle Tasks, die noch nicht in Done liegen
    */

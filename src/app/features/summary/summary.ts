@@ -23,9 +23,11 @@ export class Summary {
 
   readonly showGreetingScreen = this.cameFromLogin();
 
+
   constructor() {
     this.taskService.getTasks();
   }
+
 
   /**
    * Prüft, ob die Summary direkt nach dem Login geöffnet wurde.

@@ -61,24 +61,6 @@ export class ContactsComponent implements OnInit {
     return id && this.contactService.isOwnContact(id) ? DELETE_TEXTS.account : DELETE_TEXTS.contact;
   });
 
-  async ngOnInit(): Promise<void> {
-    try {
-      await this.contactService.getContacts();
-    } catch {
-      this.loadError.set(true);
-    }
-  }
-
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent): void {
-    if (this.showMobileMenu()) {
-      const target = event.target as HTMLElement;
-      if (!target.closest('.mobile-fab-wrapper')) {
-        this.showMobileMenu.set(false);
-      }
-    }
-  }
-
   groupedContacts = computed<GroupedContacts[]>(() => {
     const map = new Map<string, ContactInterface[]>();
     for (const c of this.contacts()) {
@@ -93,6 +75,32 @@ export class ContactsComponent implements OnInit {
 
   isMobileDetailOpen = computed(() => this.selectedContactId() !== null);
 
+
+  /** Lädt beim Öffnen der Seite alle Kontakte. Klappt das nicht, erscheint ein Hinweis. */
+  async ngOnInit(): Promise<void> {
+    try {
+      await this.contactService.getContacts();
+    } catch {
+      this.loadError.set(true);
+    }
+  }
+
+
+  /**
+   * Schließt das mobile Menü, wenn außerhalb davon geklickt wird.
+   * @param event der Klick auf der Seite
+   */
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (this.showMobileMenu()) {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.mobile-fab-wrapper')) {
+        this.showMobileMenu.set(false);
+      }
+    }
+  }
+
+
   /**
    * Prüft, ob der Kontakt zum eingeloggten User gehört. In der Liste steht dann „(You)“ hinter dem Namen.
    * @param contact Kontakt aus der Liste
@@ -102,10 +110,13 @@ export class ContactsComponent implements OnInit {
     return this.contactService.isOwnContact(contact.id);
   }
 
+
+  /** Geht in der mobilen Ansicht vom Kontakt zurück zur Liste. */
   goBackToList(): void {
     this.selectedContactId.set(null);
     this.showMobileMenu.set(false);
   }
+
 
   /**
    * Setzt den neu erstellten Kontakt als aktiv.
@@ -115,14 +126,19 @@ export class ContactsComponent implements OnInit {
     this.selectedContactId.set(contactId);
   }
 
+
+  /** Öffnet oder schließt das mobile Menü des Kontakts. */
   toggleMobileMenu(): void {
     this.showMobileMenu.update((val) => !val);
   }
 
+
+  /** Öffnet das Bearbeiten-Formular und schließt das mobile Menü. */
   openEditModal(): void {
     this.showEditContactModal.set(true);
     this.showMobileMenu.set(false);
   }
+
 
   /**
    * Öffnet den Lösch-Dialog, aber nur für Kontakte, die der User löschen darf.
@@ -137,11 +153,14 @@ export class ContactsComponent implements OnInit {
     this.contactService.showDeleteModal.set(true);
   }
 
+
+  /** Löscht den gewählten Kontakt, nachdem im Dialog bestätigt wurde. */
   async confirmDelete(): Promise<void> {
     const id = this.selectedContactId();
     this.contactService.showDeleteModal.set(false);
     if (id) await this.executeContactDeletion(id);
   }
+
 
   /**
    * Löscht den Kontakt. Ist es der eigene, wird der ganze Account gelöscht und zum Login weitergeleitet.
@@ -161,6 +180,7 @@ export class ContactsComponent implements OnInit {
       this.showMessage(this.contactService.showDeleteErrorMessage);
     }
   }
+
 
   /**
    * Zeigt eine Meldung und blendet sie nach 3 Sekunden wieder aus.

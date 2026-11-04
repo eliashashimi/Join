@@ -30,6 +30,7 @@ export function randomColor(): string {
   return CONTACT_COLORS[Math.floor(Math.random() * CONTACT_COLORS.length)];
 }
 
+
 /**
  * Berechnet die Initialen: erster Buchstabe des ersten und des letzten Wortes,
  * bei nur einem Wort die ersten zwei Buchstaben.
@@ -43,6 +44,7 @@ export function getInitials(name: string): string {
   return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
 }
 
+
 /**
  * Schreibt den ersten Buchstaben jedes Namensteils groß, auch nach einem Bindestrich.
  * @param str der eingegebene Name
@@ -51,6 +53,7 @@ export function getInitials(name: string): string {
 export function capitalizeFirstLetter(str: string): string {
   return str.replace(/(^|[\s-])\p{L}/gu, (match) => match.toUpperCase());
 }
+
 
 /**
  * Prüft, ob ein Datenbankfehler von einer doppelten E-Mail-Adresse kommt.

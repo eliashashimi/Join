@@ -12,10 +12,14 @@ export class ContactDetailComponent {
   @Output() editClicked = new EventEmitter<void>();
   @Output() deleteClicked = new EventEmitter<void>();
 
+
+  /** Meldet der Kontaktliste, dass der Kontakt bearbeitet werden soll. */
   onEdit(): void {
     this.editClicked.emit();
   }
 
+
+  /** Meldet der Kontaktliste, dass der Kontakt gelöscht werden soll. */
   onDelete(): void {
     this.deleteClicked.emit();
   }

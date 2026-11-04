@@ -19,6 +19,7 @@ export class ContactService {
   showCannotDeleteMessage = signal<boolean>(false);
   showDeleteModal = signal<boolean>(false);
 
+
   /**
    * READ: Lädt alle Kontakte und legt sie im Signal `contacts` ab.
    * Merkt sich außerdem die ID des eingeloggten Users für die Löschrechte.
@@ -32,6 +33,7 @@ export class ContactService {
     return contacts;
   }
 
+
   /**
    * CREATE: Speichert einen neuen Kontakt. Er hat keine `user_id` und gilt daher als Dummy-Kontakt.
    * @param contact Daten aus dem Formular
@@ -44,6 +46,7 @@ export class ContactService {
     this.contactList.update((list) => sortContacts([...list, created]));
     return created;
   }
+
 
   /**
    * UPDATE: Ändert einen vorhandenen Kontakt.
@@ -62,6 +65,7 @@ export class ContactService {
     return updated;
   }
 
+
   /**
    * DELETE: Löscht einen Kontakt. Die Datenbank erlaubt das nur für den eigenen
    * Kontakt und für Dummy-Kontakte (siehe Delete-Policy).
@@ -75,6 +79,7 @@ export class ContactService {
     this.contactList.update((list) => list.filter((c) => c.id !== id));
   }
 
+
   /**
    * Löscht den eigenen Account samt Kontakt und meldet den User lokal ab.
    */
@@ -84,6 +89,7 @@ export class ContactService {
     this.contactList.set([]);
     this.currentUserId.set(null);
   }
+
 
   /**
    * Darf der eingeloggte User diesen Kontakt löschen? Erlaubt sind der eigene Kontakt
@@ -95,6 +101,7 @@ export class ContactService {
     return !contact.userId || contact.userId === this.currentUserId();
   }
 
+
   /**
    * Prüft, ob der Kontakt zum eingeloggten User gehört.
    * @param id ID des Kontakts
@@ -104,6 +111,7 @@ export class ContactService {
     const userId = this.currentUserId();
     return !!userId && this.contactList().some((c) => c.id === id && c.userId === userId);
   }
+
 
   /**
    * Prüft, ob die E-Mail-Adresse schon bei einem anderen Kontakt vergeben ist.
@@ -116,12 +124,21 @@ export class ContactService {
     return this.contactList().some((c) => c.id !== exceptId && c.email.toLowerCase() === wanted);
   }
 
+
+  /**
+   * Merkt sich die ID des angemeldeten Users, z. B. für den eigenen Kontakt und die Löschrechte.
+   */
   private async loadCurrentUser(): Promise<void> {
     const { data } = await this.db.auth.getSession();
     this.currentUserId.set(data.session?.user.id ?? null);
   }
 }
 
+/**
+ * Wandelt eine Zeile aus Supabase in einen Kontakt für die App um.
+ * @param row die Zeile aus der Tabelle contacts
+ * @returns den Kontakt
+ */
 function toContact(row: ContactRow): ContactInterface {
   return {
     id: row.id,
@@ -136,6 +153,12 @@ function toContact(row: ContactRow): ContactInterface {
   };
 }
 
+
+/**
+ * Wandelt Formulardaten in eine Zeile für Supabase um. Leerzeichen werden entfernt, ein leeres Telefon wird null.
+ * @param data die Daten aus dem Formular
+ * @returns die Zeile für die Tabelle contacts
+ */
 function toRow(data: Partial<ContactData>): Partial<ContactRow> {
   return {
     name: data.name?.trim(),
@@ -145,6 +168,12 @@ function toRow(data: Partial<ContactData>): Partial<ContactRow> {
   };
 }
 
+
+/**
+ * Sortiert Kontakte alphabetisch nach Namen.
+ * @param contacts die Kontakte
+ * @returns eine neue, sortierte Liste
+ */
 function sortContacts(contacts: ContactInterface[]): ContactInterface[] {
   return [...contacts].sort((a, b) => a.name.localeCompare(b.name, 'de'));
 }

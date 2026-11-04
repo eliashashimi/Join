@@ -36,6 +36,7 @@ export class EditContact {
     phone: ['', [Validators.required, Validators.pattern(PHONE_REGEX)]],
   });
 
+
   constructor() {
     effect(() => {
       const contact = this.contactService.contacts().find((c) => c.id === this.contactId());
@@ -43,23 +44,42 @@ export class EditContact {
     });
   }
 
+
+  /**
+   * Das Formularfeld für den Namen.
+   * @returns das Feld „name“
+   */
   get name() {
     return this.userform.get('name');
   }
 
+
+  /**
+   * Das Formularfeld für die E-Mail-Adresse.
+   * @returns das Feld „email“
+   */
   get email() {
     return this.userform.get('email');
   }
 
+
+  /**
+   * Das Formularfeld für die Telefonnummer.
+   * @returns das Feld „phone“
+   */
   get phone() {
     return this.userform.get('phone');
   }
 
+
+  /** Öffnet den Lösch-Dialog und schließt das Bearbeiten-Formular. */
   onDeleteClick(): void {
     this.contactService.showDeleteModal.set(true);
     this.close();
   }
 
+
+  /** Schließt das Formular mit Animation und meldet das der Kontaktliste. */
   close(): void {
     if (this.isClosing()) return;
     this.isClosing.set(true);
@@ -69,6 +89,7 @@ export class EditContact {
       this.isClosing.set(false);
     }, 250);
   }
+
 
   /**
    * Übernimmt die Daten des Kontakts ins Formular.
@@ -83,6 +104,7 @@ export class EditContact {
     });
   }
 
+
   /**
    * Liefert die Initialen des aktuell eingegebenen Namens.
    * @returns die Initialen oder ein leerer String
@@ -90,6 +112,7 @@ export class EditContact {
   getInitials(): string {
     return initialsOf(this.name?.value ?? '');
   }
+
 
   /**
    * Liest die Formularwerte. Die Farbe bleibt unverändert.
@@ -103,12 +126,15 @@ export class EditContact {
     };
   }
 
+
+  /** Leert das Formular und schließt es. */
   private resetAndCloseForm(): void {
     this.userform.reset();
     this.formSubmitted.set(false);
     this.isSubmitting.set(false);
     this.close();
   }
+
 
   /**
    * Zeigt je nach Fehler den Hinweis an der E-Mail oder eine allgemeine Meldung.
@@ -120,6 +146,8 @@ export class EditContact {
     this.isSubmitting.set(false);
   }
 
+
+  /** Speichert die Änderungen am Kontakt und schließt das Formular. */
   private async saveContact(): Promise<void> {
     try {
       await this.contactService.updateContact(this.contactId(), this.getFormData());
@@ -129,6 +157,10 @@ export class EditContact {
     }
   }
 
+
+  /**
+   * Prüft das Formular und speichert die Änderungen, wenn alles stimmt und die E-Mail frei ist.
+   */
   async onSubmit(): Promise<void> {
     this.formSubmitted.set(true);
     this.emailExistingError.set(false);
