@@ -6,4 +6,6 @@
   <div class="toast"><p>Contact successfully updated</p></div>
 } @else if (contactService.showDeleteErrorMessage()) {
   <div class="toast"><p>Contact could not be deleted</p></div>
+} @else if (contactService.showCannotDeleteMessage()) {
+  <div class="toast"><p>User cannot be deleted</p></div>
 }

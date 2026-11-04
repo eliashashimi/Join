@@ -103,10 +103,14 @@ export class ContactsComponent implements OnInit {
 
   /**
    * Öffnet den Lösch-Dialog, aber nur für Kontakte, die der User löschen darf.
+   * Sonst wird die Meldung "kann nicht gelöscht werden" angezeigt.
    */
   onDeleteContact(): void {
-    if (!this.canDeleteSelected()) return;
     this.showMobileMenu.set(false);
+    if (!this.canDeleteSelected()) {
+      this.showMessage(this.contactService.showCannotDeleteMessage);
+      return;
+    }
     this.contactService.showDeleteModal.set(true);
   }
 
