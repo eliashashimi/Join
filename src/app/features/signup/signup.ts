@@ -78,11 +78,96 @@ export class Signup {
   );
 
   constructor() {
-    inject(DestroyRef).onDestroy(() => clearTimeout(this.redirectTimer));
+    inject(DestroyRef).onDestroy(() => {
+      clearTimeout(this.redirectTimer);
+      // Entfernt, da es beim Navigieren zwischendurch die Daten löscht
+    });
+    this.loadFormDataFromLocalStorage();
+    this.setupLocalStorageListeners();
   }
 
-  onBack(): void {
-    this.location.back();
+  /**
+   * Lädt die Formulardaten aus dem localStorage und füllt sie in das Formular ein.
+   * Wird beim Initialisieren der Komponente aufgerufen.
+   */
+  private loadFormDataFromLocalStorage(): void {
+    const savedFormData = localStorage.getItem('signupFormData');
+    if (savedFormData) {
+      try {
+        const formData = JSON.parse(savedFormData);
+        // Füllt die Form Controls nur mit gesperrten Werten (sichere Methode)
+        Object.keys(formData).forEach(key => {
+          const control = this.signupForm.get(key);
+          if (control && formData[key] !== null && formData[key] !== undefined) {
+            control.setValue(formData[key], { emitEvent: false });
+          }
+        });
+      } catch (error) {
+        console.error('Fehler beim Laden der Formulardaten:', error);
+        localStorage.removeItem('signupFormData');
+      }
+    }
+  }
+
+  /**
+   * Überprüft, ob Formular-Tracking für Safari/Chrome unterstützt wird und überprüft die gespeicherten Daten.
+   * @returns true, wenn LocalStorage unterstützt wird, sonst false
+   */
+  private verifyStorageSupport(): boolean {
+    try {
+      const testKey = '__storage_test__';
+      localStorage.setItem(testKey, testKey);
+      localStorage.removeItem(testKey);
+      return true;
+    } catch (error) {
+      console.warn('LocalStorage wird nicht unterstützt:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Richtet die Listener für das Speichern der Formulardaten im localStorage ein.
+   * Überwacht Änderungen in allen Form Controls.
+   */
+  private setupLocalStorageListeners(): void {
+    // Überwacht Änderungen in jedem Form Control
+    this.signupForm.valueChanges.subscribe(value => {
+      this.saveFormDataToLocalStorage(value);
+    });
+
+    // Speichert auch bei direktem localStorage-Ereignis (Tab-Wechsel)
+    const saveOnStorageChange = (event: StorageEvent) => {
+      if (event.key === 'signupFormData') {
+        this.loadFormDataFromLocalStorage();
+      }
+    };
+    window.addEventListener('storage', saveOnStorageChange);
+  }
+
+  /**
+   * Speichert die Formulardaten im localStorage.
+   * @param value Die aktuellen Formwerte
+   */
+  private saveFormDataToLocalStorage(value: any): void {
+    try {
+      // Erstellt eine sichere Kopie ohne sensitive Daten (wie Passwörter)
+      const safeValue = {
+        name: value.name || '',
+        email: value.email || '',
+        privacy: value.privacy || false
+      };
+      localStorage.setItem('signupFormData', JSON.stringify(safeValue));
+    } catch (error) {
+      console.error('Fehler beim Speichern der Formulardaten:', error);
+    }
+  }
+
+  /**
+   * Löscht die Formulardaten aus dem localStorage.
+   * Wird nach erfolgreicher Formularübermittlung aufgerufen.
+   */
+  private clearFormDataFromLocalStorage(): void {
+    localStorage.removeItem('signupFormData');
   }
 
   /**
@@ -127,6 +212,31 @@ export class Signup {
   }
 
   /**
+   * Leitet den Zugriff auf die Privacy Policy und Legal Notice weiter.
+   * Speichert die Formulardaten und navigiert zur entsprechenden Seite.
+   */
+  navigateTo(route: '/privacy-policy' | '/legal-notice'): void {
+    this.saveFormDataToLocalStorage(this.signupForm.value);
+    this.router.navigate([route]);
+  }
+
+  /**
+   * Navigiert explizit zurück zur Login-Seite.
+   */
+  onBack(): void {
+    this.router.navigate([LOGIN_ROUTE]);
+  }
+
+  /**
+   * Speichert die Formulardaten und navigiert zurück zur Signup-Formularseite.
+   * @param route Die Route, zur der navigiert werden soll (Standard: '/signup')
+   */
+  navigateBack(route: string = '/signup'): void {
+    this.saveFormDataToLocalStorage(this.signupForm.value);
+    this.router.navigate([route]);
+  }
+
+  /**
    * Erstellt das Konto in Supabase Auth. Der Name wird als user_metadata gespeichert.
    * Ist die E-Mail-Adresse schon registriert, wirft die Funktion einen Fehler mit dem Code `email_exists`.
    */
@@ -144,6 +254,7 @@ export class Signup {
 
   private showSuccessAndLeave(): void {
     this.showSuccess.set(true);
+    this.clearFormDataFromLocalStorage();
     this.redirectTimer = setTimeout(() => this.router.navigate([LOGIN_ROUTE]), REDIRECT_DELAY_MS);
   }
 
