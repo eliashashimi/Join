@@ -241,7 +241,7 @@ $error-color: #ff8190;
     outline: none;
     box-sizing: border-box;
     color: $dark-blue;
-    transition: border-color 0.15s ease;
+    transition: border-color 0.1s ease;
 
     &:focus {
       border-color: $light-blue;
@@ -317,19 +317,33 @@ $error-color: #ff8190;
     font-size: 18px;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.15s ease-in-out;
+    transition: all 0.1s ease-in-out;
     box-sizing: border-box;
   }
 }
 
 .svg {
-  position: fixed;
-  transform: translateX(-40px) translateY(14px);
-  border-style: none;
+  position: absolute;
+  top: 25px;
+  right: 20px;
+  transform: translateY(-50%);
+  display: flex;
+  padding: 0;
+  border: none;
   background-color: transparent;
-  @media screen and (max-width: 650px) {
-    transform: translateX(-40px) translateY(12px);
-  }
+}
+
+svg.svg {
+  pointer-events: none;
+}
+
+button.svg {
+  cursor: pointer;
+}
+
+.sign-up-btn {
+  cursor: pointer;
+  transition: all 0.1s ease-in-out;
 }
 
 .btn-primary {
@@ -367,7 +381,7 @@ $error-color: #ff8190;
     color: #a8a8a8;
     text-decoration: none;
     font-size: 16px;
-    transition: color 0.2s;
+    transition: color 0.1s;
     &:hover {
       color: $light-blue;
     }
