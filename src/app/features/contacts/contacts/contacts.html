@@ -39,7 +39,7 @@
             {{ contact.initials }}
           </div>
           <div class="contact-info">
-            <span class="contact-name">{{ contact.name }}</span>
+            <span class="contact-name">{{ contact.name }}{{ isOwnContact(contact) ? ' (You)' : '' }}</span>
             <span class="contact-email">{{ contact.email }}</span>
           </div>
         </div>
@@ -169,4 +169,8 @@
 }
 
 <app-toast />
-<app-delete-confirm (confirmed)="confirmDelete()" />
+<app-delete-confirm
+  [title]="deleteText().title"
+  [message]="deleteText().message"
+  (confirmed)="confirmDelete()"
+/>

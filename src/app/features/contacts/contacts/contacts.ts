@@ -17,6 +17,14 @@ import { ContactService } from '../../../service/contact-service';
 import { Toast } from '../../../shared/toast/toast';
 import { DeleteConfirm } from '../../../shared/delete-confirm/delete-confirm';
 
+const DELETE_TEXTS = {
+  contact: { title: 'Delete contact', message: 'Are you sure you want to delete this contact?' },
+  account: {
+    title: 'Delete your account',
+    message: 'Your account and your contact will be deleted and you will be logged out.',
+  },
+};
+
 @Component({
   imports: [CommonModule, ContactDetailComponent, AddContact, EditContact, Toast, DeleteConfirm],
   selector: 'app-contacts',
@@ -45,6 +53,12 @@ export class ContactsComponent implements OnInit {
   canDeleteSelected = computed(() => {
     const contact = this.selectedContact();
     return !!contact && this.contactService.canDelete(contact);
+  });
+
+  /** Texte für den Lösch-Dialog. Beim eigenen Kontakt warnt er, dass der ganze Account gelöscht wird. */
+  deleteText = computed(() => {
+    const id = this.selectedContactId();
+    return id && this.contactService.isOwnContact(id) ? DELETE_TEXTS.account : DELETE_TEXTS.contact;
   });
 
   async ngOnInit(): Promise<void> {
@@ -78,6 +92,15 @@ export class ContactsComponent implements OnInit {
   });
 
   isMobileDetailOpen = computed(() => this.selectedContactId() !== null);
+
+  /**
+   * Prüft, ob der Kontakt zum eingeloggten User gehört. In der Liste steht dann „(You)“ hinter dem Namen.
+   * @param contact Kontakt aus der Liste
+   * @returns `true` beim eigenen Kontakt
+   */
+  isOwnContact(contact: ContactInterface): boolean {
+    return this.contactService.isOwnContact(contact.id);
+  }
 
   goBackToList(): void {
     this.selectedContactId.set(null);
