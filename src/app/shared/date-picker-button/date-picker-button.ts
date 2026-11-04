@@ -10,6 +10,11 @@ interface CalendarDay {
 
 const DATE_TEXT = /^(\d{2})\/(\d{2})\/(\d{4})$/;
 
+/**
+ * Wandelt ein Datum im Format TT/MM/JJJJ in ISO (JJJJ-MM-TT) um.
+ * @param text das eingegebene Datum
+ * @returns das Datum als ISO-Text oder einen leeren Text, wenn es kein gültiges Datum ist
+ */
 function toIsoValue(text: string): string {
   const match = DATE_TEXT.exec(text);
   if (!match) return '';
@@ -28,6 +33,11 @@ function toIsoValue(text: string): string {
   return `${yearText}-${monthText}-${dayText}`;
 }
 
+
+/**
+ * Gibt das heutige Datum als ISO-Text zurück.
+ * @returns heute als JJJJ-MM-TT
+ */
 function todayIso(): string {
   const now = new Date();
   const pad = (n: number) => String(n).padStart(2, '0');
@@ -52,6 +62,8 @@ export class DatePickerButton {
   visibleMonth = new Date().getMonth();
   monthLabel = '';
 
+
+  /** Öffnet den Kalender beim gewählten Datum oder im aktuellen Monat. */
   open(): void {
     this.today = todayIso();
     const selected = toIsoValue(this.value) || this.today;
@@ -62,10 +74,17 @@ export class DatePickerButton {
     this.updateCalendar();
   }
 
+
+  /** Schließt den Kalender. */
   close(): void {
     this.calendarOpen = false;
   }
 
+
+  /**
+   * Blättert im Kalender vor oder zurück.
+   * @param offset +1 für den nächsten, -1 für den vorigen Monat
+   */
   changeMonth(offset: number): void {
     const month = new Date(this.visibleYear, this.visibleMonth + offset, 1);
     this.visibleYear = month.getFullYear();
@@ -73,12 +92,22 @@ export class DatePickerButton {
     this.updateCalendar();
   }
 
+
+  /**
+   * Übernimmt das angeklickte Datum als TT/MM/JJJJ ins Formular und schließt den Kalender.
+   * @param value das Datum als ISO-Text
+   */
   selectDate(value: string): void {
     const [year, month, day] = value.split('-');
     this.picked.emit(`${day}/${month}/${year}`);
     this.close();
   }
 
+
+  /**
+   * Prüft, ob man zurückblättern darf. Vor den aktuellen Monat geht es nicht.
+   * @returns `true`, wenn der vorige Monat erlaubt ist
+   */
   canGoToPreviousMonth(): boolean {
     return (
       this.visibleYear > Number(this.today.slice(0, 4)) ||
@@ -87,11 +116,15 @@ export class DatePickerButton {
     );
   }
 
+
+  /** Schließt den Kalender mit der Escape-Taste. */
   @HostListener('document:keydown.escape')
   onEscape(): void {
     this.close();
   }
 
+
+  /** Baut das Kalenderblatt für den angezeigten Monat neu auf. */
   private updateCalendar(): void {
     const firstWeekday = (new Date(this.visibleYear, this.visibleMonth, 1).getDay() + 6) % 7;
     const daysInMonth = new Date(this.visibleYear, this.visibleMonth + 1, 0).getDate();

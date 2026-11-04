@@ -80,11 +80,13 @@ export class Signup {
     { validators: passwordsMatch },
   );
 
+
   constructor() {
     inject(DestroyRef).onDestroy(() => clearTimeout(this.redirectTimer));
     this.restoreDraft();
     this.signupForm.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => this.saveDraft());
   }
+
 
   /**
    * Füllt Name, E-Mail und Privacy-Haken wieder ein, z. B. nach einem Blick in die Privacy Policy.
@@ -94,11 +96,13 @@ export class Signup {
     if (savedDraft) this.signupForm.patchValue(savedDraft);
   }
 
+
   /** Merkt sich Name, E-Mail und Privacy-Haken im Speicher. Passwörter werden nie gemerkt. */
   private saveDraft(): void {
     const { name, email, privacy } = this.signupForm.getRawValue();
     savedDraft = { name, email, privacy };
   }
+
 
   /**
    * Zeigt oder versteckt die Eingabe eines Passwortfeldes (Klick auf das Auge).
@@ -108,6 +112,7 @@ export class Signup {
     const visible = field === 'password' ? this.showPassword : this.showConfirm;
     visible.update((shown) => !shown);
   }
+
 
   /**
    * Gibt den Fehlertext zu einem Feld zurück. Fehler erscheinen erst, wenn das Feld
@@ -124,11 +129,15 @@ export class Signup {
     return ERROR_MESSAGES[field][Object.keys(control.errors ?? {})[0]] ?? '';
   }
 
+
+  /** Löscht die Fehlermeldungen vom letzten Absenden. */
   clearServerErrors(): void {
     this.emailServerError.set('');
     this.submitError.set('');
   }
 
+
+  /** Legt das Konto an, wenn das Formular gültig ist, und zeigt danach Erfolg oder Fehler an. */
   async onSubmit(): Promise<void> {
     if (this.signupForm.invalid || this.isSubmitting()) return;
     this.clearServerErrors();
@@ -141,11 +150,13 @@ export class Signup {
     }
   }
 
+
   /** Bricht die Registrierung ab, vergisst die Eingaben und geht zurück zum Login. */
   onBack(): void {
     savedDraft = null;
     this.router.navigate([LOGIN_ROUTE]);
   }
+
 
   /**
    * Erstellt das Konto in Supabase Auth. Der Name wird als user_metadata gespeichert.
@@ -163,11 +174,16 @@ export class Signup {
     if (data.session) await this.db.auth.signOut({ scope: 'local' });
   }
 
+
+  /**
+   * Zeigt „You Signed Up successfully“, vergisst die Eingaben und geht nach kurzer Zeit zum Login.
+   */
   private showSuccessAndLeave(): void {
     this.showSuccess.set(true);
     savedDraft = null;
     this.redirectTimer = setTimeout(() => this.router.navigate([LOGIN_ROUTE]), REDIRECT_DELAY_MS);
   }
+
 
   /**
    * Zeigt den passenden Fehler und gibt den Button wieder frei.
