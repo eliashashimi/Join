@@ -1,5 +1,5 @@
-import { Location } from '@angular/common';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   AbstractControl,
   FormBuilder,
@@ -20,6 +20,10 @@ const MISMATCH_MESSAGE = "Your passwords don't match. Please try again.";
 const GENERIC_SUBMIT_ERROR = 'Sign up failed. Please try again.';
 
 type FieldName = 'name' | 'email' | 'password' | 'confirm';
+
+type SignupDraft = { name: string; email: string; privacy: boolean };
+
+let savedDraft: SignupDraft | null = null;
 
 const ERROR_MESSAGES: Record<FieldName, Record<string, string>> = {
   name: { pattern: 'Please enter a valid name' },
@@ -53,7 +57,6 @@ const SUBMIT_ERRORS: Record<string, string> = {
   templateUrl: './signup.html',
 })
 export class Signup {
-  private readonly location = inject(Location);
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
   private readonly db = inject(Supabase).client;
@@ -78,96 +81,23 @@ export class Signup {
   );
 
   constructor() {
-    inject(DestroyRef).onDestroy(() => {
-      clearTimeout(this.redirectTimer);
-      // Entfernt, da es beim Navigieren zwischendurch die Daten löscht
-    });
-    this.loadFormDataFromLocalStorage();
-    this.setupLocalStorageListeners();
+    inject(DestroyRef).onDestroy(() => clearTimeout(this.redirectTimer));
+    this.restoreDraft();
+    this.signupForm.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => this.saveDraft());
   }
 
   /**
-   * Lädt die Formulardaten aus dem localStorage und füllt sie in das Formular ein.
-   * Wird beim Initialisieren der Komponente aufgerufen.
+   * Füllt Name, E-Mail und Privacy-Haken wieder ein, z. B. nach einem Blick in die Privacy Policy.
+   * Die Daten liegen nur im Speicher der offenen Seite, nie im localStorage.
    */
-  private loadFormDataFromLocalStorage(): void {
-    const savedFormData = localStorage.getItem('signupFormData');
-    if (savedFormData) {
-      try {
-        const formData = JSON.parse(savedFormData);
-        // Füllt die Form Controls nur mit gesperrten Werten (sichere Methode)
-        Object.keys(formData).forEach(key => {
-          const control = this.signupForm.get(key);
-          if (control && formData[key] !== null && formData[key] !== undefined) {
-            control.setValue(formData[key], { emitEvent: false });
-          }
-        });
-      } catch (error) {
-        console.error('Fehler beim Laden der Formulardaten:', error);
-        localStorage.removeItem('signupFormData');
-      }
-    }
+  private restoreDraft(): void {
+    if (savedDraft) this.signupForm.patchValue(savedDraft);
   }
 
-  /**
-   * Überprüft, ob Formular-Tracking für Safari/Chrome unterstützt wird und überprüft die gespeicherten Daten.
-   * @returns true, wenn LocalStorage unterstützt wird, sonst false
-   */
-  private verifyStorageSupport(): boolean {
-    try {
-      const testKey = '__storage_test__';
-      localStorage.setItem(testKey, testKey);
-      localStorage.removeItem(testKey);
-      return true;
-    } catch (error) {
-      console.warn('LocalStorage wird nicht unterstützt:', error);
-      return false;
-    }
-  }
-
-  /**
-   * Richtet die Listener für das Speichern der Formulardaten im localStorage ein.
-   * Überwacht Änderungen in allen Form Controls.
-   */
-  private setupLocalStorageListeners(): void {
-    // Überwacht Änderungen in jedem Form Control
-    this.signupForm.valueChanges.subscribe(value => {
-      this.saveFormDataToLocalStorage(value);
-    });
-
-    // Speichert auch bei direktem localStorage-Ereignis (Tab-Wechsel)
-    const saveOnStorageChange = (event: StorageEvent) => {
-      if (event.key === 'signupFormData') {
-        this.loadFormDataFromLocalStorage();
-      }
-    };
-    window.addEventListener('storage', saveOnStorageChange);
-  }
-
-  /**
-   * Speichert die Formulardaten im localStorage.
-   * @param value Die aktuellen Formwerte
-   */
-  private saveFormDataToLocalStorage(value: any): void {
-    try {
-      // Erstellt eine sichere Kopie ohne sensitive Daten (wie Passwörter)
-      const safeValue = {
-        name: value.name || '',
-        email: value.email || '',
-        privacy: value.privacy || false
-      };
-      localStorage.setItem('signupFormData', JSON.stringify(safeValue));
-    } catch (error) {
-      console.error('Fehler beim Speichern der Formulardaten:', error);
-    }
-  }
-
-  /**
-   * Löscht die Formulardaten aus dem localStorage.
-   * Wird nach erfolgreicher Formularübermittlung aufgerufen.
-   */
-  private clearFormDataFromLocalStorage(): void {
-    localStorage.removeItem('signupFormData');
+  /** Merkt sich Name, E-Mail und Privacy-Haken im Speicher. Passwörter werden nie gemerkt. */
+  private saveDraft(): void {
+    const { name, email, privacy } = this.signupForm.getRawValue();
+    savedDraft = { name, email, privacy };
   }
 
   /**
@@ -211,29 +141,10 @@ export class Signup {
     }
   }
 
-  /**
-   * Leitet den Zugriff auf die Privacy Policy und Legal Notice weiter.
-   * Speichert die Formulardaten und navigiert zur entsprechenden Seite.
-   */
-  navigateTo(route: '/privacy-policy' | '/legal-notice'): void {
-    this.saveFormDataToLocalStorage(this.signupForm.value);
-    this.router.navigate([route]);
-  }
-
-  /**
-   * Navigiert explizit zurück zur Login-Seite.
-   */
+  /** Bricht die Registrierung ab, vergisst die Eingaben und geht zurück zum Login. */
   onBack(): void {
+    savedDraft = null;
     this.router.navigate([LOGIN_ROUTE]);
-  }
-
-  /**
-   * Speichert die Formulardaten und navigiert zurück zur Signup-Formularseite.
-   * @param route Die Route, zur der navigiert werden soll (Standard: '/signup')
-   */
-  navigateBack(route: string = '/signup'): void {
-    this.saveFormDataToLocalStorage(this.signupForm.value);
-    this.router.navigate([route]);
   }
 
   /**
@@ -254,18 +165,16 @@ export class Signup {
 
   private showSuccessAndLeave(): void {
     this.showSuccess.set(true);
-    this.clearFormDataFromLocalStorage();
+    savedDraft = null;
     this.redirectTimer = setTimeout(() => this.router.navigate([LOGIN_ROUTE]), REDIRECT_DELAY_MS);
   }
 
   /**
-   * Zeigt den passenden Fehler und gibt den Button wieder frei. Den echten Grund von Supabase
-   * gibt es zusätzlich in der Konsole, damit man bei einem Fehler nicht raten muss.
+   * Zeigt den passenden Fehler und gibt den Button wieder frei.
    * @param error Fehler aus createAccount
    */
   private handleError(error: unknown): void {
     const code = (error as { code?: string })?.code ?? '';
-    console.error('Sign up failed:', error);
     if (EMAIL_ERRORS[code]) this.emailServerError.set(EMAIL_ERRORS[code]);
     else this.submitError.set(SUBMIT_ERRORS[code] ?? GENERIC_SUBMIT_ERROR);
     this.isSubmitting.set(false);
