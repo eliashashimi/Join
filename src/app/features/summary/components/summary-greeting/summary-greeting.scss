@@ -18,3 +18,20 @@
   color: #124658;
   overflow-wrap: anywhere;
 }
+
+@media (max-width: 767px) {
+  :host {
+    align-items: center;
+    text-align: center;
+  }
+
+  .greeting {
+    font-size: 36px;
+    font-weight: 400;
+  }
+
+  .greeting__name {
+    font-size: 47px;
+    color: var(--light-blue);
+  }
+}

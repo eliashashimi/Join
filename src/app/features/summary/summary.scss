@@ -3,6 +3,8 @@ $blue: #29abe2;
 
 .summary { padding: 48px; }
 
+.summary__greeting-screen { display: none; }
+
 .summary__head {
   display: flex;
   align-items: center;
@@ -96,7 +98,31 @@ $blue: #29abe2;
     gap: 12px; 
   }
 
-  app-summary-greeting { 
+  .summary__content app-summary-greeting { 
     display: none; 
+  }
+
+  .summary__greeting-screen {
+    position: fixed;
+    inset: 80px 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+    background: var(--bg, #f6f7f8);
+    animation: greetingScreen 2s ease-in forwards;
+  }
+}
+
+@keyframes greetingScreen {
+  0%,
+  70% {
+    opacity: 1;
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
   }
 }

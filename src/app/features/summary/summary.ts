@@ -1,4 +1,4 @@
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Component, computed, inject } from '@angular/core';
 import { TaskService } from '../../service/task-service';
 import { AuthService } from '../../service/auth-service';
@@ -16,12 +16,23 @@ import { SummaryGreeting } from './components/summary-greeting/summary-greeting'
 export class Summary {
   private readonly taskService = inject(TaskService);
   private readonly statsService = inject(SummaryStatsService);
+  private readonly router = inject(Router);
 
   readonly stats = computed(() => this.statsService.calcStats(this.taskService.tasks()));
   readonly userName = inject(AuthService).userName;
 
-  /** Lädt beim Öffnen der Seite alle Tasks aus Supabase. */
+  readonly showGreetingScreen = this.cameFromLogin();
+
   constructor() {
     this.taskService.getTasks();
+  }
+
+  /**
+   * Prüft, ob die Summary direkt nach dem Login geöffnet wurde.
+   * @returns `true`, wenn die vorige Seite die Login-Seite war
+   */
+  private cameFromLogin(): boolean {
+    const navigation = this.router.currentNavigation() ?? this.router.lastSuccessfulNavigation();
+    return navigation?.previousNavigation?.finalUrl?.toString() === '/login';
   }
 }

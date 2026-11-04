@@ -1,4 +1,10 @@
 <section class="summary">
+  @if (showGreetingScreen) {
+    <div class="summary__greeting-screen">
+      <app-summary-greeting [name]="userName()" />
+    </div>
+  }
+
   <header class="summary__head">
     <h1>Join 360</h1>
     <span class="summary__divider"></span>
