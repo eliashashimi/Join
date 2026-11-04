@@ -60,6 +60,8 @@ export class Signup {
   private redirectTimer?: ReturnType<typeof setTimeout>;
 
   isSubmitting = signal(false);
+  showPassword = signal(false);
+  showConfirm = signal(false);
   showSuccess = signal(false);
   emailServerError = signal('');
   submitError = signal('');
@@ -81,6 +83,15 @@ export class Signup {
 
   onBack(): void {
     this.location.back();
+  }
+
+  /**
+   * Zeigt oder versteckt die Eingabe eines Passwortfeldes (Klick auf das Auge).
+   * @param field das Passwortfeld, dessen Anzeige gewechselt wird
+   */
+  togglePasswordVisibility(field: 'password' | 'confirm'): void {
+    const visible = field === 'password' ? this.showPassword : this.showConfirm;
+    visible.update((shown) => !shown);
   }
 
   /**
@@ -128,7 +139,6 @@ export class Signup {
     });
     if (error) throw error;
     if (data.user?.identities?.length === 0) throw { code: EMAIL_TAKEN };
-    // Ohne E-Mail-Bestätigung loggt signUp sofort ein, im Figma folgt aber der Login
     if (data.session) await this.db.auth.signOut({ scope: 'local' });
   }
 

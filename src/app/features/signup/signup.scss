@@ -1,6 +1,17 @@
 @use '../../../styles.scss';
 @use '../../../../public/assets/styles/' as *;
 
+// Werte aus dem Figma ("Sign up", "Sign up mobile", "Privacy policy check mark", "Button wo icon")
+$signup-border: #d1d1d1;       // Rahmen und Platzhalter der Felder
+$signup-icon: #a8a8a8;         // Symbole in den Feldern und der Text "I accept the"
+$signup-focus: #29abe2;        // Rahmen beim Tippen, Link
+$signup-error: #e60026;        // Rahmen und Text bei Fehlern
+$signup-checkbox: #4589ff;     // Rahmen und Häkchen der Checkbox
+$signup-hover-circle: #edf2fa; // Kreis hinter der Checkbox bei Hover
+$signup-footer-link: #cdcdcd;
+$signup-shadow: 0 0 14px 3px rgba(0, 0, 0, 0.04);
+$signup-font-error: 'Poppins', sans-serif;
+
 :host {
     position: relative;
     display: flex;
@@ -148,6 +159,61 @@ form {
     height: 24px;
     fill: var(--color-muted);
     pointer-events: none;
+}
+
+// Sammelblatt mit allen Symbolen (siehe signup.html): nimmt keinen Platz weg
+.icon-sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+ 
+// Auge in den Passwortfeldern: Es ersetzt das Schloss, sobald das Feld angeklickt wird
+// oder schon Text enthält, und zeigt oder versteckt das Passwort.
+.field__toggle {
+  position: absolute;
+  top: 12px;
+  right: 21px;
+  display: none;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: $signup-icon;
+  cursor: pointer;
+  transition: color $transition;
+ 
+  svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+  }
+ 
+  &:hover {
+    color: $signup-focus;
+  }
+ 
+  &:focus-visible {
+    border-radius: 4px;
+    outline: 2px solid $signup-focus;
+    outline-offset: 2px;
+  }
+}
+ 
+// :focus-within gilt auch, wenn der Fokus auf dem Auge-Button liegt;
+// :not(:placeholder-shown) bedeutet "im Feld steht etwas"
+.field--password:focus-within,
+.field--password:has(.field__input:not(:placeholder-shown)) {
+  .field__icon--lock {
+    display: none;
+  }
+ 
+  .field__toggle {
+    display: grid;
+  }
 }
 
 .field__error {
@@ -359,6 +425,37 @@ form {
     :host {
         padding-top: 197px;
     }
+}
+
+// -- Hinweis "You Signed Up successfully" ---------------------------------------
+.toast {
+  position: absolute;
+  bottom: 48px; // Unterkante wie der Button
+  left: 50%;
+  z-index: 1;
+  box-sizing: border-box;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  padding: 25px;
+  border-radius: 20px;
+  background: var(--dark-blue, #2a3647);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+  font: 400 20px/1.2 $font-main;
+  color: #fff;
+  transform: translateX(-50%);
+  animation: toast-in 200ms cubic-bezier(0.42, 0, 0.58, 1); // Figma: von unten, 200ms, ease-in-out
+}
+ 
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 120%);
+  }
+ 
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }
 
 @media (max-width: 640px) {

@@ -11,6 +11,8 @@ export interface ContactInterface {
 
   initials: string;
 
+  userId: string | null;
+
   createdAt: string;
   updatedAt: string;
 }
@@ -27,6 +29,7 @@ export interface ContactRow {
   name: string;
   email: string;
   phone: string | null;
+  user_id: string | null;
   color: string;
   created_at: string;
   updated_at: string;
