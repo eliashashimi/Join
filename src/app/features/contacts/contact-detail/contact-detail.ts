@@ -1,6 +1,5 @@
-import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ContactInterface } from '../../../interface/contact-interface';
-import { ContactService } from '../../../service/contact-service';
 
 @Component({
   selector: 'app-contact-detail',
@@ -11,16 +10,13 @@ import { ContactService } from '../../../service/contact-service';
 export class ContactDetailComponent {
   @Input() contact: ContactInterface | null = null;
   @Output() editClicked = new EventEmitter<void>();
-
-  private srv = inject(ContactService);
+  @Output() deleteClicked = new EventEmitter<void>();
 
   onEdit(): void {
     this.editClicked.emit();
   }
 
   onDelete(): void {
-    if (!this.contact?.id) return;
-    this.srv.showDeleteModal.set(true);
+    this.deleteClicked.emit();
   }
 }
-

@@ -16,6 +16,7 @@ export class ContactService {
   showDeletedMessage = signal<boolean>(false);
   showUpdatedMessage = signal<boolean>(false);
   showDeleteErrorMessage = signal<boolean>(false);
+  showCannotDeleteMessage = signal<boolean>(false);
   showDeleteModal = signal<boolean>(false);
 
   /**
@@ -64,10 +65,13 @@ export class ContactService {
   /**
    * DELETE: Löscht einen Kontakt. Die Datenbank erlaubt das nur für den eigenen
    * Kontakt und für Dummy-Kontakte (siehe Delete-Policy).
+   * Blockiert die Policy das Löschen, wirft Supabase keinen Fehler, sondern betrifft 0 Zeilen.
+   * Deshalb werden die gelöschten Zeilen zurückgefragt und geprüft.
    * @param id ID des Kontakts
    */
   async deleteContact(id: string): Promise<void> {
-    await this.db.from(TABLE).delete().eq('id', id).throwOnError();
+    const { data } = await this.db.from(TABLE).delete().eq('id', id).select().throwOnError();
+    if (!data || data.length === 0) throw new Error('Kontakt darf nicht gelöscht werden.');
     this.contactList.update((list) => list.filter((c) => c.id !== id));
   }
 
