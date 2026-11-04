@@ -47,6 +47,7 @@ export class Board implements OnInit {
   awaitFeedback = this.taskService.tasksByStatus('await_feedback');
   done = this.taskService.tasksByStatus('done');
 
+
   /**
    * Leert die Suche und lädt Kontakte und Tasks.
    */
@@ -56,6 +57,7 @@ export class Board implements OnInit {
     await this.taskService.getTasks();
   }
 
+
   /**
    * Öffnet die Detailansicht eines Tasks.
    * @param task Der Task, der angezeigt wird.
@@ -64,12 +66,14 @@ export class Board implements OnInit {
     this.openedTask = task;
   }
 
+
   /**
    * Schließt die Detailansicht.
    */
   closeTaskDetails() {
     this.openedTask = null;
   }
+
 
   /**
    * Öffnet das Add-Task-Formular für eine Spalte.
@@ -78,6 +82,7 @@ export class Board implements OnInit {
   openAddTask(status: TaskStatus = 'todo'): void {
     this.taskOverlay.open(status);
   }
+
 
   /**
    * Löscht den geöffneten Task und schließt die Detailansicht.
@@ -89,6 +94,7 @@ export class Board implements OnInit {
     }
   }
 
+
   /**
    * Zählt die erledigten Subtasks eines Tasks.
    * @param task Der Task.
@@ -97,6 +103,7 @@ export class Board implements OnInit {
   doneCount(task: TaskInterface) {
     return task.subtasks.filter((s) => s.done).length;
   }
+
 
   /**
    * Übernimmt einen abgelegten Task in die Zielspalte und speichert die neue Position.
@@ -121,6 +128,7 @@ export class Board implements OnInit {
     await this.taskService.moveTask(task.id, newStatus, event.currentIndex);
   }
 
+
   /**
    * Verschiebt einen Task ans Ende der gewählten Spalte (Menü "Move to").
    * @param task Der Task, der verschoben wird.
@@ -131,6 +139,7 @@ export class Board implements OnInit {
     void this.taskService.moveTask(task.id, status, index);
   }
 
+
   /**
    * Neigt die gezogene Karte in die Richtung, in die sie bewegt wird.
    * @param event Das Bewegungs-Ereignis des CDK.
@@ -140,12 +149,14 @@ export class Board implements OnInit {
     this.setTilt(event.delta.x > 0 ? TILT_DEGREES : -TILT_DEGREES);
   }
 
+
   /**
    * Setzt die Neigung der Karte zurück, wenn das Ziehen endet.
    */
   onDragEnded(): void {
     document.documentElement.style.removeProperty('--drag-tilt');
   }
+
 
   /**
    * Setzt die Neigung der gezogenen Karte.

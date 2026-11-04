@@ -27,20 +27,29 @@ export class Login implements OnInit {
   loginError = signal('');
   showPassword = false;
 
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private auth: AuthService,
   ) {}
 
+
+  /** Zeigt oder versteckt das Passwort (Klick auf das Auge). */
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
   }
 
+
+  /** Baut beim Öffnen der Seite das Login-Formular auf. */
   ngOnInit(): void {
     this.initForm();
   }
 
+
+  /**
+   * Erstellt das Formular mit E-Mail und Passwort. Sobald getippt wird, verschwindet die Fehlermeldung.
+   */
   initForm(): void {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -53,6 +62,8 @@ export class Login implements OnInit {
     });
   }
 
+
+  /** Prüft das Formular und meldet den Nutzer mit E-Mail und Passwort an. */
   onSubmit(): void {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
@@ -62,10 +73,18 @@ export class Login implements OnInit {
     this.runLogin(() => this.auth.login(email, password), LOGIN_ERROR);
   }
 
+
+  /** Meldet den Besucher als Gast an. */
   guestLogin(): void {
     this.runLogin(() => this.auth.loginAsGuest(), GUEST_ERROR);
   }
 
+
+  /**
+   * Führt einen Login aus und sperrt dabei die Buttons. Danach geht es zur Summary, bei einem Fehler erscheint die Meldung.
+   * @param login die Login-Funktion (mit Passwort oder als Gast)
+   * @param errorText der Text, der bei einem Fehler angezeigt wird
+   */
   private async runLogin(login: () => Promise<void>, errorText: string): Promise<void> {
     this.isLoading.set(true);
     this.loginError.set('');

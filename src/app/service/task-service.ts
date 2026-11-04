@@ -7,6 +7,7 @@ import {
   TaskStatus,
 } from '../interface/task-interface';
 import { Supabase } from './supabase';
+import { placeTask, toFullIndex } from './task-positions';
 
 const TABLE = 'tasks';
 const SELECT = '*, subtasks(*), task_assignees(contact_id)';
@@ -37,6 +38,7 @@ export class TaskService {
     () => this.searchText().trim() !== '' && this.filteredTasks().length === 0,
   );
 
+
   /**
    * Liefert ein Signal mit den (gefilterten) Tasks einer Spalte.
    * @param status Die Spalte, deren Tasks gebraucht werden.
@@ -45,6 +47,7 @@ export class TaskService {
   tasksByStatus(status: TaskStatus) {
     return computed(() => this.filteredTasks().filter((t) => t.status === status));
   }
+
 
   /**
    * Zeigt einen Toast drei Sekunden lang an. Ein neuer Toast ersetzt den alten.
@@ -55,6 +58,7 @@ export class TaskService {
     this.toastMessage.set(message);
     this.toastTimer = setTimeout(() => this.toastMessage.set(''), 3000);
   }
+
 
   /**
    * Lädt alle Tasks mit Subtasks und Zuweisungen aus Supabase und speichert sie im Signal.
@@ -72,6 +76,7 @@ export class TaskService {
     return tasks;
   }
 
+
   /**
    * Legt einen neuen Task samt Zuweisungen und Subtasks an und zeigt einen Toast.
    * @param task Die Daten aus dem Formular.
@@ -84,6 +89,7 @@ export class TaskService {
     this.showToast('Task added to board');
     return this.taskList().find((t) => t.id === taskId)!;
   }
+
 
   /**
    * Speichert die Hauptdaten eines neuen Tasks am Ende seiner Spalte.
@@ -101,6 +107,7 @@ export class TaskService {
     return (data as TaskRow).id;
   }
 
+
   /**
    * Speichert Zuweisungen und Subtasks. Schlägt das fehl, wird der halbe Task wieder gelöscht.
    * @param taskId Die ID des neuen Tasks.
@@ -116,6 +123,7 @@ export class TaskService {
     }
   }
 
+
   /**
    * Weist einem Task Kontakte zu.
    * @param taskId Die ID des Tasks.
@@ -127,6 +135,7 @@ export class TaskService {
     await this.db.from('task_assignees').insert(rows).throwOnError();
   }
 
+
   /**
    * Legt die Subtasks eines Tasks an.
    * @param taskId Die ID des Tasks.
@@ -137,6 +146,7 @@ export class TaskService {
     const rows = titles.map((title) => ({ task_id: taskId, title: title.trim() }));
     await this.db.from('subtasks').insert(rows).throwOnError();
   }
+
 
   /**
    * Verschiebt einen Task sofort im Board und speichert danach die neuen Positionen. Bei einem Fehler kommt ein Toast und die Tasks werden neu geladen.
@@ -156,6 +166,7 @@ export class TaskService {
       await this.getTasks().catch(() => undefined);
     }
   }
+
 
   /**
    * Speichert Status und Position aller Tasks, die sich verändert haben.
@@ -179,6 +190,7 @@ export class TaskService {
     );
   }
 
+
   /**
    * Hakt einen Subtask ab oder wieder ab und übernimmt das im Board.
    * @param taskId Die ID des Tasks.
@@ -199,6 +211,7 @@ export class TaskService {
     );
   }
 
+
   /**
    * Löscht einen Task und zeigt einen Toast. Bei einem Fehler wird dieser weitergegeben.
    * @param id Die ID des Tasks.
@@ -213,6 +226,7 @@ export class TaskService {
       throw error;
     }
   }
+
 
   /**
    * Speichert einen bearbeiteten Task samt Zuweisungen und Subtasks und zeigt einen Toast. Bei einem Fehler wird dieser weitergegeben.
@@ -230,6 +244,7 @@ export class TaskService {
       throw error;
     }
   }
+
 
   /**
    * Speichert Titel, Beschreibung, Datum, Kategorie, Priorität und Status eines Tasks.
@@ -250,6 +265,7 @@ export class TaskService {
       .throwOnError();
   }
 
+
   /**
    * Ersetzt die Zuweisungen eines Tasks durch die aktuellen.
    * @param task Der bearbeitete Task.
@@ -261,6 +277,7 @@ export class TaskService {
       await this.db.from('task_assignees').insert(rows).throwOnError();
     }
   }
+
 
   /**
    * Ersetzt die Subtasks eines Tasks durch die aktuellen.
@@ -297,6 +314,7 @@ function toInsertRow(task: TaskData, position: number) {
   };
 }
 
+
 /**
  * Wandelt eine Zeile aus Supabase in einen Task der App um.
  * @param row Die Zeile mit Subtasks und Zuweisungen.
@@ -317,71 +335,4 @@ function toTask(row: TaskRowWithRelations): TaskInterface {
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
-}
-
-/**
- * Liefert die Tasks einer Spalte nach Position sortiert.
- * @param tasks Alle Tasks.
- * @param status Die Spalte.
- * @returns Die sortierten Tasks dieser Spalte.
- */
-function column(tasks: TaskInterface[], status: TaskStatus): TaskInterface[] {
-  return tasks.filter((t) => t.status === status).sort((a, b) => a.position - b.position);
-}
-
-/**
- * Nummeriert die Positionen einer Spalte von 0 an neu durch.
- * @param tasks Die Tasks einer Spalte in der gewünschten Reihenfolge.
- * @returns Die Tasks mit neuen Positionen.
- */
-function renumber(tasks: TaskInterface[]): TaskInterface[] {
-  return tasks.map((task, position) => ({ ...task, position }));
-}
-
-/**
- * Setzt einen Task an eine Stelle einer Spalte und nummeriert die betroffenen Spalten neu.
- * @param tasks Alle Tasks.
- * @param id Die ID des verschobenen Tasks.
- * @param status Die Zielspalte.
- * @param index Die Position in der Zielspalte.
- * @returns Alle Tasks mit den neuen Positionen.
- */
-function placeTask(
-  tasks: TaskInterface[],
-  id: string,
-  status: TaskStatus,
-  index: number,
-): TaskInterface[] {
-  const moved = tasks.find((t) => t.id === id);
-  if (!moved) return tasks;
-  const target = column(tasks, status).filter((t) => t.id !== id);
-  target.splice(index, 0, { ...moved, status });
-  const sourceTasks = column(tasks, moved.status).filter((t) => t.id !== id);
-  const source = moved.status === status ? [] : renumber(sourceTasks);
-  const rest = tasks.filter((t) => t.status !== status && t.status !== moved.status);
-  return [...rest, ...renumber(target), ...source];
-}
-
-/**
- * Rechnet eine Position aus der gefilterten Ansicht in die Position in der vollständigen Spalte um.
- * @param all Alle Tasks.
- * @param shown Die gerade angezeigten (gefilterten) Tasks.
- * @param id Die ID des verschobenen Tasks.
- * @param status Die Zielspalte.
- * @param index Die Position in der angezeigten Spalte.
- * @returns Die Position in der vollständigen Spalte.
- */
-function toFullIndex(
-  all: TaskInterface[],
-  shown: TaskInterface[],
-  id: string,
-  status: TaskStatus,
-  index: number,
-): number {
-  const fullColumn = column(all, status).filter((t) => t.id !== id);
-  const shownColumn = column(shown, status).filter((t) => t.id !== id);
-  if (shownColumn.length === fullColumn.length) return index;
-  if (index < shownColumn.length) return fullColumn.indexOf(shownColumn[index]);
-  const last = shownColumn[shownColumn.length - 1];
-  return last ? fullColumn.indexOf(last) + 1 : fullColumn.length;
 }
