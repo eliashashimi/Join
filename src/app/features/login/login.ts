@@ -46,6 +46,11 @@ export class Login implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(5)]],
     });
+    this.loginForm.valueChanges.subscribe(() => {
+      if (this.loginError()) {
+        this.loginError.set('');
+      }
+    });
   }
 
   onSubmit(): void {
@@ -61,20 +66,15 @@ export class Login implements OnInit {
     this.runLogin(() => this.auth.loginAsGuest(), GUEST_ERROR);
   }
 
-  // guestLogin(): void {
-  //   console.log('Als Gast eingeloggt - Eingeschränkte Rechte');
-  //   localStorage.setItem('user_role', 'guest');
-  //   this.router.navigate(['/summary']);
-  // }
-
   private async runLogin(login: () => Promise<void>, errorText: string): Promise<void> {
     this.isLoading.set(true);
     this.loginError.set('');
     try {
       await login();
       this.router.navigate(['/summary']);
-    } catch {
+    } catch (error) {
       this.loginError.set(errorText);
+    } finally {
       this.isLoading.set(false);
     }
   }

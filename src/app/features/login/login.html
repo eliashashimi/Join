@@ -116,6 +116,12 @@
           </div>
         </div>
 
+        @if (loginError()) {
+          <div class="supabase-error">
+            {{ loginError() }}
+          </div>
+        }
+
         <div class="button-group">
           <button type="submit" class="btn-primary" [disabled]="loginForm.invalid || isLoading()">
             Log in

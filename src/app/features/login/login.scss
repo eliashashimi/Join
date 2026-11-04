@@ -269,14 +269,6 @@ $error-color: #ff8190;
   }
 
   .error-msg {
-    // position: absolute;
-    // color: $error-color;
-    // font-size: 13px;
-    // margin-top: 6px;
-    // padding-left: 4px;
-    // width: 100%;
-    // text-align: left;
-    // white-space: nowrap;
     position: absolute;
     bottom: 2px;
     left: 4px;
@@ -303,6 +295,13 @@ $error-color: #ff8190;
     gap: 12px;
     color: #a8a8a8;
   }
+}
+
+.supabase-error {
+  font-size: clamp(10px, calc(8.077px + 0.641vw), 13px);
+  color: $error-color;
+  text-align: center;
+  transform: translateY(-10px);
 }
 
 .button-group {
