@@ -25,12 +25,17 @@ export class Login implements OnInit {
   rememberMe: boolean = false;
   isLoading = signal(false);
   loginError = signal('');
+  showPassword = false;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private auth: AuthService,
   ) {}
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
 
   ngOnInit(): void {
     this.initForm();
