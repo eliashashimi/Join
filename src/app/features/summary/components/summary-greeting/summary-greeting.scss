@@ -1,0 +1,37 @@
+:host { display: flex; flex-direction: column; gap: 3px; }
+
+.greeting {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(32px, 4vw, 47px);
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+.greeting__name {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(40px, 5vw, 64px);
+  font-weight: 700;
+  line-height: 1.2;
+  color: #124658;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 767px) {
+  :host {
+    align-items: center;
+    text-align: center;
+  }
+
+  .greeting {
+    font-size: 36px;
+    font-weight: 400;
+  }
+
+  .greeting__name {
+    font-size: 47px;
+    color: var(--light-blue);
+  }
+}

@@ -1,0 +1,20 @@
+<div class="urgent">
+  <div class="urgent__prios">
+    @for (item of items(); track item.key) {
+      <div class="prio">
+        <span class="prio__count">{{ item.count }}</span>
+        <span [class]="'prio__circle prio__circle--' + item.key">
+          <img [src]="item.icon" alt="" />
+        </span>
+        <span class="prio__label">{{ item.label }}</span>
+      </div>
+    }
+  </div>
+  <span class="urgent__divider"></span>
+  <div class="urgent__deadline">
+    <strong class="urgent__date">
+      {{ deadline() ? (deadline() | date: 'MMMM d, y') : 'No deadline' }}
+    </strong>
+    <span class="urgent__hint">Upcoming Deadline</span>
+  </div>
+</div>

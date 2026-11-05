@@ -5,6 +5,7 @@
     </div>
   </div>
 
+  @if (auth.user()) {
   <nav class="nav-menu">
     <a routerLink="/summary" routerLinkActive="active" class="nav-item">
       <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -32,6 +33,16 @@
       Contacts
     </a>
   </nav>
+    } @else {
+    <nav class="nav-menu">
+      <a routerLink="/login" class="nav-item login-item">
+        <span class="login-content">
+          <img src="assets/icons/login.svg" alt="" class="login-icon" width="26" height="26" />
+          Log in
+        </span>
+      </a>
+    </nav>
+  }
 
   <div class="sidebar-footer">
     <a routerLink="/privacy-policy" routerLinkActive="active-footer-link" class="footer-link"

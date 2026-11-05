@@ -15,6 +15,7 @@ export function parseDate(value: string): Date | null {
   return isReal ? date : null;
 }
 
+
 /**
  * Wandelt ein Datum von dd/mm/yyyy nach yyyy-mm-dd für die Datenbank um.
  * @param value der Text aus dem Datumsfeld
@@ -27,6 +28,7 @@ export function toIsoDate(value: string): string {
   const day = String(date.getDate()).padStart(2, '0');
   return `${date.getFullYear()}-${month}-${day}`;
 }
+
 
 /**
  * Prüft, ob das Fälligkeitsdatum gültig ist und nicht in der Vergangenheit liegt.
@@ -43,6 +45,7 @@ export function dueDateValidator(control: AbstractControl): ValidationErrors | n
   return date < today ? { pastDate: true } : null;
 }
 
+
 /**
  * Formatiert Eingaben beim Tippen zu dd/mm/yyyy.
  * @param raw der Wert aus dem Eingabefeld
@@ -54,6 +57,12 @@ export function formatDateInput(raw: string): string {
   return parts.filter(Boolean).join('/');
 }
 
+
+/**
+ * Wandelt ein ISO-Datum (JJJJ-MM-TT) in das Format des Formulars (TT/MM/JJJJ) um.
+ * @param value das Datum als ISO-Text
+ * @returns das Datum als TT/MM/JJJJ oder einen leeren Text
+ */
 export function toFormDate(value: string): string {
   const [year, month, day] = value.split('-');
   return year && month && day ? `${day}/${month}/${year}` : '';

@@ -7,7 +7,12 @@ import { AssignedToDropdown } from '../../add-task/components/assigned-to-dropdo
 import { PrioritySelect } from '../../add-task/components/priority-select/priority-select';
 import { SubtaskInput } from '../../add-task/components/subtask-input/subtask-input';
 import { DatePickerButton } from '../../../shared/date-picker-button/date-picker-button';
-import { dueDateValidator, formatDateInput, toFormDate, toIsoDate } from '../../add-task/task-form/task-form-utils';
+import {
+  dueDateValidator,
+  formatDateInput,
+  toFormDate,
+  toIsoDate,
+} from '../../add-task/task-form/task-form-utils';
 import {
   AbstractControl,
   FormBuilder,
@@ -41,10 +46,16 @@ export class TaskOverlay {
   readonly submitted = signal(false);
   private readonly fb = inject(FormBuilder);
   readonly taskForm = this.fb.nonNullable.group({
-    title: ['', [Validators.required, Validators.pattern(/\S/)]],
+    title: ['', [Validators.required, Validators.pattern(/\S/), Validators.maxLength(100)]],
     description: [''],
     dueDate: ['', [Validators.required, (control) => this.dueDateRule(control)]],
   });
+  isEditing = signal(false);
+  readonly confirmingDelete = signal(false);
+  readonly saving = signal(false);
+  draft!: TaskInterface;
+  editableSubtasks = signal<string[]>([]);
+
 
   /**
    * Prüft, ob ein Feld einen Fehler anzeigen soll.
@@ -53,8 +64,29 @@ export class TaskOverlay {
    */
   isInvalid(name: 'title' | 'dueDate'): boolean {
     const control = this.taskForm.controls[name];
-    return control.invalid && (control.touched || this.submitted());
+    return control.invalid && (control.touched || control.dirty || this.submitted());
   }
+
+
+  /**
+   * Gibt die Fehlermeldung für den Titel zurück.
+   * @returns den Fehlertext oder einen leeren Text
+   */
+  titleMessage(): string {
+    const errors = this.taskForm.controls.title.errors;
+    if (!errors) return '';
+
+    if (errors['maxlength']) {
+      return 'Maxiumum 100 characters allowed';
+    }
+
+    if (errors['required'] || errors['pattern']) {
+      return 'Please enter a title';
+    }
+
+    return '';
+  }
+
 
   /**
    * Liefert die Fehlermeldung für das Fälligkeitsdatum.
@@ -67,6 +99,7 @@ export class TaskOverlay {
     return 'This field is required';
   }
 
+
   /**
    * Prüft das Fälligkeitsdatum. Das alte Datum des Tasks bleibt erlaubt, auch wenn es
    * schon in der Vergangenheit liegt. Nur ein geändertes Datum wird geprüft.
@@ -78,6 +111,7 @@ export class TaskOverlay {
     if (original && control.value === original) return null;
     return dueDateValidator(control);
   }
+
 
   /**
    * Formatiert die Eingabe im Datumsfeld als dd/mm/yyyy und markiert das Feld als berührt.
@@ -92,6 +126,7 @@ export class TaskOverlay {
     control.markAsTouched();
   }
 
+
   /**
    * Übernimmt das im Kalender gewählte Datum ins Formular.
    * @param date Das Datum als dd/mm/yyyy.
@@ -103,11 +138,6 @@ export class TaskOverlay {
     control.markAsDirty();
   }
 
-  isEditing = signal(false);
-  readonly confirmingDelete = signal(false);
-  readonly saving = signal(false);
-  draft!: TaskInterface;
-  editableSubtasks = signal<string[]>([]);
 
   /**
    * Liefert das Fälligkeitsdatum als dd/mm/yyyy für die Detailansicht.
@@ -116,6 +146,7 @@ export class TaskOverlay {
   dueDateText(): string {
     return toFormDate(this.task.dueDate);
   }
+
 
   /**
    * Liefert die Kontakte, die einem Task zugewiesen sind.
@@ -126,6 +157,7 @@ export class TaskOverlay {
     return this.contactService.contacts().filter((c) => task.assigneeIds.includes(c.id));
   }
 
+
   /**
    * Schließt das Overlay nur, wenn direkt auf den grauen Hintergrund (modal-overlay) geklickt wird.
    * @param event Der Klick auf das Overlay.
@@ -135,6 +167,7 @@ export class TaskOverlay {
       this.closeOverlay.emit();
     }
   }
+
 
   /**
    * Hakt einen Subtask ab oder wieder ab und lädt den Task neu aus dem Service.
@@ -148,6 +181,7 @@ export class TaskOverlay {
     this.task = this.taskService.tasks().find((t) => t.id === this.task.id) ?? this.task;
   }
 
+
   /**
    * Fragt nach, ob der Task wirklich gelöscht werden soll.
    */
@@ -155,12 +189,14 @@ export class TaskOverlay {
     this.confirmingDelete.set(true);
   }
 
+
   /**
    * Bricht das Löschen ab.
    */
   cancelDelete() {
     this.confirmingDelete.set(false);
   }
+
 
   /**
    * Löscht den Task und schließt die Ansicht. Schlägt das fehl, bleibt sie offen.
@@ -175,6 +211,7 @@ export class TaskOverlay {
     }
   }
 
+
   /**
    * Wechselt in den Bearbeitungsmodus und füllt das Formular mit den Daten des Tasks.
    */
@@ -184,6 +221,7 @@ export class TaskOverlay {
     this.fillForm();
     this.isEditing.set(true);
   }
+
 
   /**
    * Speichert die Änderungen, wenn das Formular gültig ist. Während des Speicherns ist der Button gesperrt.
@@ -201,6 +239,7 @@ export class TaskOverlay {
     }
   }
 
+
   /**
    * Speichert den Task und kehrt zur Detailansicht zurück.
    * @param updated Der bearbeitete Task.
@@ -210,6 +249,7 @@ export class TaskOverlay {
     this.task = this.taskService.tasks().find((t) => t.id === updated.id) ?? updated;
     this.isEditing.set(false);
   }
+
 
   /**
    * Füllt das Formular mit den aktuellen Daten des Tasks.
@@ -223,6 +263,7 @@ export class TaskOverlay {
     this.submitted.set(false);
   }
 
+
   /**
    * Baut aus Formular und Entwurf den bearbeiteten Task.
    * @returns Der bearbeitete Task.
@@ -232,6 +273,7 @@ export class TaskOverlay {
     const subtasks = this.buildSubtasks();
     return { ...this.draft, title, description, dueDate: toIsoDate(dueDate), subtasks };
   }
+
 
   /**
    * Baut die Subtasks aus der Liste im Formular und übernimmt Status und ID bestehender Subtasks.

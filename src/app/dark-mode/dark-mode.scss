@@ -8,6 +8,7 @@
   --hover: #f0f0f0;
   --input-border: #959595;
   --drag-drop-card:#ffffff;
+  --summary: #000;
 }
 
 :root[data-theme='dark'] {
@@ -20,6 +21,7 @@
   --hover: #2f3644;
   --input-border: #5a6478;
   --drag-drop-card:#2f3644;
+  --summary: #ffffff;
 
   color-scheme: dark;
 

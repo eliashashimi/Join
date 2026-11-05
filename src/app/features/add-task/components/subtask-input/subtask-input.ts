@@ -13,6 +13,7 @@ export class SubtaskInput {
   readonly editText = signal('');
   readonly hasEditError = signal(false);
 
+
   /**
    * Übernimmt den Text im Eingabefeld und entfernt die Fehlermeldung.
    * @param event das Input-Event des Eingabefelds
@@ -21,6 +22,7 @@ export class SubtaskInput {
     this.draft.set((event.target as HTMLInputElement).value);
     this.hasDraftError.set(false);
   }
+
 
   /**
    * Legt bei Enter im Eingabefeld einen Subtask an, ohne das Formular abzusenden.
@@ -31,6 +33,7 @@ export class SubtaskInput {
     event.stopPropagation();
     this.addSubtask();
   }
+
 
   /**
    * Fügt den eingegebenen Text als Subtask hinzu und leert das Feld.
@@ -44,6 +47,7 @@ export class SubtaskInput {
     this.hasDraftError.set(false);
   }
 
+
   /**
    * Leert das Eingabefeld, ohne einen Subtask anzulegen.
    */
@@ -51,6 +55,7 @@ export class SubtaskInput {
     this.draft.set('');
     this.hasDraftError.set(false);
   }
+
 
   /**
    * Startet das Bearbeiten eines Subtasks.
@@ -62,6 +67,7 @@ export class SubtaskInput {
     this.hasEditError.set(false);
   }
 
+
   /**
    * Übernimmt den Text im Bearbeitungsfeld und entfernt die Fehlermeldung.
    * @param event das Input-Event des Bearbeitungsfelds
@@ -70,6 +76,7 @@ export class SubtaskInput {
     this.editText.set((event.target as HTMLInputElement).value);
     this.hasEditError.set(false);
   }
+
 
   /**
    * Speichert bei Enter im Bearbeitungsfeld, ohne das Formular abzusenden.
@@ -80,6 +87,7 @@ export class SubtaskInput {
     event.stopPropagation();
     this.saveEdit();
   }
+
 
   /**
    * Speichert den bearbeiteten Subtask.
@@ -94,6 +102,7 @@ export class SubtaskInput {
     this.editIndex.set(null);
   }
 
+
   /**
    * Bricht das Bearbeiten ab, ohne zu speichern.
    */
@@ -101,6 +110,7 @@ export class SubtaskInput {
     this.editIndex.set(null);
     this.hasEditError.set(false);
   }
+
 
   /**
    * Löscht einen Subtask und passt den Bearbeitungsmodus an.

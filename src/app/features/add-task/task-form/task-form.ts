@@ -32,7 +32,7 @@ export class TaskForm {
   readonly cancelled = output<void>();
 
   readonly taskForm = this.fb.nonNullable.group({
-    title: ['', Validators.required],
+    title: ['', [Validators.required, Validators.pattern(/\S/), Validators.maxLength(100)]],
     description: [''],
     dueDate: ['', [Validators.required, dueDateValidator]],
   });
@@ -45,6 +45,7 @@ export class TaskForm {
   readonly isSaving = signal(false);
   readonly hasSaveError = signal(false);
 
+
   /**
    * Prüft, ob ein Pflichtfeld als fehlerhaft angezeigt werden soll.
    * @param name Name des Formularfelds
@@ -52,8 +53,29 @@ export class TaskForm {
    */
   isInvalid(name: 'title' | 'dueDate'): boolean {
     const control = this.taskForm.controls[name];
-    return control.invalid && (control.touched || this.submitted());
+    return control.invalid && (control.touched || control.dirty || this.submitted());
   }
+
+
+  /**
+   * Gibt die Fehlermeldung für den Titel zurück.
+   * @returns den Fehlertext oder einen leeren Text
+   */
+  titleMessage(): string {
+    const errors = this.taskForm.controls.title.errors;
+    if (!errors) return '';
+
+    if (errors['maxlength']) {
+      return 'Maxiumum 100 characters allowed';
+    }
+
+    if (errors['required'] || errors['pattern']) {
+      return 'Please enter a title';
+    }
+
+    return '';
+  }
+
 
   /**
    * Liefert die Fehlermeldung zum Fälligkeitsdatum.
@@ -65,6 +87,7 @@ export class TaskForm {
     if (errors?.['pastDate']) return 'The date must not be in the past';
     return 'This field is required';
   }
+
 
   /**
    * Setzt beim Tippen im Datumsfeld die Schrägstriche.
@@ -79,6 +102,7 @@ export class TaskForm {
     control.markAsTouched();
   }
 
+
   /**
    * Übernimmt das im Kalender gewählte Datum ins Formular.
    * @param date Das Datum als dd/mm/yyyy.
@@ -89,6 +113,7 @@ export class TaskForm {
     control.markAsTouched();
     control.markAsDirty();
   }
+
 
   /**
    * Verhindert, dass Enter in den Feldern der rechten Spalte das Formular absendet.
@@ -101,6 +126,7 @@ export class TaskForm {
     }
   }
 
+
   /**
    * Validiert das Formular und legt den Task an.
    */
@@ -112,6 +138,7 @@ export class TaskForm {
     await this.saveTask();
     this.isSaving.set(false);
   }
+
 
   /**
    * Speichert den Task, leert das Formular und meldet Erfolg oder Fehler.
@@ -126,6 +153,7 @@ export class TaskForm {
     }
   }
 
+
   /**
    * Bricht im Overlay ab oder leert das Formular auf der Seite.
    */
@@ -133,6 +161,7 @@ export class TaskForm {
     if (this.isOverlay()) this.cancelled.emit();
     else this.clearForm();
   }
+
 
   /**
    * Setzt alle Felder und Auswahlen auf den Anfangszustand zurück.
@@ -147,6 +176,7 @@ export class TaskForm {
     this.hasSaveError.set(false);
   }
 
+
   /**
    * Markiert alle Felder als berührt und prüft das gesamte Formular.
    * @returns true, wenn alle Pflichtangaben gültig sind
@@ -155,6 +185,7 @@ export class TaskForm {
     this.taskForm.markAllAsTouched();
     return this.taskForm.valid && !!this.category();
   }
+
 
   /**
    * Baut aus den Formularwerten die Daten für die Datenbank.

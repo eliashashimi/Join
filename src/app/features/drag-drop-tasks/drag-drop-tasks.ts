@@ -36,17 +36,32 @@ export class DragDropTasks {
     { originX: 'end', originY: 'top', overlayX: 'end', overlayY: 'bottom', offsetY: -4 },
   ];
 
+
+  /**
+   * Zählt die erledigten Subtasks eines Tasks.
+   * @param task der Task
+   * @returns die Anzahl der erledigten Subtasks
+   */
   doneCount(task: TaskInterface): number {
     return task.subtasks?.filter((s) => s.done).length || 0;
   }
 
+
+  /**
+   * Sucht die Kontakte, die dem Task zugewiesen sind.
+   * @param task der Task
+   * @returns die zugewiesenen Kontakte
+   */
   assigneesOf(task: TaskInterface) {
     return this.contactService.contacts().filter((c) => task.assigneeIds.includes(c.id));
   }
 
+
+  /** Öffnet beim Klick auf die Karte die Detailansicht des Tasks. */
   onCardClick() {
     this.openDetails.emit(this.task);
   }
+
 
   /**
    * Liefert alle Spalten außer der aktuellen Spalte des Tasks.
@@ -59,6 +74,7 @@ export class DragDropTasks {
     );
   }
 
+
   /**
    * Öffnet oder schließt das "Move to"-Menü, ohne die Detailansicht zu öffnen.
    * @param event Der Klick auf den Pfeil-Button.
@@ -68,10 +84,12 @@ export class DragDropTasks {
     this.menuOpen.update((open) => !open);
   }
 
+
   /** Schließt das "Move to"-Menü. */
   closeMenu(): void {
     this.menuOpen.set(false);
   }
+
 
   /**
    * Schließt das Menü mit der Escape-Taste.
@@ -80,6 +98,7 @@ export class DragDropTasks {
   onMenuKey(event: KeyboardEvent): void {
     if (event.key === 'Escape') this.closeMenu();
   }
+
 
   /**
    * Meldet der Board-Seite die gewählte Spalte und schließt das Menü.

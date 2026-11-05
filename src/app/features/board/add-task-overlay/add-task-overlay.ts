@@ -18,19 +18,26 @@ export class AddTaskOverlay {
   readonly isRendered = signal(false);
   readonly isVisible = signal(false);
 
+
   constructor() {
     effect(() => (this.overlay.isOpen() ? this.show() : this.hide()));
   }
 
+
+  /** Schließt das Add-Task-Overlay. */
   close(): void {
     this.overlay.close();
   }
 
+
+  /** Zeigt das Overlay an und startet kurz danach die Einblend-Animation. */
   private show(): void {
     this.isRendered.set(true);
     setTimeout(() => this.isVisible.set(true), 20);
   }
 
+
+  /** Startet die Ausblend-Animation und nimmt das Overlay danach aus der Seite. */
   private hide(): void {
     this.isVisible.set(false);
     setTimeout(() => {

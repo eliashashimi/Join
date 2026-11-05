@@ -38,18 +38,35 @@ export class AddContact {
     phone: ['', [Validators.required, Validators.pattern(PHONE_REGEX)]],
   });
 
+
+  /**
+   * Das Formularfeld für den Namen.
+   * @returns das Feld „name“
+   */
   get name() {
     return this.userform.get('name');
   }
 
+
+  /**
+   * Das Formularfeld für die E-Mail-Adresse.
+   * @returns das Feld „email“
+   */
   get email() {
     return this.userform.get('email');
   }
 
+
+  /**
+   * Das Formularfeld für die Telefonnummer.
+   * @returns das Feld „phone“
+   */
   get phone() {
     return this.userform.get('phone');
   }
 
+
+  /** Schließt das Formular mit Animation und meldet das der Kontaktliste. */
   close(): void {
     if (this.isClosing()) return;
     this.isClosing.set(true);
@@ -60,6 +77,7 @@ export class AddContact {
     }, 250);
   }
 
+
   /**
    * Liefert die Initialen des aktuell eingegebenen Namens.
    * @returns die Initialen oder ein leerer String
@@ -67,6 +85,7 @@ export class AddContact {
   getInitials(): string {
     return initialsOf(this.name?.value ?? '');
   }
+
 
   /**
    * Liest die Formularwerte und ergänzt die gewählte Avatar-Farbe.
@@ -81,12 +100,15 @@ export class AddContact {
     };
   }
 
+
+  /** Leert das Formular und schließt es. */
   private resetAndCloseForm(): void {
     this.userform.reset();
     this.formSubmitted.set(false);
     this.isSubmitting.set(false);
     this.close();
   }
+
 
   /**
    * Zeigt die Erfolgsmeldung und meldet den neuen Kontakt an die Liste.
@@ -99,6 +121,7 @@ export class AddContact {
     setTimeout(() => this.contactService.showSuccessMessage.set(false), 3000);
   }
 
+
   /**
    * Zeigt je nach Fehler den Hinweis an der E-Mail oder eine allgemeine Meldung.
    * @param error der abgefangene Fehler
@@ -109,6 +132,8 @@ export class AddContact {
     this.isSubmitting.set(false);
   }
 
+
+  /** Speichert den neuen Kontakt und zeigt danach Erfolg oder Fehler an. */
   private async createContact(): Promise<void> {
     try {
       const created = await this.contactService.addContact(this.getFormData());
@@ -118,6 +143,10 @@ export class AddContact {
     }
   }
 
+
+  /**
+   * Prüft das Formular und legt den Kontakt an, wenn alles stimmt und die E-Mail noch frei ist.
+   */
   async onSubmit(): Promise<void> {
     this.formSubmitted.set(true);
     this.emailExistingError.set(false);

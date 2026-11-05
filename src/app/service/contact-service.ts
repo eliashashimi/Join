@@ -11,25 +11,31 @@ export class ContactService {
   private readonly contactList = signal<ContactInterface[]>([]);
 
   readonly contacts = this.contactList.asReadonly();
+  readonly currentUserId = signal<string | null>(null);
   showSuccessMessage = signal<boolean>(false);
   showDeletedMessage = signal<boolean>(false);
   showUpdatedMessage = signal<boolean>(false);
   showDeleteErrorMessage = signal<boolean>(false);
+  showCannotDeleteMessage = signal<boolean>(false);
   showDeleteModal = signal<boolean>(false);
+
 
   /**
    * READ: Lädt alle Kontakte und legt sie im Signal `contacts` ab.
+   * Merkt sich außerdem die ID des eingeloggten Users für die Löschrechte.
    * @returns die sortierte Kontaktliste
    */
   async getContacts(): Promise<ContactInterface[]> {
+    await this.loadCurrentUser();
     const { data } = await this.db.from(TABLE).select('*').throwOnError();
     const contacts = sortContacts(data.map(toContact));
     this.contactList.set(contacts);
     return contacts;
   }
 
+
   /**
-   * CREATE: Speichert einen neuen Kontakt.
+   * CREATE: Speichert einen neuen Kontakt. Er hat keine `user_id` und gilt daher als Dummy-Kontakt.
    * @param contact Daten aus dem Formular
    * @returns den gespeicherten Kontakt inklusive ID
    */
@@ -40,6 +46,7 @@ export class ContactService {
     this.contactList.update((list) => sortContacts([...list, created]));
     return created;
   }
+
 
   /**
    * UPDATE: Ändert einen vorhandenen Kontakt.
@@ -58,14 +65,53 @@ export class ContactService {
     return updated;
   }
 
+
   /**
-   * DELETE: Löscht einen Kontakt.
+   * DELETE: Löscht einen Kontakt. Die Datenbank erlaubt das nur für den eigenen
+   * Kontakt und für Dummy-Kontakte (siehe Delete-Policy).
+   * Blockiert die Policy das Löschen, wirft Supabase keinen Fehler, sondern betrifft 0 Zeilen.
+   * Deshalb werden die gelöschten Zeilen zurückgefragt und geprüft.
    * @param id ID des Kontakts
    */
   async deleteContact(id: string): Promise<void> {
-    await this.db.from(TABLE).delete().eq('id', id).throwOnError();
+    const { data } = await this.db.from(TABLE).delete().eq('id', id).select().throwOnError();
+    if (!data || data.length === 0) throw new Error('Kontakt darf nicht gelöscht werden.');
     this.contactList.update((list) => list.filter((c) => c.id !== id));
   }
+
+
+  /**
+   * Löscht den eigenen Account samt Kontakt und meldet den User lokal ab.
+   */
+  async deleteOwnAccount(): Promise<void> {
+    await this.db.rpc('delete_own_account').throwOnError();
+    await this.db.auth.signOut({ scope: 'local' });
+    this.contactList.set([]);
+    this.currentUserId.set(null);
+  }
+
+
+  /**
+   * Darf der eingeloggte User diesen Kontakt löschen? Erlaubt sind der eigene Kontakt
+   * und Dummy-Kontakte ohne Account, nicht aber andere registrierte User.
+   * @param contact der Kontakt
+   * @returns `true`, wenn das Löschen erlaubt ist
+   */
+  canDelete(contact: ContactInterface): boolean {
+    return !contact.userId || contact.userId === this.currentUserId();
+  }
+
+
+  /**
+   * Prüft, ob der Kontakt zum eingeloggten User gehört.
+   * @param id ID des Kontakts
+   * @returns `true`, wenn es der eigene Kontakt ist
+   */
+  isOwnContact(id: string): boolean {
+    const userId = this.currentUserId();
+    return !!userId && this.contactList().some((c) => c.id === id && c.userId === userId);
+  }
+
 
   /**
    * Prüft, ob die E-Mail-Adresse schon bei einem anderen Kontakt vergeben ist.
@@ -77,8 +123,22 @@ export class ContactService {
     const wanted = email.toLowerCase();
     return this.contactList().some((c) => c.id !== exceptId && c.email.toLowerCase() === wanted);
   }
+
+
+  /**
+   * Merkt sich die ID des angemeldeten Users, z. B. für den eigenen Kontakt und die Löschrechte.
+   */
+  private async loadCurrentUser(): Promise<void> {
+    const { data } = await this.db.auth.getSession();
+    this.currentUserId.set(data.session?.user.id ?? null);
+  }
 }
 
+/**
+ * Wandelt eine Zeile aus Supabase in einen Kontakt für die App um.
+ * @param row die Zeile aus der Tabelle contacts
+ * @returns den Kontakt
+ */
 function toContact(row: ContactRow): ContactInterface {
   return {
     id: row.id,
@@ -87,11 +147,18 @@ function toContact(row: ContactRow): ContactInterface {
     phone: row.phone ?? '',
     color: row.color,
     initials: getInitials(row.name),
+    userId: row.user_id,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
 }
 
+
+/**
+ * Wandelt Formulardaten in eine Zeile für Supabase um. Leerzeichen werden entfernt, ein leeres Telefon wird null.
+ * @param data die Daten aus dem Formular
+ * @returns die Zeile für die Tabelle contacts
+ */
 function toRow(data: Partial<ContactData>): Partial<ContactRow> {
   return {
     name: data.name?.trim(),
@@ -101,6 +168,12 @@ function toRow(data: Partial<ContactData>): Partial<ContactRow> {
   };
 }
 
+
+/**
+ * Sortiert Kontakte alphabetisch nach Namen.
+ * @param contacts die Kontakte
+ * @returns eine neue, sortierte Liste
+ */
 function sortContacts(contacts: ContactInterface[]): ContactInterface[] {
   return [...contacts].sort((a, b) => a.name.localeCompare(b.name, 'de'));
 }
