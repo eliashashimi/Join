@@ -142,7 +142,6 @@ $breakpoint-mobile: 1149px;
 
       @include mobile {
         height: 100%;
-        gap: 56px;
       }
 
       &--box {
@@ -206,7 +205,8 @@ $breakpoint-mobile: 1149px;
       }
 
       .btn {
-        padding: 10px 24px;
+        padding: clamp(8px, calc(7.474px + 0.175vw), 10px)
+          clamp(18px, calc(16.421px + 0.526vw), 24px);
         border-radius: 10px;
         font-size: 21px;
         font-weight: 700;
