@@ -174,7 +174,7 @@
       padding: 8px 16px;
       gap: 4px;
       background-color: var(--dark-blue);
-      border: 1px solid var(--dark-blue);
+      border: none;
       border-radius: 10px;
       font-size: 21px;
       font-weight: 700;
@@ -189,6 +189,12 @@
         display: flex;
         align-items: center;
         width: 100%;
+      }
+
+      &:hover {
+        background-color: var(--light-blue);
+        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+        
       }
     }
   }
