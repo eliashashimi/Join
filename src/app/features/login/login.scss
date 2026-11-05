@@ -39,7 +39,7 @@ $error-color: #ff8190;
 
 .login-container {
   min-height: 100vh;
-  background-color: $bg-color;
+  border-color: var(--bg);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -69,7 +69,7 @@ $error-color: #ff8190;
     gap: 20px;
     span {
       font-size: 20px;
-      color: $dark-blue;
+      color: var(--text);
     }
     .sign-up-btn {
       font-size: 20px;
@@ -295,7 +295,8 @@ button.svg {
   }
 
   .login-container {
-    padding: 24px 16px;
+    padding: 24px 16px; 
+    
   }
   .login-header {
     justify-content: flex-start;
