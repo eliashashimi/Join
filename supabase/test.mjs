@@ -21,7 +21,7 @@ const supabaseUrl = readValue('supabaseUrl');
 const supabasePublishableKey = readValue('supabasePublishableKey');
 const TABLE = 'contacts';
 // Alle Spalten aus supabase/contacts.sql – fehlt eine, schlägt die erste Prüfung fehl
-const COLUMNS = 'id, name, email, phone, color, created_at, updated_at';
+const COLUMNS = 'id, name, email, phone, color, created_at, updated_at, user_id';
 let passed = 0;
 let failed = 0;
 let testId = null;

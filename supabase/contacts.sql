@@ -35,10 +35,19 @@ create table public.contacts (
 
   -- Zeitstempel setzt die Datenbank, nicht das Frontend
   created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
+  updated_at timestamptz not null default now(),
+
+  -- Account, zu dem der Kontakt gehört, leer bei Dummy-Kontakten.
+  -- Wird der Account gelöscht, verschwindet sein Kontakt mit.
+  user_id    uuid references auth.users (id) on delete cascade,
+
+  -- Jede E-Mail-Adresse gibt es nur einmal
+  constraint unique_email unique (email)
 );
 
 comment on table public.contacts is 'Kontakte der Join-App';
+
+create index contacts_user_id_idx on public.contacts (user_id);
 
 -- -----------------------------------------------------------------------------
 -- 2) updated_at bei jeder Änderung automatisch auf "jetzt" setzen
@@ -84,13 +93,63 @@ create policy "Logged-in users can update contacts"
   using (true)
   with check (true);
 
-create policy "Logged-in users can delete contacts"
+-- Löschen nur beim eigenen Kontakt und bei Dummy-Kontakten (ohne user_id)
+create policy "Delete own or dummy contacts"
   on public.contacts for delete
   to authenticated
-  using (true);
+  using (user_id is null or user_id = (select auth.uid()));
 
 -- -----------------------------------------------------------------------------
--- 5) Beispielkontakte (Für leeren Start löschen)
+-- 5) Eigener Kontakt bei der Registrierung
+--    Legt für jeden neuen Account einen Kontakt mit dem Namen aus dem
+--    Sign up an. Gäste bekommen keinen.
+-- -----------------------------------------------------------------------------
+create or replace function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if new.is_anonymous is not true and new.email is not null then
+    insert into public.contacts (name, email, color, user_id)
+    values (
+      coalesce(nullif(new.raw_user_meta_data->>'name', ''), split_part(new.email, '@', 1)),
+      lower(new.email),
+      '#' || lpad(to_hex((random() * 16777215)::int), 6, '0'),
+      new.id
+    );
+  end if;
+  return new;
+end;
+$$;
+
+revoke execute on function public.handle_new_user() from public, anon, authenticated;
+
+create or replace trigger on_auth_user_created
+  after insert on auth.users
+  for each row
+  execute function public.handle_new_user();
+
+-- -----------------------------------------------------------------------------
+-- 6) Eigenen Account löschen
+--    Die App ruft das auf, wenn jemand seinen eigenen Kontakt löscht.
+--    Der Kontakt verschwindet über user_id mit.
+-- -----------------------------------------------------------------------------
+create or replace function public.delete_own_account()
+returns void
+language sql
+security definer
+set search_path = public
+as $$
+  delete from auth.users where id = auth.uid();
+$$;
+
+revoke execute on function public.delete_own_account() from public, anon;
+grant execute on function public.delete_own_account() to authenticated;
+
+-- -----------------------------------------------------------------------------
+-- 7) Beispielkontakte (Für leeren Start löschen)
 -- -----------------------------------------------------------------------------
 insert into public.contacts (name, email, phone, color) values
   ('Anton Mayer',      'anton.mayer@example.com',      '+49 1111 111111', '#FF7A00'),
