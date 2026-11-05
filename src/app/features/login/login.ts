@@ -12,6 +12,7 @@ import { AuthService } from '../../service/auth-service';
 
 const LOGIN_ERROR = 'Check your email and password. Please try again.';
 const GUEST_ERROR = 'Guest log in failed. Please try again.';
+const INTRO_SEEN_KEY = 'join-intro-seen';
 
 const INTRO_DELAY = 300;
 const INTRO_DURATION = 1000;
@@ -113,13 +114,18 @@ export class Login implements OnInit, AfterViewInit {
   }
 
 
-  /** Lässt das Logo aus der Mitte an seinen Platz im Header fahren und blendet das Overlay aus. */
+    /** Lässt das Logo aus der Mitte an seinen Platz im Header fahren. Nur beim ersten Aufruf pro Sitzung. */
   private async playIntro(): Promise<void> {
     const logo = this.logoRef.nativeElement;
+    if (this.introAlreadySeen()) {
+      logo.classList.add('visible');
+      return this.finishIntro();
+    }
     await Promise.all(
       Array.from(logo.querySelectorAll('img')).map((img) => img.decode().catch(() => {})),
     );
     logo.classList.add('visible');
+    this.markIntroSeen();
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
       return this.finishIntro();
     }
@@ -127,6 +133,26 @@ export class Login implements OnInit, AfterViewInit {
     this.fadeOverlay();
     this.fadeWhiteLogo(logo);
     move.finished.then(() => this.finishIntro()).catch(() => {});
+  }
+
+
+  /** Prüft, ob das Intro in diesem Tab schon gelaufen ist. */
+  private introAlreadySeen(): boolean {
+    try {
+      return sessionStorage.getItem(INTRO_SEEN_KEY) === 'true';
+    } catch {
+      return false;
+    }
+  }
+
+
+  /** Merkt sich für diesen Tab, dass das Intro gelaufen ist. */
+  private markIntroSeen(): void {
+    try {
+      sessionStorage.setItem(INTRO_SEEN_KEY, 'true');
+    } catch {
+      // Speicher gesperrt, dann läuft das Intro eben jedes Mal
+    }
   }
 
 
