@@ -35,11 +35,28 @@ form {
     width: 100%;
 }
 
-.logo {
+.landing-logo {
     position: absolute;
-    top: 65px;
-    left: 77px;
-    width: 100px;
+    top: 67px;
+    left: 0;
+    right: 0;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 77px;
+}
+
+.logo {
+    display: block;
+    width: clamp(64px, calc(22.857px + 5.357vw), 100px);
+}
+
+@media (max-width: 768px) {
+    .landing-logo {
+        top: 37px;
+        padding: 0 38px;
+    }
 }
 
 .signup-form {
@@ -454,12 +471,6 @@ form {
 @media (max-width: 640px) {
     :host {
         padding: 125px 0;
-    }
-
-    .logo {
-        top: 37px;
-        left: 38px;
-        width: 64px;
     }
 
     .signup-form {

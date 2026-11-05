@@ -14,8 +14,8 @@ $error-color: #ff8190;
 .logo-anchor {
   position: relative;
   z-index: 1000;
-  width: clamp(65px, calc(55.405px + 3.198vw), 80px);
-  margin-top: clamp(10px, calc(2.105px + 2.632vw), 40px);
+  width: clamp(64px, calc(22.857px + 5.357vw), 100px);
+  margin-top: 0;
   opacity: 0;
   will-change: transform;
 
@@ -46,7 +46,7 @@ $error-color: #ff8190;
   width: 100%;
   max-width: 1440px;
   margin: 0 auto;
-  padding: 65px 80px 40px;
+  padding: 67px 77px 40px;
 }
 
 .login-header {
@@ -58,7 +58,8 @@ $error-color: #ff8190;
 
   .header-left {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    align-self: flex-start;
   }
 
   .header-right {
@@ -300,7 +301,10 @@ button.svg {
   }
   .login-header {
     justify-content: flex-start;
-    padding: 0px 0px 0px 20px;
+    padding: 0;
+    .header-left {
+      margin: 13px 0 0 22px;
+    }
     .header-right {
       display: none;
     }
