@@ -33,9 +33,14 @@
       Contacts
     </a>
   </nav>
-  } @else {
+    } @else {
     <nav class="nav-menu">
-      <a routerLink="/login" class="nav-item">Log in</a>
+      <a routerLink="/login" class="nav-item login-item">
+        <span class="login-content">
+          <img src="assets/icons/login.svg" alt="" class="login-icon" width="26" height="26" />
+          Log in
+        </span>
+      </a>
     </nav>
   }
 
