@@ -9,7 +9,7 @@ import { filter } from 'rxjs';
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
-export class App implements OnInit{
+export class App {
   isLogin: boolean = true;
 
 

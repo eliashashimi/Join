@@ -4,6 +4,8 @@ export const EMAIL_REGEX = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.
 
 export const PHONE_REGEX = /^\+?[0-9]{6,15}$/;
 
+export const DEFAULT_PHONE = '+490000000000';
+
 export const CONTACT_COLORS = [
   '#FF7A00',
   '#FF5EB3',
