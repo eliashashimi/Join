@@ -1,20 +1,12 @@
-<div class="intro-overlay">
-  <img src="assets/Join-logo.png" alt="Join Logo" class="animated-logo" />
-  <!-- <img src="assets/images/join-logo-white-groß.png" alt="Join-logo" class="animated-logo-mobile" /> -->
-  <div class="mobile-logo-wrapper">
-    <img
-      src="assets/images/join-logo-white-groß.png"
-      alt="Join Logo"
-      class="animated-logo-mobile-white"
-    />
-    <img src="assets/Join-logo.png" alt="Join Logo" class="animated-logo-mobile-dark" />
-  </div>
-</div>
+<div class="intro-overlay" #overlay></div>
 
 <section class="login-container">
   <header class="login-header">
     <div class="header-left">
-      <img src="assets/Join-logo.png" alt="Join Logo" class="static-logo" />
+      <div class="logo-anchor" #logo>
+        <img src="assets/Join-logo.png" alt="Join Logo" class="logo-dark" />
+        <img src="assets/images/join-logo-white-groß.png" alt="" class="logo-white" />
+      </div>
     </div>
     <div class="header-right">
       <span>Not a Join user?</span>
