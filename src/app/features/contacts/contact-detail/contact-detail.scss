@@ -89,6 +89,19 @@
             transition: fill 0.1s ease;
           }
 
+          span {
+            display: inline-flex;
+            flex-direction: column;
+
+            &::after {
+              content: attr(data-text);
+              height: 0;
+              overflow: hidden;
+              visibility: hidden;
+              font-weight: 700;
+            }
+          }
+
           &:hover {
             font-weight: 700;
             color: #124658;
