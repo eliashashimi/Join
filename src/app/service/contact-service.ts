@@ -1,6 +1,7 @@
 import { inject, Service, signal } from '@angular/core';
 import { ContactData, ContactInterface, ContactRow } from '../interface/contact-interface';
 import { Supabase } from './supabase';
+import { AuthService } from './auth-service';
 import { getInitials, randomColor } from '../shared/contact-utils';
 
 const TABLE = 'contacts';
@@ -8,6 +9,7 @@ const TABLE = 'contacts';
 @Service()
 export class ContactService {
   private readonly db = inject(Supabase).client;
+  private readonly auth = inject(AuthService);
   private readonly contactList = signal<ContactInterface[]>([]);
 
   readonly contacts = this.contactList.asReadonly();
@@ -50,6 +52,7 @@ export class ContactService {
 
   /**
    * UPDATE: Ändert einen vorhandenen Kontakt.
+   * Beim eigenen Kontakt ändert sich auch der Name im Konto (Avatar, Begrüßung).
    * @param id ID des Kontakts
    * @param changes die geänderten Felder
    * @returns den geänderten Kontakt
@@ -59,6 +62,7 @@ export class ContactService {
     const { data } = await query.throwOnError();
     if (!data) throw new Error(`Kontakt ${id} wurde nicht gefunden.`);
     const updated = toContact(data);
+    if (changes.name && this.isOwnContact(id)) await this.auth.updateName(updated.name);
     this.contactList.update((list) => sortContacts(list.map((c) => (c.id === id ? updated : c))));
     this.showUpdatedMessage.set(true);
     setTimeout(() => this.showUpdatedMessage.set(false), 3000);

@@ -52,6 +52,17 @@ export class AuthService {
   }
 
 
+  /**
+   * Speichert einen neuen Namen im Konto. Avatar und Begrüßung zeigen ihn sofort.
+   * @param name der neue Name
+   * @throws den Fehler von Supabase
+   */
+  async updateName(name: string): Promise<void> {
+    const { error } = await this.db.auth.updateUser({ data: { name } });
+    if (error) throw error;
+  }
+
+
   /** Meldet den Nutzer ab und löscht die Sitzung im Browser. */
   async logout(): Promise<void> {
     await this.db.auth.signOut();
