@@ -156,6 +156,16 @@ insert into public.contacts (name, email, phone, color) values
   ('Anja Schulz',      'anja.schulz@example.com',      '+49 2222 222222', '#9327FF'),
   ('Benedikt Ziegler', 'benedikt.ziegler@example.com', '+49 3333 333333', '#6E52FF'),
   ('David Eisenberg',  'david.eisenberg@example.com',  '+49 4444 444444', '#FC71FF'),
-  ('Eva Fischer',      'eva.fischer@example.com',      '+49 5555 555555', '#FFBB2B');
+  ('Eva Fischer',      'eva.fischer@example.com',      '+49 5555 555555', '#FFBB2B'),
+  ('Anna Müller',      'anna.muster@example.de',       '+49 1701 234567', '#FF7A00'),
+  ('Max Petersen',     'max.petersen@example.de',      '+49 1707 7654321', '#FF5EB3'),
+  ('Sarah Köhler',     'sarah.koehler@example.de',     '+49 1709 876543', '#6E52FF'),
+  ('Thomas Becker',    'thomas.becker@example.de',     '+49 1705 555444', '#9327FF'),
+  ('Lisa Fischer',     'lisa.fischer@example.de',      '+49 1701 112223', '#00BEE8'),
+  ('Kevin Schmitt',    'kevin.schmitt@example.de',     '+49 1703 334445', '#1FD7C1'),
+  ('Julia Wagner',     'julia.wagner@example.de',      '+49 1706 667778', '#FF745E'),
+  ('Marcus Hoffmann',  'marc.hoffmann@example.de',     '+49 1708 889990', '#FFA35E'),
+  ('Carolina Weber',   'carolina.weber@example.de',    '+49 1701 231234', '#FC71FF'),
+  ('Stephan Richter',  'stephan.richter@example.de',   '+49 1704 567890', '#FFC701');
 
 commit;
